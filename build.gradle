@@ -1,0 +1,17 @@
+ext {
+    JAVA_VERION = 17;
+}
+
+subprojects {
+    apply plugin: 'java-library'
+
+    repositories {
+        mavenCentral()
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(JAVA_VERION)
+        }
+    }
+}
