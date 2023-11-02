@@ -4,7 +4,7 @@ on:
   - pull_request
 
 jobs:
-  validation:
+  validate-gradle-wrapper:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
