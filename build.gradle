@@ -1,5 +1,13 @@
-ext {
-    JAVA_VERION = 17;
+plugins {
+    id "org.sonarqube" version "4.4.1.3373"
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", SONAR_KEY
+        property "sonar.organization", SONAR_ORG
+        property "sonar.host.url", SONAR_URL
+    }
 }
 
 subprojects {
@@ -11,7 +19,7 @@ subprojects {
 
     java {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(JAVA_VERION)
+            languageVersion = JavaLanguageVersion.of(JAVA_VERSION)
         }
     }
 }
