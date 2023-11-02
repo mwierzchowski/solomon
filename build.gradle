@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.github.mwierzchowski.solomon'
+version = '0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+}
