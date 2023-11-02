@@ -6,7 +6,7 @@ group = 'com.github.mwierzchowski.solomon'
 version = '0.1-SNAPSHOT'
 
 dependencies {
-    annotationProcessor 'org.projectlombok:lombok:1.18.30'
-    compileOnly 'org.projectlombok:lombok:1.18.30'
-    implementation 'org.slf4j:slf4j-api:2.0.9'
+    annotationProcessor libs.lombok
+    compileOnly libs.lombok
+    implementation libs.slf4j.api
 }
