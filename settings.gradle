@@ -1,8 +1,2 @@
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-    }
-}
-
 include('core')
 

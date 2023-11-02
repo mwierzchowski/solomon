@@ -1,6 +1,10 @@
 subprojects {
     apply plugin: 'java-library'
 
+    repositories {
+        mavenCentral()
+    }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(17)
