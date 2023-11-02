@@ -42,7 +42,7 @@ public abstract class CommandFlowBase<F, C extends I, I, R> {
     @SuppressWarnings("unchecked")
     public F initialize(@NonNull Consumer<C> initializer) {
         if (this.initialized) {
-            log.warn("Command {} already initialized", cmdName());
+            LOG.warn("Command {} already initialized", cmdName());
         }
         initializer.accept(this.command);
         this.initialized = true;
@@ -52,7 +52,7 @@ public abstract class CommandFlowBase<F, C extends I, I, R> {
     @SuppressWarnings("unchecked")
     public F decorate(@NonNull UnaryOperator<I> decorator) {
         this.callStack = decorator.apply(this.callStack);
-        log.trace("Command {} decorated: {}", cmdName(), this.callStack);
+        LOG.trace("Command {} decorated: {}", cmdName(), this.callStack);
         return (F) this;
     }
 
@@ -83,7 +83,7 @@ public abstract class CommandFlowBase<F, C extends I, I, R> {
             try {
                 listener.accept(optionalResult);
             } catch (Exception ex) {
-                log.error("Command {} failed sending success notification", cmdName(), ex);
+                LOG.error("Command {} failed sending success notification", cmdName(), ex);
             }
         }
     }
@@ -96,7 +96,7 @@ public abstract class CommandFlowBase<F, C extends I, I, R> {
             try {
                 listener.accept(runtimeException);
             } catch (Exception ex) {
-                log.error("Command {} failed sending failure notification", cmdName(), ex);
+                LOG.error("Command {} failed sending failure notification", cmdName(), ex);
             }
         }
     }

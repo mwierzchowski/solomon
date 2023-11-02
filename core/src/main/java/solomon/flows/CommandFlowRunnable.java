@@ -14,17 +14,17 @@ public class CommandFlowRunnable<C extends Runnable> extends CommandFlowBase<Com
     public CommandFlowRunnable<C> decorateInline(@NonNull Consumer<Runnable> decoratorLambda) {
         Runnable prevCallStack = super.callStack;
         super.callStack = () -> decoratorLambda.accept(prevCallStack);
-        log.trace("Command {} decorated by inline decorator", super.cmdName());
+        LOG.trace("Command {} decorated by inline decorator", super.cmdName());
         return this;
     }
 
     public void execute() {
-        log.debug("Executing command: {}", super.command);
+        LOG.debug("Executing command: {}", super.command);
         try {
             long start = System.currentTimeMillis();
             super.callStack.run();
             long stop = System.currentTimeMillis();
-            log.debug("Command {} successfully finished in {} ms", super.cmdName(), stop - start);
+            LOG.debug("Command {} successfully finished in {} ms", super.cmdName(), stop - start);
         } catch (RuntimeException runtimeException) {
             super.notifyOnFailure(runtimeException);
             throw runtimeException;
