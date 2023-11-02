@@ -5,10 +5,6 @@ plugins {
 group = 'com.github.mwierzchowski.solomon'
 version = '0.1-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     compileOnly 'org.projectlombok:lombok:1.18.30'
