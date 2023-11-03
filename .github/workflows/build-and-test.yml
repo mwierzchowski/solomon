@@ -36,7 +36,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: Tests
+          name: Tests report
           path: build/reports/tests/unit-test/aggregated-results
 
       - name: Upload coverage report
