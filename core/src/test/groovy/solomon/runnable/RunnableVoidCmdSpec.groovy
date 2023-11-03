@@ -18,13 +18,6 @@ class RunnableVoidCmdSpec extends Specification {
         noExceptionThrown()
     }
 
-    def "Test that fails"() {
-        when:
-        def x = 1 + 1
-        then:
-        x == 3
-    }
-
 //    public static void main(String[] args) {
 //        new CommandExecutorJdk().runnable(RunnableVoidCmd.class)
 //                .initialize(cmd -> {
