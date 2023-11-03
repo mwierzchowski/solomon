@@ -6,7 +6,7 @@ on:
       - 'spring/**'
 
 jobs:
-  analyze:
+  sonar-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
