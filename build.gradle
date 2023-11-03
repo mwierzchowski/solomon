@@ -1,17 +1,34 @@
 plugins {
+    id 'jacoco-report-aggregation'
     id "org.sonarqube" version "4.4.1.3373"
 }
 
 subprojects {
     apply plugin: 'java-library'
-
-    repositories {
-        mavenCentral()
-    }
+    apply plugin: 'groovy'
+    apply plugin: 'jacoco'
 
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(JAVA_VERSION)
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+        maxParallelForks = Runtime.runtime.availableProcessors()
+        jacoco.enabled = (System.getenv('CI') ?: 'false').toBoolean()
+    }
+
+    parent.dependencies {
+        jacocoAggregation project
+    }
+}
+
+reporting {
+    reports {
+        testCodeCoverageReport(JacocoCoverageReport) {
+            testType = TestSuiteType.UNIT_TEST
         }
     }
 }
