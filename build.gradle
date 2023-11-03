@@ -28,7 +28,6 @@ subprojects {
 
     test {
         useJUnitPlatform()
-        maxParallelForks = Runtime.runtime.availableProcessors()
         jacoco.enabled = (System.getenv('CI') ?: 'false').toBoolean()
     }
 
