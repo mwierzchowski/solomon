@@ -1,7 +1,12 @@
 name: Build and Test
 on:
   push:
-    branches-ignore: [main]
+    paths-ignore:
+      - '.gitignore'
+      - '.java-version'
+      - 'README.md'
+      - 'LICENSE'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -25,4 +30,16 @@ jobs:
           gradle-home-cache-cleanup: ${{ github.ref_name == 'main' }}
 
       - name: Build and test
-        run: ./gradlew test
+        run: ./gradlew build testAggregateTestReport testCodeCoverageReport --continue
+
+      - name: Upload tests report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Tests report
+          path: build/reports/tests/unit-test/aggregated-results
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v3
+        with:
+          files: build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
