@@ -6,6 +6,7 @@ on:
       - '.java-version'
       - 'README.md'
       - 'LICENSE'
+  workflow_dispatch:
 
 permissions:
   contents: read

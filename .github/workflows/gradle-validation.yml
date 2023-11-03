@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'gradle/wrapper/**'
+  workflow_dispatch:
 
 jobs:
   validate-gradle:
