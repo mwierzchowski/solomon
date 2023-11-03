@@ -2,4 +2,6 @@ dependencies {
     annotationProcessor libs.lombok
     compileOnly libs.lombok
     implementation libs.slf4j.api
+    testImplementation libs.spock.core
+    testImplementation libs.slf4j.simple
 }
