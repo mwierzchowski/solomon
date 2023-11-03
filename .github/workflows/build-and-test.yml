@@ -1,7 +1,9 @@
 name: Build and Test
 on:
   push:
-    branches-ignore: [main]
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
 
 permissions:
   contents: read
