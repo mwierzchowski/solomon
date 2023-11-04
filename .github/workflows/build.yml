@@ -44,35 +44,3 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           files: build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
-
-  build-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Set up SDK
-        uses: sdkman/sdkman-action@main
-
-      - name: DEBUG
-        run: java -version
-
-      - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: ${{ github.ref_name == 'main' }}
-
-      - name: Run build
-        run: ./gradlew build testAggregateTestReport testCodeCoverageReport --continue
-
-      - name: Upload tests report
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: Tests report
-          path: build/reports/tests/unit-test/aggregated-results
-
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v3
-        with:
-          files: build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
