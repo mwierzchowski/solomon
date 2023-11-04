@@ -1,10 +1,8 @@
 name: Sonar Scan
 on:
+  push:
+    branches: [main]
   pull_request:
-#  push:
-#    paths:
-#      - 'solomon-core/**'
-#      - 'solomon-spring/**'
   workflow_dispatch:
 
 jobs:
