@@ -25,12 +25,6 @@ subprojects {
         jacocoAggregation project
     }
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(JAVA_VERSION)
-        }
-    }
-
     test {
         useJUnitPlatform()
         jacoco.enabled = System.getenv('CI')
