@@ -54,7 +54,7 @@ jobs:
           -Dsonar.branch.name=${{ github.ref_name }}
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
-          -Dsonar.jacoco.reportPaths=${{ env.JACOCO_REPORT }}
+          -Dsonar.coverage.jacoco.xmlReportPaths=${{ env.JACOCO_REPORT }}
 
       - name: Upload failed tests report
         if: failure()
