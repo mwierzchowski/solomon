@@ -4,4 +4,4 @@ dependencyResolutionManagement {
     }
 }
 
-include('solomon-core')
+include 'solomon-core'
