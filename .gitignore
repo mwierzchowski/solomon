@@ -6,10 +6,10 @@ build/
 .gradletasknamecache
 
 ### IntelliJ IDEA
+!/.idea/runConfigurations/
 out/
 src/main/generated/
 /.idea/*
-!/.idea/runConfigurations
 *.iws
 *.iml
 *.ipr
