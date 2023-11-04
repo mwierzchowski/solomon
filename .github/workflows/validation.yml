@@ -16,7 +16,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Validate Gradle wrapper
+      - name: Validate wrapper
         uses: gradle/wrapper-validation-action@v1
 
   code-quality:
