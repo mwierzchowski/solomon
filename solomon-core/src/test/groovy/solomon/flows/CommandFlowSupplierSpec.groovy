@@ -8,19 +8,19 @@ import java.util.function.Supplier
 
 @Slf4j
 class CommandFlowSupplierSpec extends Specification {
-    def command = new SupplierCmd()
-    def commandFlow = new CommandFlowSupplier(command)
+    def cmd = new SupplierCmd()
+    def cmdFlow = new CommandFlowSupplier(cmd)
 
     def "Executes command"() {
         when:
-        commandFlow.execute()
+        cmdFlow.execute()
         then:
         noExceptionThrown()
     }
 
     def "Initializes command"() {
         when:
-        def result = commandFlow.initialize(cmd -> {
+        def result = cmdFlow.initialize(cmd -> {
                         cmd.x = 42
                     })
                     .execute()
@@ -30,7 +30,7 @@ class CommandFlowSupplierSpec extends Specification {
 
     def "Decorates command with decorator"() {
         when:
-        def result = commandFlow.decorate(SupplierDecorator::new)
+        def result = cmdFlow.decorate(SupplierDecorator::new)
                 .execute()
         then:
         result == 1000
@@ -38,7 +38,7 @@ class CommandFlowSupplierSpec extends Specification {
 
     def "Decorates command inline"() {
         when:
-        commandFlow.decorateInline {cmd -> {
+        cmdFlow.decorateInline { cmd -> {
                     log.info("Before")
                     def result = cmd.get()
                     log.info("After")
@@ -51,7 +51,7 @@ class CommandFlowSupplierSpec extends Specification {
 
     def "Listens for command success"() {
         when:
-        commandFlow.onSuccess {
+        cmdFlow.onSuccess {
                     log.info("Success " + it.get())
                 }
                 .execute()
@@ -63,7 +63,7 @@ class CommandFlowSupplierSpec extends Specification {
         given:
         def exception = new RuntimeException("test")
         when:
-        commandFlow.decorateInline {
+        cmdFlow.decorateInline {
                     throw exception
                 }
                 .onFailure {
@@ -79,7 +79,7 @@ class CommandFlowSupplierSpec extends Specification {
         def defaultValue = 123
         def exception = new RuntimeException("test")
         when:
-        def result = commandFlow.decorateInline {
+        def result = cmdFlow.decorateInline {
                     throw exception
                 }
                 .defaultResult(defaultValue)
@@ -92,7 +92,7 @@ class CommandFlowSupplierSpec extends Specification {
         public int x = 1
 
         @Override
-        public Integer get() {
+        Integer get() {
             return x * 100
         }
     }
@@ -102,7 +102,7 @@ class CommandFlowSupplierSpec extends Specification {
         private final Supplier<C> cmd
 
         @Override
-        public C get() {
+        C get() {
             return cmd.get() * 10
         }
     }
