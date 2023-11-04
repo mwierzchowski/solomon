@@ -4,7 +4,10 @@ spock = '2.4-M1-groovy-4.0'
 
 [libraries]
 lombok = 'org.projectlombok:lombok:1.18.30'
-slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j'}
-slf4j-simple = { module = 'org.slf4j:slf4j-simple', version.ref = 'slf4j'}
+slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j' }
+slf4j-simple = { module = 'org.slf4j:slf4j-simple', version.ref = 'slf4j' }
 spock-core = { module = 'org.spockframework:spock-core', version.ref = 'spock' }
 spock-spring = { module = 'org.spockframework:spock-spring', version.ref = 'spock' }
+
+[plugins]
+sonar = 'org.sonarqube:4.4.1.3373'

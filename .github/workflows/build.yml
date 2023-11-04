@@ -1,7 +1,8 @@
-name: Build and Test
+name: Build
 on:
   push:
     paths-ignore:
+      - '.github/**'
       - '.gitignore'
       - '.java-version'
       - 'README.md'
@@ -12,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -29,7 +30,7 @@ jobs:
         with:
           gradle-home-cache-cleanup: ${{ github.ref_name == 'main' }}
 
-      - name: Build and test
+      - name: Run build
         run: ./gradlew build testAggregateTestReport testCodeCoverageReport --continue
 
       - name: Upload tests report

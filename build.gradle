@@ -1,7 +1,7 @@
 plugins {
     id 'test-report-aggregation'
     id 'jacoco-report-aggregation'
-    id "org.sonarqube" version "4.4.1.3373"
+    alias libs.plugins.sonar
 }
 
 reporting {
@@ -20,19 +20,17 @@ subprojects {
     apply plugin: 'groovy'
     apply plugin: 'jacoco'
 
-    java {
-        toolchain {
-            languageVersion = JavaLanguageVersion.of(JAVA_VERSION)
-        }
+    rootProject.dependencies {
+        testReportAggregation project
+        jacocoAggregation project
+    }
+
+    dependencies {
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     test {
         useJUnitPlatform()
-        jacoco.enabled = (System.getenv('CI') ?: 'false').toBoolean()
-    }
-
-    rootProject.dependencies {
-        testReportAggregation project
-        jacocoAggregation project
+        jacoco.enabled = System.getenv('CI')
     }
 }
