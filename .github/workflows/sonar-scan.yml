@@ -1,9 +1,10 @@
 name: Sonar Scan
 on:
-  push:
-    paths:
-      - 'solomon-core/**'
-      - 'solomon-spring/**'
+  pull_request:
+#  push:
+#    paths:
+#      - 'solomon-core/**'
+#      - 'solomon-spring/**'
   workflow_dispatch:
 
 jobs:
