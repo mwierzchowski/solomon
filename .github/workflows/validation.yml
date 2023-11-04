@@ -9,7 +9,8 @@ env:
   JACOCO_REPORT: 'build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml'
 
 jobs:
-  Gradle-Wrapper:
+  gradle-wrapper:
+    name: 'Gradle Wrapper'
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -18,7 +19,8 @@ jobs:
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
 
-  Code-Quality:
+  code-quality:
+    name: 'Code Quality'
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -54,7 +56,7 @@ jobs:
           -Dsonar.organization=${{ github.repository_owner }}
           -Dsonar.jacoco.reportPaths=${{ env.JACOCO_REPORT }}
 
-      - name: Upload tests report
+      - name: Upload failed tests report
         if: failure()
         uses: actions/upload-artifact@v3
         with:
