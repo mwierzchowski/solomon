@@ -49,7 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
-          ./gradlew build testAggregateTestReport testCodeCoverageReport sonar --continue
+          ./gradlew build testAggregateTestReport testCodeCoverageReport sonar --continue --info
           -Pcoverage.enabled=true
           -Dsonar.branch.name=${{ github.ref_name }}
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
