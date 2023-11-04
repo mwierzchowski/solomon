@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  validate-gradle:
+  gradle-validation:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
