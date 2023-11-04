@@ -1,7 +1,7 @@
 plugins {
     id 'test-report-aggregation'
     id 'jacoco-report-aggregation'
-    id "org.sonarqube" version "4.4.1.3373"
+    alias libs.plugins.sonar
 }
 
 reporting {
