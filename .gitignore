@@ -36,4 +36,4 @@ bin/
 .vscode/
 
 ### MacOS
-.DS_Store
+.DS_Store!/.gitignore
