@@ -9,22 +9,6 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
-/**
- TODO
- - callback do zwracania metryki czasu wykonania
- - a moze runnable onSuccess moze przesylac zwykly obiekt null bez pakowania w Optional?
- - moze runnable powinno wysylac onSuccess resultat jako czas wykonania?
- - jesli zdecyduje sie na powyzsze to Supplier powinien wysylac resultat i rowniez czas wykonania
- - czy decoratory powinny byc uzywane wewnetrznie? chyba nie, to zabiera czas procesora i sterte
- - moze powinienem wystawiac jakies metryki typu ile jest dekoratorow?
- - komendy Runnable moga zwracac na execute sama siebie, dzieki czemu moga zwracac wiele resultatow, byc moze dzieki temu
-   uda sie tez uwspolnic interfejs z komendami supplier
-
- OGOLNIE, przemyslec co mogloby byc dekoratorem (w springboot) a co mogloby sluchac na onSuccess. Czy naprawde chcialbym
- cos tam podlaczac w rzeczywistym projekcie? Mam poczucie ze pewnie niczego bym tam produkcyjnie nie wrzucal i dlatego
- zastanawiam sie czy decoratory nie powinny byc uzywane wewnetrznie - to by uratowalo kod ktory z takim wysilkiem napisalem :)
- */
-
 @Slf4j
 public abstract class CommandFlowBase<F, C extends I, I, R> {
     protected final C command;
