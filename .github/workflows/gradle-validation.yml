@@ -1,8 +1,7 @@
 name: 'Gradle Validation'
 on:
   push:
-    paths:
-      - 'gradle/wrapper/**'
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
