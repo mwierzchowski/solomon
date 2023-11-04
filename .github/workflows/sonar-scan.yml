@@ -37,6 +37,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
           ./gradlew compileJava sonar
-            -Dsonar.branch.name=$GITHUB_REF_NAME          
-            -Dsonar.projectKey=$GITHUB_REPOSITORY_OWNER_${{ github.event.repository.name }}
-            -Dsonar.organization=$GITHUB_REPOSITORY_OWNER
+          -Dsonar.branch.name=$GITHUB_REF_NAME          
+          -Dsonar.projectKey=$GITHUB_REPOSITORY_OWNER_${{ github.event.repository.name }}
+          -Dsonar.organization=$GITHUB_REPOSITORY_OWNER
