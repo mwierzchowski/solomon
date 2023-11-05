@@ -10,7 +10,7 @@ Prerequisites:
 - SDKMAN!
 - IDE
 
-Installation:
+Setup:
 1. Clone
 2. sdk env install
 3. java -version
