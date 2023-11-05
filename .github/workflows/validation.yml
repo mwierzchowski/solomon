@@ -49,12 +49,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
-          ./gradlew build testAggregateTestReport testCodeCoverageReport sonar --continue --info
+          ./gradlew build testAggregateTestReport jacocoTestReport testCodeCoverageReport sonar --continue --info
           -Ptest.coverage.enabled=true
           -Dsonar.branch.name=${{ github.ref_name }}
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
-          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
 
       - name: Upload failed tests report
         if: failure()
@@ -67,3 +66,5 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           files: build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
+
+#          -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
