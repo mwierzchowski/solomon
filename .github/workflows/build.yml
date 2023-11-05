@@ -1,46 +1,41 @@
 name: Build
 on:
   push:
+    branches-ignore:
+      - main
     paths-ignore:
-      - '.github/**'
-      - '.gitignore'
-      - '.java-version'
-      - 'README.md'
-      - 'LICENSE'
+      - .github/**
+      - .gitignore
+      - README.md
+      - LICENSE
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  test:
+    name: 'Test'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      - name: 'Check out code'
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: 'Set up Java'
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          distribution: temurin
+          java-version: 17
 
-      - name: Set up Gradle
+      - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: ${{ github.ref_name == 'main' }}
 
-      - name: Run build
-        run: ./gradlew build testAggregateTestReport testCodeCoverageReport --continue
+      - name: 'Run Gradle'
+        run: ./gradlew build testAggregateTestReport --continue
 
-      - name: Upload tests report
+      - name: 'Upload failed tests report'
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: Tests report
+          name: 'Tests report'
           path: build/reports/tests/unit-test/aggregated-results
-
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v3
-        with:
-          files: build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml

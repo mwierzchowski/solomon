@@ -88,9 +88,9 @@ class CommandFlowRunnableSpec extends Specification {
         private final Runnable cmd
 
         @Override
-        public void run() {
+        void run() {
             log.info("Before")
-            cmd.run();
+            cmd.run()
             log.info("After")
         }
     }
