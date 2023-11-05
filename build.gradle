@@ -31,7 +31,7 @@ subprojects {
 
     test {
         useJUnitPlatform()
-        jacoco.enabled = project.properties['test.coverage.enabled']
+        jacoco.enabled = project.properties['coverage.enabled']
     }
 
     jacocoTestReport {

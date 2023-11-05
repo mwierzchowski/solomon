@@ -50,7 +50,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
           ./gradlew build testAggregateTestReport jacocoTestReport testCodeCoverageReport sonar --continue --info
-          -Ptest.coverage.enabled=true
+          -Pcoverage.enabled=true
           -Dsonar.branch.name=${{ github.ref_name }}
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
