@@ -49,7 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
-          ./gradlew build jacocoTestReport testAggregateTestReport testCodeCoverageReport sonar --continue --info
+          ./gradlew build jacocoTestReport testAggregateTestReport testCodeCoverageReport sonar --continue
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
           -Dsonar.branch.name=${{ github.event.pull_request && github.head_ref || github.ref_name }}
