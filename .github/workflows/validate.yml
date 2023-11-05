@@ -11,57 +11,57 @@ jobs:
     name: 'Gradle Wrapper'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      - name: 'Check out code'
         uses: actions/checkout@v4
 
-      - name: Validate wrapper
+      - name: 'Validate wrapper'
         uses: gradle/wrapper-validation-action@v1
 
   code-quality:
     name: 'Code Quality'
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      - name: 'Check out code'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Java
+      - name: 'Set up Java'
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Gradle
+      - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
         with:
           gradle-home-cache-cleanup: ${{ github.ref_name == 'main' }}
 
-      - name: Set up Sonar
+      - name: 'Set up Sonar'
         uses: actions/cache@v3
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Run Gradle
+      - name: 'Run Gradle'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
           ./gradlew build testAggregateTestReport jacocoTestReport testCodeCoverageReport sonar --continue --info
-          -Pcoverage.enabled=true
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
+          -Pcoverage.enabled=true
 
-      - name: Upload failed tests report
+      - name: 'Upload failed tests report'
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: Tests report
+          name: 'Tests report'
           path: build/reports/tests/unit-test/aggregated-results
 
-      - name: Upload coverage report
+      - name: 'Upload coverage report'
         uses: codecov/codecov-action@v3
         with:
           files: build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml
