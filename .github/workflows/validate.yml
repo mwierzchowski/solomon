@@ -50,9 +50,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >-
           ./gradlew build jacocoTestReport testAggregateTestReport testCodeCoverageReport sonar --continue
+          -Dsonar.host.url="https://sonarcloud.io"
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
           -Dsonar.branch.name=${{ github.event_name == 'workflow_dispatch' && github.ref_name || '' }}
+          -Dsonar.gradle.skipCompile=true
           -Pcoverage.enabled=true
 
       - name: 'Upload failed tests report'
