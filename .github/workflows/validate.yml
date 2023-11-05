@@ -52,7 +52,7 @@ jobs:
           ./gradlew build jacocoTestReport testAggregateTestReport testCodeCoverageReport sonar --continue
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
-          -Dsonar.branch.name=""
+          -Dsonar.branch.name=${{ github.event_name == 'workflow_dispatch' && github.ref_name || '' }}
           -Pcoverage.enabled=true
 
       - name: 'Upload failed tests report'
