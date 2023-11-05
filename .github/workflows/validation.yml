@@ -5,8 +5,6 @@ on:
       - main
   pull_request:
   workflow_dispatch:
-env:
-  JACOCO_REPORT: 'build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml'
 
 jobs:
   gradle-wrapper:
@@ -56,7 +54,6 @@ jobs:
           -Dsonar.branch.name=${{ github.ref_name }}
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.organization=${{ github.repository_owner }}
-          -Dsonar.coverage.jacoco.xmlReportPaths=${{ env.JACOCO_REPORT }}
 
       - name: Upload failed tests report
         if: failure()
@@ -68,4 +65,4 @@ jobs:
       - name: Upload coverage report
         uses: codecov/codecov-action@v3
         with:
-          files: ${{ env.JACOCO_REPORT }}
+          files: build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml

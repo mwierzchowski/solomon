@@ -33,4 +33,8 @@ subprojects {
         useJUnitPlatform()
         jacoco.enabled = project.properties['test.coverage.enabled']
     }
+
+    jacocoTestReport {
+        reports.xml.required = true
+    }
 }
