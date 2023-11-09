@@ -56,6 +56,12 @@ jobs:
 
       - name: 'Install JDK with SDKMan'
         uses: sdkman/sdkman-action@main
+        id: sdkman
+
+      - name: 'Debug'
+        run: |
+          echo '${{ steps.sdkman.outputs.file }}'
+          ls -al ${{ steps.sdkman.outputs.file }}
 
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
