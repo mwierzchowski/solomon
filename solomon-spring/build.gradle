@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':solomon-core')
+    testImplementation libs.spock.spring
+}
