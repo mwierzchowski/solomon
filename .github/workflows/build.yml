@@ -21,11 +21,14 @@ jobs:
       - name: 'Check out code'
         uses: actions/checkout@v4
 
-      - name: Setup SDK
+      - name: 'Setup SDK'
         uses: ./.github/actions/setup-sdk
 
+      - name: 'Setup Gradle'
+        uses: gradle/gradle-build-action@v2
+
       - name: 'Run Gradle'
-        run: gradle build testAggregateTestReport --continue
+        run: ./gradlew build testAggregateTestReport --continue
 
       - name: 'Upload failed tests report'
         if: failure()
