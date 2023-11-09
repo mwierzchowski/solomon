@@ -24,7 +24,7 @@ jobs:
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
         with:
-          cache-read-only: false
+          cache-read-only: true
 
       - name: 'Set up SDKMAN! cache'
         uses: actions/cache@v3
