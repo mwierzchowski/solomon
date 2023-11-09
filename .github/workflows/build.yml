@@ -47,21 +47,21 @@ jobs:
       - name: 'Check out code'
         uses: actions/checkout@v4
 
-#      - name: 'Set up SDKMAN! cache'
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.sonar/cache
-#          key: '${{ runner.os }}-sonar'
-#          restore-keys: '${{ runner.os }}-sonar'
+      - name: 'Set up SDKMAN! cache'
+        uses: actions/cache@v3
+        with:
+          path: ~/.sdkman/tmp
+          key: '${{ runner.os }}-sdkman'
+          restore-keys: '${{ runner.os }}-sdkman'
 
       - name: 'Install JDK with SDKMan'
         uses: sdkman/sdkman-action@main
-        id: sdkman
+        #        id: sdkman
 
-      - name: 'Debug'
-        run: |
-          echo '${{ steps.sdkman.outputs.file }}'
-          ls -al ${{ steps.sdkman.outputs.file }}
+#      - name: 'Debug'
+#        run: |
+#          echo '${{ steps.sdkman.outputs.file }}'
+#          ls -al ${{ steps.sdkman.outputs.file }}
 
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
