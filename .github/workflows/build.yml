@@ -21,16 +21,8 @@ jobs:
       - name: 'Check out code'
         uses: actions/checkout@v4
 
-      - name: 'Set up SDKMAN! cache'
-        uses: actions/cache@v3
-        with:
-          path: ~/.sdkman/tmp
-          key: '${{ runner.os }}-sdkman'
-          restore-keys: '${{ runner.os }}-sdkman'
-
-      - name: 'Install JDK with SDKMan'
-        uses: sdkman/sdkman-action@main
-
+      - name: Setup SDK
+        uses: ./.github/actions/setup-sdk
 
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
