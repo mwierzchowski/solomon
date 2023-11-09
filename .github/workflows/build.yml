@@ -14,51 +14,27 @@ permissions:
   contents: read
 
 jobs:
-#  poc:
-#    name: 'POC'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: 'Check out code'
-#        uses: actions/checkout@v4
-#
-#      - name: 'Set up Gradle'
-#        uses: gradle/gradle-build-action@v2
-#
-#      - name: 'Set up SDKMAN! cache'
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.sdkman/tmp
-#          key: '${{ runner.os }}-sdkman'
-#          restore-keys: '${{ runner.os }}-sdkman'
-#
-#      - name: 'Install JDK with SDKMan'
-#        uses: sdkman/sdkman-action@main
-#
-#      - name: 'Run Gradle'
-#        run: ./gradlew build testAggregateTestReport --continue
-#
-#      - name: 'Upload failed tests report'
-#        if: failure()
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: 'Tests report'
-#          path: build/reports/tests/unit-test/aggregated-results
-
-  test:
-    name: 'Test'
+  poc:
+    name: 'POC'
     runs-on: ubuntu-latest
     steps:
       - name: 'Check out code'
         uses: actions/checkout@v4
 
-      - name: 'Set up Java'
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 17
-
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: false
+
+      - name: 'Set up SDKMAN! cache'
+        uses: actions/cache@v3
+        with:
+          path: ~/.sdkman/tmp
+          key: '${{ runner.os }}-sdkman'
+          restore-keys: '${{ runner.os }}-sdkman'
+
+      - name: 'Install JDK with SDKMan'
+        uses: sdkman/sdkman-action@main
 
       - name: 'Run Gradle'
         run: ./gradlew build testAggregateTestReport --continue
@@ -69,3 +45,29 @@ jobs:
         with:
           name: 'Tests report'
           path: build/reports/tests/unit-test/aggregated-results
+
+#  test:
+#    name: 'Test'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: 'Check out code'
+#        uses: actions/checkout@v4
+#
+#      - name: 'Set up Java'
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: temurin
+#          java-version: 17
+#
+#      - name: 'Set up Gradle'
+#        uses: gradle/gradle-build-action@v2
+#
+#      - name: 'Run Gradle'
+#        run: ./gradlew build testAggregateTestReport --continue
+#
+#      - name: 'Upload failed tests report'
+#        if: failure()
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: 'Tests report'
+#          path: build/reports/tests/unit-test/aggregated-results
