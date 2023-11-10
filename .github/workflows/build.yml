@@ -4,10 +4,11 @@ on:
     branches-ignore:
       - main
     paths-ignore:
-      - .github/**
-      - .gitignore
-      - README.md
-      - LICENSE
+      - '.github/**'
+      - '!.github/workflows/build.yml'
+      - '.gitignore'
+      - 'README.md'
+      - 'LICENSE'
   workflow_dispatch:
 
 permissions:
