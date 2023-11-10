@@ -13,6 +13,8 @@ runs:
     - shell: bash
       run: |
         curl -s "https://get.sdkman.io" | bash
+        echo 'PWD/.sdkman ----------------------------------------'
+        ls -al .sdkman        
         echo '/home/runner/.sdkman ----------------------------------------'
         ls -al /home/runner/.sdkman
         echo '~/.sdkman ----------------------------------------------'
