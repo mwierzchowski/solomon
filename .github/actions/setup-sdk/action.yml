@@ -14,4 +14,4 @@ runs:
 
     - shell: bash
       run: |
-        echo "JAVA_HOME=~/.sdkman/candidates/java/current" >> "$GITHUB_ENV"
+        echo "JAVA_HOME=$(readlink -f -- ~/.sdkman/candidates/java/current)" >> "$GITHUB_ENV"
