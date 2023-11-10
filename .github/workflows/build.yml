@@ -19,26 +19,21 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
-      - name: 'JAVA_HOME before checkout'
-        run: echo $JAVA_HOME
-
       - name: 'Check out code'
         uses: actions/checkout@v4
-
-      - name: 'JAVA_HOME after checkout'
-        run: echo $JAVA_HOME
 
       - name: 'Set up SDK'
         uses: ./.github/actions/setup-sdk
 
-      - name: 'JAVA_HOME after SDK'
-        run: echo $JAVA_HOME
+      - name: debug
+        run: |
+          echo 'zawartosc sdkman'
+          ls -al ~/.sdkman
+          echo 'zawartosc candidates'
+          ls -al ~/.sdkman/candidates
 
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
-
-      - name: 'JAVA_HOME after Gradle'
-        run: echo $JAVA_HOME
 
       - name: Debug
         run: |          
