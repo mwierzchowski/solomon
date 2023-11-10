@@ -26,8 +26,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: 'Set up SDK'
-        uses: ./.github/actions/setup-sdk
+      - name: 'Set up JDK'
+        uses: ./.github/actions/setup-jdk
 
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
