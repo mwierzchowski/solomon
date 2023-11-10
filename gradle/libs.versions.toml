@@ -1,6 +1,7 @@
 [versions]
 slf4j = '2.0.9'
 spock = '2.4-M1-groovy-4.0'
+spring-framework = '6.0.13'
 
 [libraries]
 lombok = 'org.projectlombok:lombok:1.18.30'
@@ -8,6 +9,7 @@ slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j' }
 slf4j-simple = { module = 'org.slf4j:slf4j-simple', version.ref = 'slf4j' }
 spock-core = { module = 'org.spockframework:spock-core', version.ref = 'spock' }
 spock-spring = { module = 'org.spockframework:spock-spring', version.ref = 'spock' }
+spring-context = { module = 'org.springframework:spring-context', version.ref = 'spring-framework' }
 
 [plugins]
 sonar = 'org.sonarqube:4.4.1.3373'
