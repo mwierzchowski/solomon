@@ -51,7 +51,6 @@ jobs:
           -Dsonar.organization=${{ github.repository_owner }}
           -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
           -Dsonar.branch.name=${{ github.event_name == 'workflow_dispatch' && github.ref_name || '' }}
-          -Dsonar.gradle.skipCompile=true
           -Pcoverage.enabled=true
 
       - name: 'Upload failed tests report'
