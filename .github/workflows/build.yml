@@ -31,6 +31,8 @@ jobs:
         run: |
           java -version
           ./gradlew --version
+          ls -al ~/.sdkman/tmp
+          ls -al ~/.sdkman/candidates/java
 
       - name: 'Run Gradle'
         run: ./gradlew build testAggregateTestReport --continue
