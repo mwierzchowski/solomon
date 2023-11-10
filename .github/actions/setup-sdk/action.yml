@@ -12,17 +12,6 @@ runs:
 
     - uses: sdkman/sdkman-action@main
 
-#    - shell: bash
-#      run: |
-#        curl -s "https://get.sdkman.io" | bash
-#        echo 'PWD/.sdkman ----------------------------------------'
-#        ls -al .sdkman
-#        echo '/home/runner/.sdkman ----------------------------------------'
-#        ls -al /home/runner/.sdkman
-#        echo '~/.sdkman ----------------------------------------------'
-#        ls -al ~/.sdkman
-#        ls -al ~/.sdkman/bin
-#        chmod +x $HOME/.sdkman/bin/sdkman-init.sh
-#        bash -c "source $HOME/.sdkman/bin/sdkman-init.sh"
-#        sdk version
-#        sdk env install
+    - shell: bash
+      run: |
+        echo "JAVA_HOME=~/.sdkman/candidates/java/current" >> "$GITHUB_ENV"

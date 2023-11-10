@@ -25,13 +25,6 @@ jobs:
       - name: 'Set up SDK'
         uses: ./.github/actions/setup-sdk
 
-      - name: debug
-        run: |
-          echo 'zawartosc sdkman'
-          ls -al ~/.sdkman
-          echo 'zawartosc candidates'
-          ls -al ~/.sdkman/candidates
-
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
 
@@ -39,8 +32,6 @@ jobs:
         run: |          
           java --version
           ./gradlew --version
-#          ls -al ~/.sdkman/tmp
-#          ls -al ~/.sdkman/candidates/java
 
       - name: 'Run Gradle'
         run: ./gradlew build testAggregateTestReport --continue
