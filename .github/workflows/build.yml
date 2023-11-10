@@ -28,7 +28,9 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Debug
-        run: |          
+        run: |
+          pwd
+          echo $JAVA_HOME
           java --version
           ./gradlew --version
 #          ls -al ~/.sdkman/tmp
