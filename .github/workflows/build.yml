@@ -21,9 +21,6 @@ jobs:
       - name: 'Check out code'
         uses: actions/checkout@v4
 
-      - name: Debug before
-        run: pwd
-
       - name: 'Set up SDK'
         uses: ./.github/actions/setup-sdk
 
