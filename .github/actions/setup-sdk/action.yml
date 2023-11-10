@@ -14,6 +14,9 @@ runs:
       run: |
         pwd
         curl -s "https://get.sdkman.io?rcupdate=false" | bash
+
+    - shell: bash
+      run: |        
         sdk version
         sdk env install
 
