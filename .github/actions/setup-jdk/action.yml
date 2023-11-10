@@ -10,7 +10,7 @@ runs:
         javaPattern="^java=(.*)-(.*)$"        
         while IFS='' read -r line || [ -n "$line" ]; do
           if [[ $line =~ $javaPattern ]]; then
-            echo "java-version=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+            echo "version=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
             if [[ ${BASH_REMATCH[2]} == "amzn" ]]; then
               echo "distribution=corretto" >> "$GITHUB_OUTPUT"
             elif [[ ${BASH_REMATCH[2]} == "librca" ]]; then
