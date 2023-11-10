@@ -1,6 +1,6 @@
 dependencies {
-    implementation project(':solomon-core')
-    compileOnly libs.spring.context
+    api project(':solomon-core')
+    implementation libs.spring.context
     testImplementation libs.spock.spring
     testImplementation libs.spring.boot.test
 }
