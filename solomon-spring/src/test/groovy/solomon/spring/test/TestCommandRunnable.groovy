@@ -1,7 +1,7 @@
 package solomon.spring.test
 
 import groovy.util.logging.Slf4j
-import solomon.spring.Command
+import solomon.spring.annotation.Command
 
 @Slf4j
 @Command

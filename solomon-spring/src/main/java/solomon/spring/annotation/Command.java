@@ -1,4 +1,4 @@
-package solomon.spring;
+package solomon.spring.annotation;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
