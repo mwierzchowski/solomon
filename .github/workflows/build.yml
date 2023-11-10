@@ -19,6 +19,9 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
+      - name: 'JAVA_HOME before checkout'
+        run: echo $JAVA_HOME
+
       - name: 'Check out code'
         uses: actions/checkout@v4
 
