@@ -13,8 +13,7 @@ runs:
     - shell: bash
       run: |
         pwd
-        curl -s "https://get.sdkman.io" | bash
-        source ~/.sdkman/bin/sdkman-init.sh
+        curl -s "https://get.sdkman.io?rcupdate=false" | bash
         sdk version
         sdk env install
 
