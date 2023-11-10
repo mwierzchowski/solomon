@@ -13,6 +13,8 @@ runs:
     - shell: bash
       run: |
         curl -s "https://get.sdkman.io" | bash
+        ls -al ~/.sdkman
+        ls -al ~/.sdkman/bib
         chmod +x $HOME/.sdkman/bin/sdkman-init.sh
         bash -c "source $HOME/.sdkman/bin/sdkman-init.sh"
         sdk version
