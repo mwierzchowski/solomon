@@ -17,7 +17,7 @@ public abstract class CommandFlowBase<F, C extends I, I, R> {
     protected List<Consumer<Optional<R>>> successListeners;
     protected List<Consumer<RuntimeException>> failureListeners;
 
-    protected CommandFlowBase(@NonNull C command) {
+    public CommandFlowBase(@NonNull C command) {
         this.command = command;
         this.callStack = command;
         this.initialized = false;
