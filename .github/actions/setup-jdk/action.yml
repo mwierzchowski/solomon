@@ -24,8 +24,8 @@ runs:
       shell: bash
       run: ./.github/actions/setup-jdk/parse-file.sh ${{ inputs.env-file }}
 
-    - if: ${{ inputs.skip-install == 'false' }}}
-      uses: actions/setup-java@v3
+    - uses: actions/setup-java@v3
+      if: inputs.skip-install == 'false'
       with:
         distribution: ${{ steps.sdkman.outputs.distribution }}
         java-version: ${{ steps.sdkman.outputs.version }}
