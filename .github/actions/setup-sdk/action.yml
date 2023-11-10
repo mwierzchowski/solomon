@@ -11,3 +11,6 @@ runs:
         restore-keys: '${{ runner.os }}-sdkman'
 
     - uses: sdkman/sdkman-action@main
+
+    - shell: bash
+      run: sdk env install

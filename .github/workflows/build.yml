@@ -28,11 +28,11 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Debug
-        run: |
-          java -version
+        run: |          
+          java --version
           ./gradlew --version
           ls -al ~/.sdkman/tmp
-          ls -al ~/.sdkman/candidates/java
+#          ls -al ~/.sdkman/candidates/java
 
       - name: 'Run Gradle'
         run: ./gradlew build testAggregateTestReport --continue
