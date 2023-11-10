@@ -28,11 +28,6 @@ jobs:
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
 
-      - name: Debug
-        run: |          
-          java --version
-          ./gradlew --version
-
       - name: 'Run Gradle'
         run: ./gradlew build testAggregateTestReport --continue
 
