@@ -13,4 +13,8 @@ runs:
     - uses: sdkman/sdkman-action@main
 
     - shell: bash
-      run: sdk env install
+      run: |
+        curl -s "https://get.sdkman.io" | bash
+        source ~/.sdkman/bin/sdkman-init.sh
+        sdk version
+        sdk env install
