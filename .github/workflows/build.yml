@@ -22,16 +22,23 @@ jobs:
       - name: 'Check out code'
         uses: actions/checkout@v4
 
+      - name: 'JAVA_HOME after checkout'
+        run: echo $JAVA_HOME
+
       - name: 'Set up SDK'
         uses: ./.github/actions/setup-sdk
+
+      - name: 'JAVA_HOME after SDK'
+        run: echo $JAVA_HOME
 
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
 
+      - name: 'JAVA_HOME after Gradle'
+        run: echo $JAVA_HOME
+
       - name: Debug
-        run: |
-          pwd
-          echo $JAVA_HOME
+        run: |          
           java --version
           ./gradlew --version
 #          ls -al ~/.sdkman/tmp
