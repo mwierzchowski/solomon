@@ -1,36 +1,18 @@
 package solomon.decorators;
 
-import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import solomon.CommandDecorator;
 import solomon.CommandResult;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static java.util.Collections.addAll;
-
 @Slf4j
+@RequiredArgsConstructor
 public class NotificationDecorator implements CommandDecorator {
-    protected List<Consumer<Object>> successListeners;
-    protected List<Consumer<Exception>> failureListeners;
-
-    @SafeVarargs
-    public final void addSuccessListeners(@NonNull final Consumer<Object>... listeners) {
-        if (this.successListeners == null) {
-            this.successListeners = new ArrayList<>();
-        }
-        addAll(this.successListeners, listeners);
-    }
-
-    @SafeVarargs
-    public final void addFailureListeners(@NonNull final Consumer<Exception>... listeners) {
-        if (this.failureListeners == null) {
-            this.failureListeners = new ArrayList<>();
-        }
-        addAll(this.failureListeners, listeners);
-    }
+    private final List<Consumer<Object>> successListeners;
+    private final List<Consumer<Exception>> failureListeners;
 
     @Override
     public void after(Object command, CommandResult result) {
