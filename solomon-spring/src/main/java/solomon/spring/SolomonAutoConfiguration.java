@@ -11,4 +11,9 @@ public class SolomonAutoConfiguration {
     public CommandExecutor commandExecutor(ApplicationContext applicationContext) {
         return new CommandExecutorSpring(applicationContext);
     }
+
+    @Bean
+    public CommandBeanPostProcessor commandBeanPostProcessor() {
+        return new CommandBeanPostProcessor();
+    }
 }

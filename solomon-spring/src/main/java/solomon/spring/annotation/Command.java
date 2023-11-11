@@ -20,4 +20,5 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Component
 @Scope(SCOPE_PROTOTYPE)
 public @interface Command {
+    Class<?>[] decorators() default {};
 }
