@@ -3,11 +3,19 @@ package solomon;
 import solomon.flows.CommandFlowRunnable;
 import solomon.flows.CommandFlowSupplier;
 
+import java.text.MessageFormat;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class CommandExecutor {
-    protected abstract <C> C instantiateCommand(Class<C> clazz);
+public class CommandExecutor {
+    protected <C> C instantiateCommand(Class<C> clazz) {
+        try {
+            return clazz.getConstructor().newInstance();
+        } catch (Exception ex) {
+            var msg = MessageFormat.format("Could not instantiate {0}", clazz);
+            throw new IllegalArgumentException(msg, ex);
+        }
+    }
 
     public <C extends Runnable> CommandFlowRunnable<C> runnable(Class<C> clazz) {
         C command = instantiateCommand(clazz);
