@@ -2,11 +2,12 @@ package solomon.flows;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import solomon.CommandFlow;
 
 import java.util.function.Consumer;
 
 @Slf4j
-public class CommandFlowRunnable<C extends Runnable> extends CommandFlowBase<CommandFlowRunnable<C>, C, Runnable, Void> {
+public class CommandFlowRunnable<C extends Runnable> extends CommandFlow<CommandFlowRunnable<C>, C, Runnable, Void> {
     public CommandFlowRunnable(C command) {
         super(command);
     }

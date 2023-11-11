@@ -1,4 +1,4 @@
-package solomon.flows;
+package solomon;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -10,14 +10,14 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 @Slf4j
-public abstract class CommandFlowBase<F, C extends I, I, R> {
+public abstract class CommandFlow<F, C extends I, I, R> {
     protected final C command;
     protected I callStack;
     protected boolean initialized;
     protected List<Consumer<Optional<R>>> successListeners;
     protected List<Consumer<RuntimeException>> failureListeners;
 
-    public CommandFlowBase(@NonNull C command) {
+    public CommandFlow(@NonNull C command) {
         this.command = command;
         this.callStack = command;
         this.initialized = false;

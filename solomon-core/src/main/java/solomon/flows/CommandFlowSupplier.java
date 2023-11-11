@@ -2,12 +2,13 @@ package solomon.flows;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import solomon.CommandFlow;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Slf4j
-public class CommandFlowSupplier<C extends Supplier<R>, R> extends CommandFlowBase<CommandFlowSupplier<C, R>, C, Supplier<R>, R> {
+public class CommandFlowSupplier<C extends Supplier<R>, R> extends CommandFlow<CommandFlowSupplier<C, R>, C, Supplier<R>, R> {
     protected R defaultResult;
 
     public CommandFlowSupplier(C command) {
