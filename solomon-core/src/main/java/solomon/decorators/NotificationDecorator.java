@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
-public class NotificationDecorator implements Decorator {
-    private List<Consumer<Object>> successListeners;
+public class NotificationDecorator<R> implements Decorator<Object> {
+    private List<Consumer<R>> successListeners;
     private List<Consumer<RuntimeException>> failureListeners;
 
     @SuppressWarnings("unchecked")
-    public <R> void addSuccessListener(@NonNull Consumer<R> listener) {
+    public void addSuccessListener(@NonNull Consumer<R> listener) {
         if (successListeners == null) {
             successListeners = new ArrayList<>();
         }
-        successListeners.add((Consumer<Object>) listener);
+        successListeners.add(listener);
         LOG.debug("Added success listener: {}", listener);
     }
 
@@ -46,7 +46,7 @@ public class NotificationDecorator implements Decorator {
         LOG.debug("Sent {} notifications", counter);
     }
 
-    protected <C> int sendSafeNotification(Consumer<C> listener, C content) {
+    protected <T> int sendSafeNotification(Consumer<T> listener, T content) {
         try {
             listener.accept(content);
             return 1;
