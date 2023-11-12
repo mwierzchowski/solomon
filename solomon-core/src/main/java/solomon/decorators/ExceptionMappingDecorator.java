@@ -9,20 +9,20 @@ import solomon.CommandResult;
 @Slf4j
 @RequiredArgsConstructor
 public class ExceptionMappingDecorator implements CommandDecorator {
-    @NonNull private final Class<? extends Exception> sourceClass;
-    @NonNull private final Class<? extends Exception> targetClass;
+    @NonNull private final Class<? extends RuntimeException> sourceClass;
+    @NonNull private final Class<? extends RuntimeException> targetClass;
 
     @Override
     public void after(Object command, CommandResult result) {
-        Exception source = result.getException();
+        var source = result.getException();
         if (result.isFailure() && source.getClass().isAssignableFrom(sourceClass)) {
-            Exception target = mapExceptionFrom(source);
+            var target = mapExceptionFrom(source);
             result.overrideException(target);
             LOG.debug("Mapped command exception from {} to {}", sourceClass, targetClass);
         }
     }
 
-    private Exception mapExceptionFrom(Exception source) {
+    private RuntimeException mapExceptionFrom(RuntimeException source) {
         try {
             return targetClass.getConstructor(sourceClass).newInstance(source);
         } catch (Exception ex) {

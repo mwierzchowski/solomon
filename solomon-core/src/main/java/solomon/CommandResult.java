@@ -5,31 +5,31 @@ import lombok.NonNull;
 
 public class CommandResult {
     private Object value;
-    private Exception exception;
+    private RuntimeException exception;
     @Getter private boolean overridden;
     @Getter private final long duration;
 
-    public CommandResult(@NonNull Object value, long start, long stop) {
+    public CommandResult(Object value, long start) {
         this.value = value;
         this.exception = null;
-        this.duration = stop - start;
+        this.duration = System.currentTimeMillis() - start;
         this.overridden = false;
     }
 
-    public CommandResult(@NonNull Exception exception, long start, long stop) {
+    public CommandResult(@NonNull RuntimeException exception, long start) {
         this.value = null;
         this.exception = exception;
-        this.duration = stop - start;
+        this.duration = System.currentTimeMillis() - start;
         this.overridden = false;
     }
 
-    public void overrideValue(@NonNull Object value) {
+    public void overrideValue(Object value) {
         this.value = value;
         this.exception = null;
         this.overridden = true;
     }
 
-    public void overrideException(@NonNull Exception exception) {
+    public void overrideException(@NonNull RuntimeException exception) {
         this.exception = exception;
         this.value = null;
         this.overridden = true;
@@ -41,7 +41,7 @@ public class CommandResult {
     }
 
     @SuppressWarnings("unchecked")
-    public <E extends Exception> E getException() {
+    public <E extends RuntimeException> E getException() {
         return (E) this.exception;
     }
 

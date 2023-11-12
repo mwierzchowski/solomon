@@ -1,18 +1,35 @@
 package solomon.decorators;
 
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import solomon.CommandDecorator;
 import solomon.CommandResult;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
-@RequiredArgsConstructor
 public class NotificationDecorator implements CommandDecorator {
-    private final List<Consumer<Object>> successListeners;
-    private final List<Consumer<Exception>> failureListeners;
+    private List<Consumer<Object>> successListeners;
+    private List<Consumer<RuntimeException>> failureListeners;
+
+    @SuppressWarnings("unchecked")
+    public <R> void addSuccessListener(@NonNull Consumer<R> listener) {
+        if (successListeners == null) {
+            successListeners = new ArrayList<>();
+        }
+        successListeners.add((Consumer<Object>) listener);
+        LOG.debug("Added success listener: {}", listener);
+    }
+
+    public void addFailureListener(@NonNull Consumer<RuntimeException> listener) {
+        if (failureListeners == null) {
+            failureListeners = new ArrayList<>();
+        }
+        failureListeners.add(listener);
+        LOG.debug("Added failure listener: {}", listener);
+    }
 
     @Override
     public void after(Object command, CommandResult result) {
@@ -34,7 +51,7 @@ public class NotificationDecorator implements CommandDecorator {
             listener.accept(content);
             return 1;
         } catch (Exception ex) {
-            LOG.error("Command failed sending notification", ex);
+            LOG.error("Notification failed", ex);
             return 0;
         }
     }
