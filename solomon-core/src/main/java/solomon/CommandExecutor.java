@@ -2,7 +2,7 @@ package solomon;
 
 import lombok.Setter;
 import solomon.flows.RunnableFlow;
-import solomon.flows.CommandFlowSupplier;
+import solomon.flows.SupplierFlow;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -31,12 +31,12 @@ public class CommandExecutor {
         return runnable(clazz).initialize(initializer);
     }
 
-    public <C extends Supplier<O>, O> CommandFlowSupplier<C, O> supplier(Class<C> clazz) {
+    public <C extends Supplier<O>, O> SupplierFlow<C, O> supplier(Class<C> clazz) {
         C command = instantiateCommand(clazz);
-        return new CommandFlowSupplier<>(command, this.globalDecorators);
+        return new SupplierFlow<>(command, this.globalDecorators);
     }
 
-    public <C extends Supplier<O>, O> CommandFlowSupplier<C, O> supplier(Class<C> clazz, Consumer<C> initializer) {
+    public <C extends Supplier<O>, O> SupplierFlow<C, O> supplier(Class<C> clazz, Consumer<C> initializer) {
         return supplier(clazz).initialize(initializer);
     }
 }

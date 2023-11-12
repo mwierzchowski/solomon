@@ -10,18 +10,18 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Slf4j
-public class CommandFlowSupplier<C extends Supplier<R>, R> extends Flow<CommandFlowSupplier<C, R>, C, R> {
-    public CommandFlowSupplier(@NonNull C command, List<Decorator> globalDecorators) {
+public class SupplierFlow<C extends Supplier<R>, R> extends Flow<SupplierFlow<C, R>, C, R> {
+    public SupplierFlow(@NonNull C command, List<Decorator> globalDecorators) {
         super(command, globalDecorators);
     }
 
-    public CommandFlowSupplier<C, R> defaultResult(R result) {
+    public SupplierFlow<C, R> defaultResult(R result) {
         super.findOrCreate(DefaultValueDecorator.class, DefaultValueDecorator::new)
                 .setDefaultValue(result);
         return this;
     }
 
-    public CommandFlowSupplier<C, R> defaultResult(@NonNull Supplier<R> resultSupplier) {
+    public SupplierFlow<C, R> defaultResult(@NonNull Supplier<R> resultSupplier) {
         super.findOrCreate(DefaultValueDecorator.class, DefaultValueDecorator::new)
                 .setDefaultValue(resultSupplier);
         return this;

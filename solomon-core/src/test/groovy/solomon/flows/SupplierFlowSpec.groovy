@@ -8,9 +8,9 @@ import spock.lang.Specification
 import java.util.function.Supplier
 
 @Slf4j
-class CommandFlowSupplierSpec extends Specification {
+class SupplierFlowSpec extends Specification {
     def cmd = new SupplierCmd()
-    def cmdFlow = new CommandFlowSupplier(cmd, null)
+    def cmdFlow = new SupplierFlow(cmd, null)
 
     def "Executes command"() {
         when:
