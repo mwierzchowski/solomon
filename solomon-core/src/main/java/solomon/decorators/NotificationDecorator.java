@@ -3,7 +3,7 @@ package solomon.decorators;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import solomon.CommandDecorator;
-import solomon.CommandResult;
+import solomon.Result;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class NotificationDecorator implements CommandDecorator {
     }
 
     @Override
-    public void after(Object command, CommandResult result) {
+    public void after(Object command, Result result) {
         int counter = 0;
         if (result.isSuccess() && this.successListeners != null) {
             counter = successListeners.stream()

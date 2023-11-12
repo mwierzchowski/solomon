@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import solomon.CommandDecorator;
-import solomon.CommandResult;
+import solomon.Result;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -13,7 +13,7 @@ public class ExceptionMappingDecorator implements CommandDecorator {
     @NonNull private final Class<? extends RuntimeException> targetClass;
 
     @Override
-    public void after(Object command, CommandResult result) {
+    public void after(Object command, Result result) {
         var source = result.getException();
         if (result.isFailure() && source.getClass().isAssignableFrom(sourceClass)) {
             var target = mapExceptionFrom(source);

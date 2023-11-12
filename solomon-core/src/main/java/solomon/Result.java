@@ -3,20 +3,20 @@ package solomon;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class CommandResult {
+public class Result {
     private Object value;
     private RuntimeException exception;
     @Getter private boolean overridden;
     @Getter private final long duration;
 
-    public CommandResult(Object value, long start) {
+    public Result(Object value, long start) {
         this.value = value;
         this.exception = null;
         this.duration = System.currentTimeMillis() - start;
         this.overridden = false;
     }
 
-    public CommandResult(@NonNull RuntimeException exception, long start) {
+    public Result(@NonNull RuntimeException exception, long start) {
         this.value = null;
         this.exception = exception;
         this.duration = System.currentTimeMillis() - start;

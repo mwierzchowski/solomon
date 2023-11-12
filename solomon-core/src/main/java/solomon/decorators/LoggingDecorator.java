@@ -2,7 +2,7 @@ package solomon.decorators;
 
 import lombok.extern.slf4j.Slf4j;
 import solomon.CommandDecorator;
-import solomon.CommandResult;
+import solomon.Result;
 
 import static java.text.MessageFormat.format;
 
@@ -17,7 +17,7 @@ public class LoggingDecorator implements CommandDecorator {
     }
 
     @Override
-    public void after(Object command, CommandResult result) {
+    public void after(Object command, Result result) {
         if (result.isSuccess() && LOG.isDebugEnabled()) {
             var message = format("Command finished in {0} ms", result.getDuration());
             LOG.debug(message);

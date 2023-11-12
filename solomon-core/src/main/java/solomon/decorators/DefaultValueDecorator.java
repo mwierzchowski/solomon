@@ -2,7 +2,7 @@ package solomon.decorators;
 
 import lombok.extern.slf4j.Slf4j;
 import solomon.CommandDecorator;
-import solomon.CommandResult;
+import solomon.Result;
 
 import java.util.function.Supplier;
 
@@ -19,7 +19,7 @@ public class DefaultValueDecorator implements CommandDecorator {
     }
 
     @Override
-    public void after(Object command, CommandResult result) {
+    public void after(Object command, Result result) {
         if (result.isFailure()) {
             var defaultValue = defaultValueSupplier != null ? defaultValueSupplier.get() : null;
             result.overrideValue(defaultValue);

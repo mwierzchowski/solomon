@@ -47,7 +47,7 @@ public abstract class CommandFlow<F, C, R> {
         return this.decorate(new BeforeDecorator(lambdaDecorator));
     }
 
-    public F decorateAfter(@NonNull BiConsumer<Object, CommandResult> lambdaDecorator) {
+    public F decorateAfter(@NonNull BiConsumer<Object, Result> lambdaDecorator) {
         return this.decorate(new AfterDecorator(lambdaDecorator));
     }
 
@@ -71,16 +71,16 @@ public abstract class CommandFlow<F, C, R> {
     }
 
     public R execute() {
-        CommandResult result = null;
+        Result result = null;
         long start = 0;
         try {
             for (var decorator : join(this.globalDecorators, this.localDecorators)) {
                 decorator.before(this.command);
             }
             start = System.currentTimeMillis();
-            result = new CommandResult(internalExecute(), start);
+            result = new Result(internalExecute(), start);
         } catch (RuntimeException ex) {
-            result = new CommandResult(ex, start);
+            result = new Result(ex, start);
         } finally {
             for (var decorator : joinReverse(this.globalDecorators, this.localDecorators)) {
                 decorator.after(this.command, result);
