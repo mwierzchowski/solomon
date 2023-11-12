@@ -8,7 +8,7 @@ import solomon.Result;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ExceptionMappingDecorator implements Decorator {
+public class ExceptionMappingDecorator implements Decorator<Object> {
     @NonNull private final Class<? extends RuntimeException> sourceClass;
     @NonNull private final Class<? extends RuntimeException> targetClass;
 

@@ -23,8 +23,8 @@ import static solomon.utils.Predicates.predicateBy;
 @RequiredArgsConstructor
 public abstract class Flow<F, C, R> {
     protected final @NonNull C command;
-    protected final List<Decorator> globalDecorators;
-    protected List<Decorator> localDecorators;
+    protected final List<Decorator<Object>> globalDecorators;
+    protected List<Decorator<Object>> localDecorators;
 
     @SuppressWarnings("unchecked")
     public F initialize(@NonNull Consumer<C> initializer) {
@@ -34,21 +34,21 @@ public abstract class Flow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    public F decorate(@NonNull Decorator decorator) {
+    public F decorate(@NonNull Decorator<?> decorator) {
         if (this.localDecorators == null) {
             this.localDecorators = new ArrayList<>();
         }
-        this.localDecorators.add(decorator);
+        this.localDecorators.add((Decorator<Object>) decorator);
         LOG.debug("Added decorator: {}", decorator);
         return (F) this;
     }
 
-    public F decorateBefore(@NonNull Consumer<Object> lambdaDecorator) {
-        return this.decorate(new BeforeDecorator(lambdaDecorator));
+    public F decorateBefore(@NonNull Consumer<C> lambdaDecorator) {
+        return this.decorate(new BeforeDecorator<>(lambdaDecorator));
     }
 
-    public F decorateAfter(@NonNull BiConsumer<Object, Result> lambdaDecorator) {
-        return this.decorate(new AfterDecorator(lambdaDecorator));
+    public F decorateAfter(@NonNull BiConsumer<C, Result> lambdaDecorator) {
+        return this.decorate(new AfterDecorator<>(lambdaDecorator));
     }
 
     public <E1 extends RuntimeException, E2 extends RuntimeException> F mapException(Class<E1> srcClass, Class<E2> dstClass) {
@@ -99,7 +99,7 @@ public abstract class Flow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    protected <D extends Decorator> D findOrCreate(@NonNull Class<D> decoratorClass, Supplier<D> decoratorSupplier) {
+    protected <D extends Decorator<?>> D findOrCreate(@NonNull Class<D> decoratorClass, Supplier<D> decoratorSupplier) {
         D decorator = null;
         if (this.localDecorators != null) {
             decorator = (D) this.localDecorators.stream()

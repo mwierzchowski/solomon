@@ -7,7 +7,7 @@ import solomon.Result;
 import java.util.function.Supplier;
 
 @Slf4j
-public class DefaultValueDecorator implements Decorator {
+public class DefaultValueDecorator implements Decorator<Object> {
     private Supplier<Object> defaultValueSupplier;
 
     public void setDefaultValue(Object defaultValue) {

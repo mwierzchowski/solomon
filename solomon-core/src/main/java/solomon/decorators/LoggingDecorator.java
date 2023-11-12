@@ -7,7 +7,7 @@ import solomon.Result;
 import static java.text.MessageFormat.format;
 
 @Slf4j
-public class LoggingDecorator implements Decorator {
+public class LoggingDecorator implements Decorator<Object> {
     @Override
     public void before(Object command) {
         if (LOG.isDebugEnabled()) {
@@ -23,7 +23,7 @@ public class LoggingDecorator implements Decorator {
             LOG.debug(message);
         } else if(result.isFailure() && LOG.isErrorEnabled()) {
             var message = format("Command failed in {0} ms", result.getDuration());
-            LOG.error(message, (Throwable) result.getException());
+            LOG.error(message);
         }
     }
 }
