@@ -2,7 +2,7 @@ package solomon.flows
 
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
-import solomon.CommandDecorator
+import solomon.Decorator
 import spock.lang.Specification
 
 import java.util.function.Supplier
@@ -101,7 +101,7 @@ class CommandFlowSupplierSpec extends Specification {
     }
 
     @TupleConstructor(includeFields = true)
-    static class SupplierCmdDecorator implements CommandDecorator {
+    static class SupplierCmdDecorator implements Decorator {
         private final overrideValue;
 
         @Override

@@ -2,12 +2,12 @@ package solomon.decorators;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import solomon.CommandDecorator;
+import solomon.Decorator;
 
 import java.util.function.Consumer;
 
 @RequiredArgsConstructor
-public class BeforeDecorator implements CommandDecorator {
+public class BeforeDecorator implements Decorator {
     private final @NonNull Consumer<Object> delegate;
 
     @Override

@@ -23,8 +23,8 @@ import static solomon.utils.Predicates.predicateBy;
 @RequiredArgsConstructor
 public abstract class CommandFlow<F, C, R> {
     protected final @NonNull C command;
-    protected final List<CommandDecorator> globalDecorators;
-    protected List<CommandDecorator> localDecorators;
+    protected final List<Decorator> globalDecorators;
+    protected List<Decorator> localDecorators;
 
     @SuppressWarnings("unchecked")
     public F initialize(@NonNull Consumer<C> initializer) {
@@ -34,7 +34,7 @@ public abstract class CommandFlow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    public F decorate(@NonNull CommandDecorator decorator) {
+    public F decorate(@NonNull Decorator decorator) {
         if (this.localDecorators == null) {
             this.localDecorators = new ArrayList<>();
         }
@@ -99,7 +99,7 @@ public abstract class CommandFlow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    protected <D extends CommandDecorator> D findOrCreate(@NonNull Class<D> decoratorClass, Supplier<D> decoratorSupplier) {
+    protected <D extends Decorator> D findOrCreate(@NonNull Class<D> decoratorClass, Supplier<D> decoratorSupplier) {
         D decorator = null;
         if (this.localDecorators != null) {
             decorator = (D) this.localDecorators.stream()

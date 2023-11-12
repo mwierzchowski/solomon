@@ -1,6 +1,6 @@
 package solomon;
 
-public interface CommandDecorator {
+public interface Decorator {
     default void before(Object command) {}
     default void after(Object command, Result result) {}
 }

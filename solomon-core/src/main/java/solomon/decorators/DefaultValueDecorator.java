@@ -1,13 +1,13 @@
 package solomon.decorators;
 
 import lombok.extern.slf4j.Slf4j;
-import solomon.CommandDecorator;
+import solomon.Decorator;
 import solomon.Result;
 
 import java.util.function.Supplier;
 
 @Slf4j
-public class DefaultValueDecorator implements CommandDecorator {
+public class DefaultValueDecorator implements Decorator {
     private Supplier<Object> defaultValueSupplier;
 
     public void setDefaultValue(Object defaultValue) {

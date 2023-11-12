@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 public class CommandExecutor {
     @Setter
-    private List<CommandDecorator> globalDecorators;
+    private List<Decorator> globalDecorators;
 
     protected <C> C instantiateCommand(Class<C> clazz) {
         try {

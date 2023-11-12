@@ -2,7 +2,7 @@ package solomon.decorators;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import solomon.CommandDecorator;
+import solomon.Decorator;
 import solomon.Result;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
-public class NotificationDecorator implements CommandDecorator {
+public class NotificationDecorator implements Decorator {
     private List<Consumer<Object>> successListeners;
     private List<Consumer<RuntimeException>> failureListeners;
 

@@ -2,7 +2,7 @@ package solomon.flows;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import solomon.CommandDecorator;
+import solomon.Decorator;
 import solomon.CommandFlow;
 import solomon.decorators.DefaultValueDecorator;
 
@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 public class CommandFlowSupplier<C extends Supplier<R>, R> extends CommandFlow<CommandFlowSupplier<C, R>, C, R> {
-    public CommandFlowSupplier(@NonNull C command, List<CommandDecorator> globalDecorators) {
+    public CommandFlowSupplier(@NonNull C command, List<Decorator> globalDecorators) {
         super(command, globalDecorators);
     }
 

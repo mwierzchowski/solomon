@@ -1,13 +1,13 @@
 package solomon.decorators;
 
 import lombok.extern.slf4j.Slf4j;
-import solomon.CommandDecorator;
+import solomon.Decorator;
 import solomon.Result;
 
 import static java.text.MessageFormat.format;
 
 @Slf4j
-public class LoggingDecorator implements CommandDecorator {
+public class LoggingDecorator implements Decorator {
     @Override
     public void before(Object command) {
         if (LOG.isDebugEnabled()) {
