@@ -2,14 +2,15 @@ package solomon.flows
 
 import groovy.transform.TupleConstructor
 import groovy.util.logging.Slf4j
+import solomon.Decorator
 import spock.lang.Specification
 
 import java.util.function.Supplier
 
 @Slf4j
-class CommandFlowSupplierSpec extends Specification {
+class SupplierFlowSpec extends Specification {
     def cmd = new SupplierCmd()
-    def cmdFlow = new CommandFlowSupplier(cmd)
+    def cmdFlow = new SupplierFlow(cmd, null)
 
     def "Executes command"() {
         when:
@@ -30,19 +31,20 @@ class CommandFlowSupplierSpec extends Specification {
 
     def "Decorates command with decorator"() {
         when:
-        def result = cmdFlow.decorate(SupplierDecorator::new)
+        def result = cmdFlow.
+                initialize ({ cmd ->
+                    cmd.x = 10
+                })
+                .decorate(new SupplierCmdDecorator(20))
                 .execute()
         then:
-        result == 1000
+        result == 2000
     }
 
     def "Decorates command inline"() {
         when:
-        cmdFlow.decorateInline { cmd -> {
+        cmdFlow.decorateBefore { cmd -> {
                     log.info("Before")
-                    def result = cmd.get()
-                    log.info("After")
-                    return result
                 }}
                 .execute()
         then:
@@ -51,19 +53,20 @@ class CommandFlowSupplierSpec extends Specification {
 
     def "Listens for command success"() {
         when:
-        cmdFlow.onSuccess {
-                    log.info("Success " + it.get())
-                }
+        cmdFlow.onSuccess(cmd -> {
+                    log.info("Success " + cmd)
+                })
                 .execute()
         then:
         noExceptionThrown()
     }
 
+
     def "Listens for command failure"() {
         given:
         def exception = new RuntimeException("test")
         when:
-        cmdFlow.decorateInline {
+        cmdFlow.decorateBefore {
                     throw exception
                 }
                 .onFailure {
@@ -79,7 +82,7 @@ class CommandFlowSupplierSpec extends Specification {
         def defaultValue = 123
         def exception = new RuntimeException("test")
         when:
-        def result = cmdFlow.decorateInline {
+        def result = cmdFlow.decorateBefore {
                     throw exception
                 }
                 .defaultResult(defaultValue)
@@ -98,12 +101,12 @@ class CommandFlowSupplierSpec extends Specification {
     }
 
     @TupleConstructor(includeFields = true)
-    static class SupplierDecorator<C> implements Supplier<C> {
-        private final Supplier<C> cmd
+    static class SupplierCmdDecorator implements Decorator {
+        private final overrideValue;
 
         @Override
-        C get() {
-            return cmd.get() * 10
+        void before(Object command) {
+            command.asType(SupplierCmd).x = this.overrideValue
         }
     }
 }

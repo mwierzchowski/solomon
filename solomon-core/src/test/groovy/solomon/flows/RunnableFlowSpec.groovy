@@ -1,13 +1,14 @@
 package solomon.flows
 
-import groovy.transform.TupleConstructor
+
 import groovy.util.logging.Slf4j
+import solomon.decorators.LoggingDecorator
 import spock.lang.Specification
 
 @Slf4j
-class CommandFlowRunnableSpec extends Specification {
+class RunnableFlowSpec extends Specification {
     def command = new RunnableCmd()
-    def commandFlow = new CommandFlowRunnable(command)
+    def commandFlow = new RunnableFlow(command, null)
 
     def "Executes command"() {
         when:
@@ -28,7 +29,7 @@ class CommandFlowRunnableSpec extends Specification {
 
     def "Decorates command with decorator"() {
         when:
-        commandFlow.decorate(RunnableDecorator::new)
+        commandFlow.decorate(new LoggingDecorator())
                 .execute()
         then:
         noExceptionThrown()
@@ -36,10 +37,8 @@ class CommandFlowRunnableSpec extends Specification {
 
     def "Decorates command inline"() {
         when:
-        commandFlow.decorateInline {cmd -> {
+        commandFlow.decorateBefore {cmd -> {
                     log.info("Before")
-                    cmd.run()
-                    log.info("After")
                 }}
                 .execute()
         then:
@@ -79,19 +78,6 @@ class CommandFlowRunnableSpec extends Specification {
         void run() {
           log.info("parameter x = {}", x)
 
-        }
-    }
-
-    @Slf4j
-    @TupleConstructor(includeFields = true)
-    static class RunnableDecorator implements Runnable {
-        private final Runnable cmd
-
-        @Override
-        void run() {
-            log.info("Before")
-            cmd.run()
-            log.info("After")
         }
     }
 }
