@@ -3,8 +3,6 @@ package solomon;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import solomon.decorators.AfterDecorator;
-import solomon.decorators.BeforeDecorator;
 import solomon.decorators.ExceptionMappingDecorator;
 import solomon.decorators.NotificationDecorator;
 
@@ -43,12 +41,24 @@ public abstract class Flow<F, C, R> {
         return (F) this;
     }
 
-    public F decorateBefore(@NonNull Consumer<C> lambdaDecorator) {
-        return this.decorate(new BeforeDecorator<>(lambdaDecorator));
+    public F decorateBefore(@NonNull Consumer<C> handler) {
+        var beforeDecorator = new Decorator<C>() {
+            @Override
+            public void before(C command) {
+                handler.accept(command);
+            }
+        };
+        return this.decorate(beforeDecorator);
     }
 
-    public F decorateAfter(@NonNull BiConsumer<C, Result> lambdaDecorator) {
-        return this.decorate(new AfterDecorator<>(lambdaDecorator));
+    public F decorateAfter(@NonNull BiConsumer<C, Result> handler) {
+        var afterDecorator = new Decorator<C>() {
+            @Override
+            public void after(C command, Result result) {
+                handler.accept(command, result);
+            }
+        };
+        return this.decorate(afterDecorator);
     }
 
     public <E1 extends RuntimeException, E2 extends RuntimeException> F mapException(Class<E1> srcClass, Class<E2> dstClass) {

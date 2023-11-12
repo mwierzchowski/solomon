@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 public class Launcher {
     @Setter
-    private List<Decorator> globalDecorators;
+    private List<Decorator<Object>> globalDecorators;
 
     public <C extends Runnable> RunnableFlow<C> createRunnable(Class<C> clazz) {
         C command = instantiateCommand(clazz);
