@@ -1,91 +1,118 @@
 package solomon;
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import solomon.decorators.AfterDecorator;
+import solomon.decorators.BeforeDecorator;
+import solomon.decorators.ExceptionMappingDecorator;
+import solomon.decorators.NotificationDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static solomon.utils.Iterables.join;
+import static solomon.utils.Iterables.joinReverse;
+import static solomon.utils.Predicates.predicateBy;
 
 @Slf4j
-public abstract class CommandFlow<F, C extends I, I, R> {
-    protected final C command;
-    protected I callStack;
-    protected boolean initialized;
-    protected List<Consumer<Optional<R>>> successListeners;
-    protected List<Consumer<RuntimeException>> failureListeners;
-
-    public CommandFlow(@NonNull C command) {
-        this.command = command;
-        this.callStack = command;
-        this.initialized = false;
-    }
+@RequiredArgsConstructor
+public abstract class CommandFlow<F, C, R> {
+    protected final @NonNull C command;
+    protected final List<CommandDecorator> globalDecorators;
+    protected List<CommandDecorator> localDecorators;
 
     @SuppressWarnings("unchecked")
     public F initialize(@NonNull Consumer<C> initializer) {
-        if (this.initialized) {
-            LOG.warn("Command {} already initialized", cmdName());
-        }
         initializer.accept(this.command);
-        this.initialized = true;
+        LOG.debug("Command initialized");
         return (F) this;
     }
 
     @SuppressWarnings("unchecked")
-    public F decorate(@NonNull UnaryOperator<I> decorator) {
-        this.callStack = decorator.apply(this.callStack);
-        LOG.trace("Command {} decorated: {}", cmdName(), this.callStack);
+    public F decorate(@NonNull CommandDecorator decorator) {
+        if (this.localDecorators == null) {
+            this.localDecorators = new ArrayList<>();
+        }
+        this.localDecorators.add(decorator);
+        LOG.debug("Added decorator: {}", decorator);
+        return (F) this;
+    }
+
+    public F decorateBefore(@NonNull Consumer<Object> lambdaDecorator) {
+        return this.decorate(new BeforeDecorator(lambdaDecorator));
+    }
+
+    public F decorateAfter(@NonNull BiConsumer<Object, CommandResult> lambdaDecorator) {
+        return this.decorate(new AfterDecorator(lambdaDecorator));
+    }
+
+    public <E1 extends RuntimeException, E2 extends RuntimeException> F mapException(Class<E1> srcClass, Class<E2> dstClass) {
+        var exceptionMappingDecorator = new ExceptionMappingDecorator(srcClass, dstClass);
+        return this.decorate(exceptionMappingDecorator);
+    }
+
+    @SuppressWarnings("unchecked")
+    public F onSuccess(Consumer<R> listener) {
+        findOrCreate(NotificationDecorator.class, NotificationDecorator::new)
+                .addSuccessListener(listener);
         return (F) this;
     }
 
     @SuppressWarnings("unchecked")
-    public F onSuccess(@NonNull Consumer<Optional<R>> listener) {
-        if (this.successListeners == null) {
-            this.successListeners = new ArrayList<>();
-        }
-        this.successListeners.add(listener);
+    public F onFailure(Consumer<RuntimeException> listener) {
+        findOrCreate(NotificationDecorator.class, NotificationDecorator::new)
+                .addFailureListener(listener);
         return (F) this;
     }
 
-    @SuppressWarnings("unchecked")
-    public F onFailure(@NonNull Consumer<RuntimeException> failureListener) {
-        if (this.failureListeners == null) {
-            this.failureListeners = new ArrayList<>();
-        }
-        this.failureListeners.add(failureListener);
-        return (F) this;
-    }
-
-    protected void notifyOnSuccess(R result) {
-        if (this.successListeners == null) {
-            return;
-        }
-        var optionalResult = Optional.ofNullable(result);
-        for (var listener : this.successListeners) {
-            try {
-                listener.accept(optionalResult);
-            } catch (Exception ex) {
-                LOG.error("Command {} failed sending success notification", cmdName(), ex);
+    public R execute() {
+        CommandResult result = null;
+        long start = 0;
+        try {
+            for (var decorator : join(this.globalDecorators, this.localDecorators)) {
+                decorator.before(this.command);
+            }
+            start = System.currentTimeMillis();
+            result = new CommandResult(internalExecute(), start);
+        } catch (RuntimeException ex) {
+            result = new CommandResult(ex, start);
+        } finally {
+            for (var decorator : joinReverse(this.globalDecorators, this.localDecorators)) {
+                decorator.after(this.command, result);
             }
         }
-    }
-
-    protected void notifyOnFailure(RuntimeException runtimeException) {
-        if (this.failureListeners == null) {
-            return;
-        }
-        for (var listener : this.failureListeners) {
-            try {
-                listener.accept(runtimeException);
-            } catch (Exception ex) {
-                LOG.error("Command {} failed sending failure notification", cmdName(), ex);
-            }
+        if (result.isFailure()) {
+            throw result.getException();
+        } else {
+            return result.getValue();
         }
     }
 
-    protected String cmdName() {
-        return this.command.getClass().getSimpleName();
+    public <T> T execute(@NonNull Function<R, T> resultMapper) {
+        R result = execute();
+        return resultMapper.apply(result);
     }
+
+    @SuppressWarnings("unchecked")
+    protected <D extends CommandDecorator> D findOrCreate(@NonNull Class<D> decoratorClass, Supplier<D> decoratorSupplier) {
+        D decorator = null;
+        if (this.localDecorators != null) {
+            decorator = (D) this.localDecorators.stream()
+                    .filter(predicateBy(decoratorClass))
+                    .findFirst()
+                    .orElse(null);
+        }
+        if (decorator == null) {
+            decorator = decoratorSupplier.get();
+            this.decorate(decorator);
+        }
+        return decorator;
+    }
+
+    protected abstract R internalExecute();
 }
