@@ -21,7 +21,7 @@ import static solomon.utils.Predicates.predicateBy;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class CommandFlow<F, C, R> {
+public abstract class Flow<F, C, R> {
     protected final @NonNull C command;
     protected final List<Decorator> globalDecorators;
     protected List<Decorator> localDecorators;

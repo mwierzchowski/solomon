@@ -3,14 +3,14 @@ package solomon.flows;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import solomon.Decorator;
-import solomon.CommandFlow;
+import solomon.Flow;
 import solomon.decorators.DefaultValueDecorator;
 
 import java.util.List;
 import java.util.function.Supplier;
 
 @Slf4j
-public class CommandFlowSupplier<C extends Supplier<R>, R> extends CommandFlow<CommandFlowSupplier<C, R>, C, R> {
+public class CommandFlowSupplier<C extends Supplier<R>, R> extends Flow<CommandFlowSupplier<C, R>, C, R> {
     public CommandFlowSupplier(@NonNull C command, List<Decorator> globalDecorators) {
         super(command, globalDecorators);
     }

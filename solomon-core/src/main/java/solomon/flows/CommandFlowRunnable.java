@@ -3,12 +3,12 @@ package solomon.flows;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import solomon.Decorator;
-import solomon.CommandFlow;
+import solomon.Flow;
 
 import java.util.List;
 
 @Slf4j
-public class CommandFlowRunnable<C extends Runnable> extends CommandFlow<CommandFlowRunnable<C>, C, C> {
+public class CommandFlowRunnable<C extends Runnable> extends Flow<CommandFlowRunnable<C>, C, C> {
     public CommandFlowRunnable(@NonNull C command, List<Decorator> globalDecorators) {
         super(command, globalDecorators);
     }
