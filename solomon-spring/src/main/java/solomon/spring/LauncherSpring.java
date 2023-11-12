@@ -2,10 +2,10 @@ package solomon.spring;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
-import solomon.CommandExecutor;
+import solomon.Launcher;
 
 @RequiredArgsConstructor
-public class CommandExecutorSpring extends CommandExecutor {
+public class LauncherSpring extends Launcher {
     private final ApplicationContext context;
 
     @Override
