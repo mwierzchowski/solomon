@@ -6,9 +6,9 @@ import solomon.decorators.LoggingDecorator
 import spock.lang.Specification
 
 @Slf4j
-class CommandFlowRunnableSpec extends Specification {
+class RunnableFlowSpec extends Specification {
     def command = new RunnableCmd()
-    def commandFlow = new CommandFlowRunnable(command, null)
+    def commandFlow = new RunnableFlow(command, null)
 
     def "Executes command"() {
         when:

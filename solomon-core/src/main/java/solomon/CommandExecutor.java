@@ -1,7 +1,7 @@
 package solomon;
 
 import lombok.Setter;
-import solomon.flows.CommandFlowRunnable;
+import solomon.flows.RunnableFlow;
 import solomon.flows.CommandFlowSupplier;
 
 import java.text.MessageFormat;
@@ -22,12 +22,12 @@ public class CommandExecutor {
         }
     }
 
-    public <C extends Runnable> CommandFlowRunnable<C> runnable(Class<C> clazz) {
+    public <C extends Runnable> RunnableFlow<C> runnable(Class<C> clazz) {
         C command = instantiateCommand(clazz);
-        return new CommandFlowRunnable<>(command, this.globalDecorators);
+        return new RunnableFlow<>(command, this.globalDecorators);
     }
 
-    public <C extends Runnable> CommandFlowRunnable<C> runnable(Class<C> clazz, Consumer<C> initializer) {
+    public <C extends Runnable> RunnableFlow<C> runnable(Class<C> clazz, Consumer<C> initializer) {
         return runnable(clazz).initialize(initializer);
     }
 

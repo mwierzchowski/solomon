@@ -8,8 +8,8 @@ import solomon.Flow;
 import java.util.List;
 
 @Slf4j
-public class CommandFlowRunnable<C extends Runnable> extends Flow<CommandFlowRunnable<C>, C, C> {
-    public CommandFlowRunnable(@NonNull C command, List<Decorator> globalDecorators) {
+public class RunnableFlow<C extends Runnable> extends Flow<RunnableFlow<C>, C, C> {
+    public RunnableFlow(@NonNull C command, List<Decorator> globalDecorators) {
         super(command, globalDecorators);
     }
 
