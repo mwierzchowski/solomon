@@ -45,6 +45,13 @@ public class Result {
         return (E) this.exception;
     }
 
+    public <V> V getValueOrThrowException() {
+        if (isFailure()) {
+            throw getException();
+        }
+        return getValue();
+    }
+
     public boolean isSuccess() {
         return exception == null;
     }

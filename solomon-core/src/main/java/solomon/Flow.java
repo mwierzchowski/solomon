@@ -81,8 +81,8 @@ public abstract class Flow<F, C, R> {
     }
 
     public R execute() {
-        Result result = null;
         long start = 0;
+        Result result = null;
         try {
             for (var decorator : join(this.globalDecorators, this.localDecorators)) {
                 decorator.before(this.command);
@@ -96,11 +96,7 @@ public abstract class Flow<F, C, R> {
                 decorator.after(this.command, result);
             }
         }
-        if (result.isFailure()) {
-            throw result.getException();
-        } else {
-            return result.getValue();
-        }
+        return result.getValueOrThrowException();
     }
 
     public <T> T execute(@NonNull Function<R, T> resultMapper) {
