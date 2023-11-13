@@ -79,16 +79,16 @@ class SupplierFlowSpec extends Specification {
 
     def "Uses default value"() {
         given:
-        def defaultValue = 123
+        def value = 123
         def exception = new RuntimeException("test")
         when:
-        def result = cmdFlow.decorateBefore {
+        def actualValue = cmdFlow.decorateBefore {
                     throw exception
                 }
-                .defaultResult(defaultValue)
+                .defaultValue(value)
                 .execute()
         then:
-        result == defaultValue
+        actualValue == value
     }
 
     static class SupplierCmd implements Supplier<Integer> {

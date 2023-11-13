@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
-public class NotificationDecorator<R> implements Decorator<Object, Object> {
-    private List<Consumer<R>> successListeners;
+public class NotificationDecorator<V> implements Decorator<Object, Object> {
+    private List<Consumer<V>> successListeners;
     private List<Consumer<RuntimeException>> failureListeners;
 
-    public void addSuccessListener(@NonNull Consumer<R> listener) {
+    public void addSuccessListener(@NonNull Consumer<V> listener) {
         if (successListeners == null) {
             successListeners = new ArrayList<>();
         }
@@ -36,7 +36,7 @@ public class NotificationDecorator<R> implements Decorator<Object, Object> {
         int counter = 0;
         if (result.isSuccess() && this.successListeners != null) {
             counter = successListeners.stream()
-                    .mapToInt(listener -> sendSafeNotification(listener, (R) result.getValue()))
+                    .mapToInt(listener -> sendSafeNotification(listener, (V) result.getValue()))
                     .sum();
         } else if (result.isFailure() && this.failureListeners != null) {
             counter = failureListeners.stream()

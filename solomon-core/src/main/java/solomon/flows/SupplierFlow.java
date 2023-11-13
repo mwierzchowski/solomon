@@ -10,25 +10,25 @@ import java.util.List;
 import java.util.function.Supplier;
 
 @Slf4j
-public class SupplierFlow<C extends Supplier<R>, R> extends Flow<SupplierFlow<C, R>, C, R> {
+public class SupplierFlow<C extends Supplier<V>, V> extends Flow<SupplierFlow<C, V>, C, V> {
     public SupplierFlow(@NonNull C command, List<Decorator<Object, Object>> globalDecorators) {
         super(command, globalDecorators);
     }
 
-    public SupplierFlow<C, R> defaultResult(R result) {
+    public SupplierFlow<C, V> defaultValue(V value) {
         super.findOrCreate(DefaultValueDecorator.class, DefaultValueDecorator::new)
-                .setDefaultValue(result);
+                .setDefaultValue(value);
         return this;
     }
 
-    public SupplierFlow<C, R> defaultResult(@NonNull Supplier<R> resultSupplier) {
+    public SupplierFlow<C, V> defaultValue(@NonNull Supplier<V> valueSupplier) {
         super.findOrCreate(DefaultValueDecorator.class, DefaultValueDecorator::new)
-                .setDefaultValue(resultSupplier);
+                .setDefaultValue(valueSupplier);
         return this;
     }
 
     @Override
-    protected R internalExecute() {
+    protected V internalExecute() {
         return super.command.get();
     }
 }

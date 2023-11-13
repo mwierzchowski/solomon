@@ -19,7 +19,7 @@ import static solomon.utils.Predicates.predicateBy;
 
 @Slf4j
 @RequiredArgsConstructor
-public abstract class Flow<F, C, R> {
+public abstract class Flow<F, C, V> {
     protected final @NonNull C command;
     protected final List<Decorator<Object, Object>> globalDecorators;
     protected List<Decorator<Object, Object>> localDecorators;
@@ -42,7 +42,7 @@ public abstract class Flow<F, C, R> {
     }
 
     public F decorateBefore(@NonNull Consumer<C> beforeHandler) {
-        var beforeDecorator = new Decorator<C, R>() {
+        var beforeDecorator = new Decorator<C, V>() {
             @Override
             public void before(C command) {
                 beforeHandler.accept(command);
@@ -51,10 +51,10 @@ public abstract class Flow<F, C, R> {
         return this.decorate(beforeDecorator);
     }
 
-    public F decorateAfter(@NonNull BiConsumer<C, Result<R>> afterHandler) {
-        var afterDecorator = new Decorator<C, R>() {
+    public F decorateAfter(@NonNull BiConsumer<C, Result<V>> afterHandler) {
+        var afterDecorator = new Decorator<C, V>() {
             @Override
-            public void after(C command, Result<R> result) {
+            public void after(C command, Result<V> result) {
                 afterHandler.accept(command, result);
             }
         };
@@ -67,7 +67,7 @@ public abstract class Flow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    public F onSuccess(Consumer<R> listener) {
+    public F onSuccess(Consumer<V> listener) {
         findOrCreate(NotificationDecorator.class, NotificationDecorator::new)
                 .addSuccessListener(listener);
         return (F) this;
@@ -81,9 +81,9 @@ public abstract class Flow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    public R execute() {
+    public V execute() {
         long start = 0;
-        Result<R> result = null;
+        Result<V> result = null;
         try {
             for (var decorator : join(this.globalDecorators, this.localDecorators)) {
                 decorator.before(this.command);
@@ -100,9 +100,9 @@ public abstract class Flow<F, C, R> {
         return result.getValueOrThrowException();
     }
 
-    public <T> T execute(@NonNull Function<R, T> resultMapper) {
-        R result = execute();
-        return resultMapper.apply(result);
+    public <T> T execute(@NonNull Function<V, T> valueMapper) {
+        V value = execute();
+        return valueMapper.apply(value);
     }
 
     @SuppressWarnings("unchecked")
@@ -121,5 +121,5 @@ public abstract class Flow<F, C, R> {
         return decorator;
     }
 
-    protected abstract R internalExecute();
+    protected abstract V internalExecute();
 }
