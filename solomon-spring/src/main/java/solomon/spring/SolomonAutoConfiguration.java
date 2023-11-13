@@ -3,13 +3,13 @@ package solomon.spring;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import solomon.Factory;
+import solomon.CmdFactory;
 
 @Configuration
 public class SolomonAutoConfiguration {
     @Bean
-    public Factory commandExecutor(ApplicationContext applicationContext) {
-        return new FactorySpring(applicationContext);
+    public CmdFactory commandExecutor(ApplicationContext applicationContext) {
+        return new SpringCmdFactory(applicationContext);
     }
 
     @Bean

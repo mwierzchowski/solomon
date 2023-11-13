@@ -2,10 +2,10 @@ package solomon.spring;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
-import solomon.Factory;
+import solomon.CmdFactory;
 
 @RequiredArgsConstructor
-public class FactorySpring extends Factory {
+public class SpringCmdFactory extends CmdFactory {
     private final ApplicationContext context;
 
     @Override
