@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+@Setter
 public class CmdFactory {
-    @Setter
     private List<Decorator<Object, Object>> globalDecorators;
 
     public <C extends Runnable> RunnableFlow<C> createRunnable(Class<C> clazz) {
