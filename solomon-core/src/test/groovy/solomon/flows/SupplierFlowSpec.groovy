@@ -102,7 +102,7 @@ class SupplierFlowSpec extends Specification {
 
     @TupleConstructor(includeFields = true)
     static class SupplierCmdDecorator implements Decorator {
-        private final overrideValue;
+        private final overrideValue
 
         @Override
         void before(Object command) {
