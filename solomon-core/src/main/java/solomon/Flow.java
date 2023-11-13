@@ -82,7 +82,7 @@ public abstract class Flow<F, C, V> {
 
     @SuppressWarnings("unchecked")
     public V execute() {
-        long start = 0;
+        Long start = null;
         Result<V> result = null;
         try {
             for (var decorator : join(this.globalDecorators, this.localDecorators)) {
