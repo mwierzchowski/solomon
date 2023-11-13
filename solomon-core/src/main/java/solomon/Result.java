@@ -53,6 +53,6 @@ public class Result<V> {
     }
 
     public boolean isDecorationFailure() {
-        return duration == null;
+        return this.duration == null;
     }
 }
