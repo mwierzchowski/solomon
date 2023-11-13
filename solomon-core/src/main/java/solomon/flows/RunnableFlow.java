@@ -9,7 +9,7 @@ import java.util.List;
 
 @Slf4j
 public class RunnableFlow<C extends Runnable> extends Flow<RunnableFlow<C>, C, C> {
-    public RunnableFlow(@NonNull C command, List<Decorator<Object>> globalDecorators) {
+    public RunnableFlow(@NonNull C command, List<Decorator<Object, Object>> globalDecorators) {
         super(command, globalDecorators);
     }
 

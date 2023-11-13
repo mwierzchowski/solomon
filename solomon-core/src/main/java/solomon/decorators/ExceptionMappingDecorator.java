@@ -8,12 +8,12 @@ import solomon.Result;
 
 @Slf4j
 @RequiredArgsConstructor
-public class ExceptionMappingDecorator implements Decorator<Object> {
+public class ExceptionMappingDecorator implements Decorator<Object, Object> {
     @NonNull private final Class<? extends RuntimeException> sourceClass;
     @NonNull private final Class<? extends RuntimeException> targetClass;
 
     @Override
-    public void after(Object command, Result result) {
+    public void after(Object command, Result<Object> result) {
         var source = result.getException();
         if (result.isFailure() && source.getClass().isAssignableFrom(sourceClass)) {
             var target = mapExceptionFrom(source);

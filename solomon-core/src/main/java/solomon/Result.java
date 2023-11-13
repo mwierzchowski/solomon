@@ -3,13 +3,14 @@ package solomon;
 import lombok.Getter;
 import lombok.NonNull;
 
-public class Result {
-    private Object value;
+@Getter
+public class Result<V> {
+    private V value;
     private RuntimeException exception;
-    @Getter private boolean overridden;
-    @Getter private final long duration;
+    private boolean overridden;
+    private final long duration;
 
-    public Result(Object value, long start) {
+    public Result(V value, long start) {
         this.value = value;
         this.exception = null;
         this.duration = System.currentTimeMillis() - start;
@@ -23,7 +24,7 @@ public class Result {
         this.overridden = false;
     }
 
-    public void overrideValue(Object value) {
+    public void overrideValue(V value) {
         this.value = value;
         this.exception = null;
         this.overridden = true;
@@ -36,27 +37,18 @@ public class Result {
     }
 
     @SuppressWarnings("unchecked")
-    public <V> V getValue() {
-        return (V) this.value;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <E extends RuntimeException> E getException() {
-        return (E) this.exception;
-    }
-
-    public <V> V getValueOrThrowException() {
-        if (isFailure()) {
-            throw getException();
+    public <T> T getValueOrThrowException() {
+        if (this.isFailure()) {
+            throw this.getException();
         }
-        return getValue();
+        return (T) this.getValue();
     }
 
     public boolean isSuccess() {
-        return exception == null;
+        return this.exception == null;
     }
 
     public boolean isFailure() {
-        return exception != null;
+        return this.exception != null;
     }
 }

@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 @Slf4j
 public class SupplierFlow<C extends Supplier<R>, R> extends Flow<SupplierFlow<C, R>, C, R> {
-    public SupplierFlow(@NonNull C command, List<Decorator<Object>> globalDecorators) {
+    public SupplierFlow(@NonNull C command, List<Decorator<Object, Object>> globalDecorators) {
         super(command, globalDecorators);
     }
 

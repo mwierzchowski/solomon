@@ -21,8 +21,8 @@ import static solomon.utils.Predicates.predicateBy;
 @RequiredArgsConstructor
 public abstract class Flow<F, C, R> {
     protected final @NonNull C command;
-    protected final List<Decorator<Object>> globalDecorators;
-    protected List<Decorator<Object>> localDecorators;
+    protected final List<Decorator<Object, Object>> globalDecorators;
+    protected List<Decorator<Object, Object>> localDecorators;
 
     @SuppressWarnings("unchecked")
     public F initialize(@NonNull Consumer<C> initializer) {
@@ -32,30 +32,30 @@ public abstract class Flow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    public F decorate(@NonNull Decorator<?> decorator) {
+    public F decorate(@NonNull Decorator<?, ?> decorator) {
         if (this.localDecorators == null) {
             this.localDecorators = new ArrayList<>();
         }
-        this.localDecorators.add((Decorator<Object>) decorator);
+        this.localDecorators.add((Decorator<Object, Object>) decorator);
         LOG.debug("Added decorator: {}", decorator);
         return (F) this;
     }
 
-    public F decorateBefore(@NonNull Consumer<C> handler) {
-        var beforeDecorator = new Decorator<C>() {
+    public F decorateBefore(@NonNull Consumer<C> beforeHandler) {
+        var beforeDecorator = new Decorator<C, R>() {
             @Override
             public void before(C command) {
-                handler.accept(command);
+                beforeHandler.accept(command);
             }
         };
         return this.decorate(beforeDecorator);
     }
 
-    public F decorateAfter(@NonNull BiConsumer<C, Result> handler) {
-        var afterDecorator = new Decorator<C>() {
+    public F decorateAfter(@NonNull BiConsumer<C, Result<R>> afterHandler) {
+        var afterDecorator = new Decorator<C, R>() {
             @Override
-            public void after(C command, Result result) {
-                handler.accept(command, result);
+            public void after(C command, Result<R> result) {
+                afterHandler.accept(command, result);
             }
         };
         return this.decorate(afterDecorator);
@@ -80,20 +80,21 @@ public abstract class Flow<F, C, R> {
         return (F) this;
     }
 
+    @SuppressWarnings("unchecked")
     public R execute() {
         long start = 0;
-        Result result = null;
+        Result<R> result = null;
         try {
             for (var decorator : join(this.globalDecorators, this.localDecorators)) {
                 decorator.before(this.command);
             }
             start = System.currentTimeMillis();
-            result = new Result(internalExecute(), start);
+            result = new Result<>(internalExecute(), start);
         } catch (RuntimeException ex) {
-            result = new Result(ex, start);
+            result = new Result<>(ex, start);
         } finally {
             for (var decorator : joinReverse(this.globalDecorators, this.localDecorators)) {
-                decorator.after(this.command, result);
+                decorator.after(this.command, (Result<Object>) result);
             }
         }
         return result.getValueOrThrowException();
@@ -105,7 +106,7 @@ public abstract class Flow<F, C, R> {
     }
 
     @SuppressWarnings("unchecked")
-    protected <D extends Decorator<?>> D findOrCreate(@NonNull Class<D> decoratorClass, Supplier<D> decoratorSupplier) {
+    protected <D extends Decorator<?, ?>> D findOrCreate(@NonNull Class<D> decoratorClass, Supplier<D> decoratorSupplier) {
         D decorator = null;
         if (this.localDecorators != null) {
             decorator = (D) this.localDecorators.stream()

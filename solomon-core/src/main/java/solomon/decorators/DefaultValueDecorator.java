@@ -7,7 +7,7 @@ import solomon.Result;
 import java.util.function.Supplier;
 
 @Slf4j
-public class DefaultValueDecorator implements Decorator<Object> {
+public class DefaultValueDecorator implements Decorator<Object, Object> {
     private Supplier<Object> defaultValueSupplier;
 
     public void setDefaultValue(Object defaultValue) {
@@ -19,7 +19,7 @@ public class DefaultValueDecorator implements Decorator<Object> {
     }
 
     @Override
-    public void after(Object command, Result result) {
+    public void after(Object command, Result<Object> result) {
         if (result.isFailure()) {
             var defaultValue = defaultValueSupplier != null ? defaultValueSupplier.get() : null;
             result.overrideValue(defaultValue);

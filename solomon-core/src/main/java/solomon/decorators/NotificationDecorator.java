@@ -10,11 +10,10 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Slf4j
-public class NotificationDecorator<R> implements Decorator<Object> {
+public class NotificationDecorator<R> implements Decorator<Object, Object> {
     private List<Consumer<R>> successListeners;
     private List<Consumer<RuntimeException>> failureListeners;
 
-    @SuppressWarnings("unchecked")
     public void addSuccessListener(@NonNull Consumer<R> listener) {
         if (successListeners == null) {
             successListeners = new ArrayList<>();
@@ -32,11 +31,12 @@ public class NotificationDecorator<R> implements Decorator<Object> {
     }
 
     @Override
-    public void after(Object command, Result result) {
+    @SuppressWarnings("unchecked")
+    public void after(Object command, Result<Object> result) {
         int counter = 0;
         if (result.isSuccess() && this.successListeners != null) {
             counter = successListeners.stream()
-                    .mapToInt(listener -> sendSafeNotification(listener, result.getValue()))
+                    .mapToInt(listener -> sendSafeNotification(listener, (R) result.getValue()))
                     .sum();
         } else if (result.isFailure() && this.failureListeners != null) {
             counter = failureListeners.stream()
