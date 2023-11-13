@@ -1,24 +1,32 @@
 package solomon.decorators;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.event.Level;
 import solomon.Decorator;
 import solomon.Result;
 
+import static org.slf4j.event.Level.DEBUG;
+import static org.slf4j.event.Level.ERROR;
+
 @Slf4j
+@Setter
 public class LoggingDecorator implements Decorator<Object, Object> {
+    private Level startLevel = DEBUG;
+    private Level successLevel = DEBUG;
+    private Level failureLevel = ERROR;
+
     @Override
     public void before(Object command) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Executing command: {}", command);
-        }
+        LOG.atLevel(startLevel).log("Executing command: {}", command);
     }
 
     @Override
     public void after(Object command, Result<Object> result) {
-        if (result.isSuccess() && LOG.isDebugEnabled()) {
-            LOG.debug("Command finished in {} ms", result.getDuration());
-        } else if(result.isFailure() && LOG.isErrorEnabled()) {
-            LOG.error("Command failed in {} ms", result.getDuration());
+        if (result.isSuccess()) {
+            LOG.atLevel(successLevel).log("Command finished in {} ms", result.getDuration());
+        } else {
+            LOG.atLevel(failureLevel).log("Command failed in {} ms", result.getDuration());
         }
     }
 }
