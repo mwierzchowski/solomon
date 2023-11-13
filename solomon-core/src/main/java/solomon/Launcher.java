@@ -19,7 +19,7 @@ public class Launcher {
     }
 
     public <C extends Runnable> RunnableFlow<C> createRunnable(Class<C> clazz, Consumer<C> initializer) {
-        return createRunnable(clazz).initialize(initializer);
+        return createRunnable(clazz).setup(initializer);
     }
 
     public <C extends Supplier<O>, O> SupplierFlow<C, O> createSupplier(Class<C> clazz) {
@@ -28,7 +28,7 @@ public class Launcher {
     }
 
     public <C extends Supplier<O>, O> SupplierFlow<C, O> createSupplier(Class<C> clazz, Consumer<C> initializer) {
-        return createSupplier(clazz).initialize(initializer);
+        return createSupplier(clazz).setup(initializer);
     }
 
     protected <C> C instantiateCommand(Class<C> clazz) {

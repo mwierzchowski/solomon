@@ -19,7 +19,7 @@ class RunnableFlowSpec extends Specification {
 
     def "Initializes command"() {
         when:
-        commandFlow.initialize {
+        commandFlow.setup {
                     it.x = 42
                 }
                 .execute()

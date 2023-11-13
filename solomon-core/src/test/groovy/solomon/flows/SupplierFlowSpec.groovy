@@ -21,7 +21,7 @@ class SupplierFlowSpec extends Specification {
 
     def "Initializes command"() {
         when:
-        def result = cmdFlow.initialize(cmd -> {
+        def result = cmdFlow.setup(cmd -> {
                         cmd.x = 42
                     })
                     .execute()
@@ -32,7 +32,7 @@ class SupplierFlowSpec extends Specification {
     def "Decorates command with decorator"() {
         when:
         def result = cmdFlow.
-                initialize ({ cmd ->
+                setup ({ cmd ->
                     cmd.x = 10
                 })
                 .decorate(new SupplierCmdDecorator(20))
