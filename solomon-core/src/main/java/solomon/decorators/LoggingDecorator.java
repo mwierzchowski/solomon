@@ -4,26 +4,21 @@ import lombok.extern.slf4j.Slf4j;
 import solomon.Decorator;
 import solomon.Result;
 
-import static java.text.MessageFormat.format;
-
 @Slf4j
 public class LoggingDecorator implements Decorator<Object> {
     @Override
     public void before(Object command) {
         if (LOG.isDebugEnabled()) {
-            var message = format("Executing command: {0}", command);
-            LOG.debug(message);
+            LOG.debug("Executing command: {}", command);
         }
     }
 
     @Override
     public void after(Object command, Result result) {
         if (result.isSuccess() && LOG.isDebugEnabled()) {
-            var message = format("Command finished in {0} ms", result.getDuration());
-            LOG.debug(message);
+            LOG.debug("Command finished in {} ms", result.getDuration());
         } else if(result.isFailure() && LOG.isErrorEnabled()) {
-            var message = format("Command failed in {0} ms", result.getDuration());
-            LOG.error(message);
+            LOG.error("Command failed in {} ms", result.getDuration());
         }
     }
 }
