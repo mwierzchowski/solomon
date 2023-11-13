@@ -2,14 +2,14 @@ package solomon.spring
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import solomon.Launcher
+import solomon.Factory
 import solomon.spring.test.TestApplication
 import solomon.spring.test.TestCommandRunnable
 import spock.lang.Specification
 
 @SpringBootTest(classes = TestApplication)
-class LauncherSpringSpec extends Specification {
-    @Autowired Launcher executor
+class FactorySpringSpec extends Specification {
+    @Autowired Factory executor
 
     def "Executes command"() {
         when:

@@ -2,10 +2,10 @@ package solomon.spring;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
-import solomon.Launcher;
+import solomon.Factory;
 
 @RequiredArgsConstructor
-public class LauncherSpring extends Launcher {
+public class FactorySpring extends Factory {
     private final ApplicationContext context;
 
     @Override
