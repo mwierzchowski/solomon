@@ -25,8 +25,8 @@ public abstract class Flow<F, C, V> {
     protected List<Decorator<Object, Object>> localDecorators;
 
     @SuppressWarnings("unchecked")
-    public F setup(@NonNull Consumer<C> configuration) {
-        configuration.accept(this.command);
+    public F setup(@NonNull Consumer<C> configurator) {
+        configurator.accept(this.command);
         LOG.debug("Command configured");
         return (F) this;
     }
