@@ -25,6 +25,8 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     public void after(Object command, Result<Object> result) {
         if (result.isSuccess()) {
             LOG.atLevel(successLevel).log("Command finished in {} ms", result.getDuration());
+        } else if(result.isDecorationFailure()) {
+            LOG.atLevel(failureLevel).log("Decoration failed");
         } else {
             LOG.atLevel(failureLevel).log("Command failed in {} ms", result.getDuration());
         }
