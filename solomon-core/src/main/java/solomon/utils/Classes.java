@@ -1,9 +1,11 @@
 package solomon.utils;
 
+import lombok.NonNull;
+
 import java.text.MessageFormat;
 
 public interface Classes {
-    static <C> C instantiate(Class<C> clazz) {
+    static <C> C instantiate(@NonNull Class<C> clazz) {
         try {
             return clazz.getConstructor().newInstance();
         } catch (Exception ex) {
