@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 import static solomon.utils.Instances.instantiate;
 
 @Setter
-public class CmdFactory {
+public class CmdBuilder {
     private List<Decorator<Object, Object>> globalDecorators;
 
     public <C extends Runnable> RunnableFlow<C> createRunnable(Class<C> clazz) {
