@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static solomon.utils.Classes.instantiate;
+import static solomon.utils.Instances.instantiate;
 
 @Setter
 public class CmdFactory {

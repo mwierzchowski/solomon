@@ -4,7 +4,7 @@ import lombok.NonNull;
 
 import java.text.MessageFormat;
 
-public interface Classes {
+public interface Instances {
     static <C> C instantiate(@NonNull Class<C> clazz) {
         try {
             return clazz.getConstructor().newInstance();
