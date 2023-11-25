@@ -1,7 +1,13 @@
 package solomon.support;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.text.MessageFormat;
 
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class Utils {
     @SuppressWarnings("unchecked")
     public static <T> T cast(Object object) {
