@@ -3,11 +3,14 @@ package solomon2;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import solomon2.core.Addon;
 import solomon2.core.Execution;
 import solomon2.core.configs.Config;
 import solomon2.spi.CommandFactory;
 import solomon2.spi.CommandHandler;
 import solomon2.spi.ConfigProcessor;
+import solomon2.support.DefaultCommandFactory;
+import solomon2.support.NoOpsConfigProcessor;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -19,16 +22,6 @@ import static solomon2.spi.CommandHandler.SUPPLIER;
 @Slf4j
 @RequiredArgsConstructor
 public class CommandExecutor {
-    public static final CommandExecutor DEFAULT_EXECUTOR = new CommandExecutorBuilder().build();
-
-    public static CommandExecutor defaultExecutor() {
-        return DEFAULT_EXECUTOR;
-    }
-
-    public static CommandExecutorBuilder customExecutor() {
-        return new CommandExecutorBuilder();
-    }
-
     private final Config config;
     private final CommandFactory factory;
     private final ConfigProcessor processor;
@@ -53,5 +46,24 @@ public class CommandExecutor {
             execution.setup(initializer);
         }
         return execution;
+    }
+
+    static class Builder {
+        private Config config = Config.emptyConfig();
+        private CommandFactory factory = new DefaultCommandFactory();
+        private ConfigProcessor processor = new NoOpsConfigProcessor();
+
+        public Builder withGlobal(Addon addon) {
+            this.config = this.config.addAddon(addon);
+            return this;
+        }
+
+        public Builder using(Addon addon) {
+            throw new UnsupportedOperationException("Method not implemented");
+        }
+
+        public CommandExecutor build() {
+            return new CommandExecutor(config, factory, processor);
+        }
     }
 }
