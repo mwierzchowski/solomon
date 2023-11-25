@@ -30,23 +30,22 @@ public class Execution<C, V> extends Context<C> {
     public V execute() {
         LOG.debug("Execution started");
         Result<V> result = null;
-        int decoratorIndex = 0;
+        int decoratorCount = 0;
         boolean decoratorFailed = true;
         try {
             LOG.debug("Decorating before");
-            for (; this.config.contains(Decorator.class, decoratorIndex); decoratorIndex++) {
-                Decorator<?, ?> decorator = this.config.get(Decorator.class, decoratorIndex);
+            for (int i = 0; this.config.contains(Decorator.class, i); i++, decoratorCount++) {
+                Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
                 decorator.before(cast(this));
             }
-            LOG.debug("Executed {} decorators", decoratorIndex);
+            LOG.debug("Executed {} decorators", decoratorCount);
             decoratorFailed = false;
             LOG.debug("Running command");
             result = commandHandler.apply(command);
         } catch (RuntimeException ex) {
             if (decoratorFailed) {
-                LOG.debug("Exception in decorator on position {}: {}", decoratorIndex, ex.getMessage());
-                // Increase index to include failed decorator in the command finalization
-                decoratorIndex += 1;
+                decoratorCount += 1;
+                LOG.debug("Exception in decorator on position {}: {}", decoratorCount, ex.getMessage());
             } else {
                 LOG.debug("Exception in command: {}", ex.getMessage());
             }
@@ -54,25 +53,25 @@ public class Execution<C, V> extends Context<C> {
         } finally {
             assert result != null;
             LOG.debug("Decorating after");
-            for (int i = decoratorIndex - 1; this.config.contains(Decorator.class, i); i--) {
+            for (int i = decoratorCount - 1; this.config.contains(Decorator.class, i); i--) {
                 Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
                 decorator.safeAfter(cast(this), cast(result));
             }
         }
-        int listenerIndex = 0;
+        int listenerCount = 0;
         if (result.isSuccess()) {
             LOG.debug("Sending success notification(s)");
-            for (; this.config.contains(Listener.class, listenerIndex); listenerIndex++) {
-                Listener<?, ?> listener = this.config.get(Listener.class, listenerIndex);
+            for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
+                Listener<?, ?> listener = this.config.get(Listener.class, i);
                 listener.safeOnSuccess(cast(this.command), cast(result.getValue()));
             }
         } else {
             LOG.debug("Sending failure notification(s)");
-            for (; this.config.contains(Listener.class, listenerIndex); listenerIndex++) {
-                Listener<?, ?> listener = this.config.get(Listener.class, listenerIndex);
+            for (int i = 0; this.config.contains(Listener.class, i); i++) {
+                Listener<?, ?> listener = this.config.get(Listener.class, i);
                 listener.safeOnError(cast(this.command), result.getException());
             }
-            LOG.debug("Sent {} notifications", listenerIndex);
+            LOG.debug("Sent {} notifications", listenerCount);
         }
         LOG.debug("Execution finished");
         return result.getValueOrThrowException();
