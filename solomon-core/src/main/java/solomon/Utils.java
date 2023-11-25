@@ -1,4 +1,4 @@
-package solomon.support;
+package solomon;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

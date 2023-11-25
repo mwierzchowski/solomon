@@ -19,7 +19,7 @@ import static solomon.support.Decorators.after;
 import static solomon.support.Decorators.before;
 import static solomon.support.Listeners.onFailure;
 import static solomon.support.Listeners.onSuccess;
-import static solomon.support.Utils.cast;
+import static solomon.Utils.cast;
 
 @Slf4j
 @AllArgsConstructor

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Collections.emptyList;
-import static solomon.support.Utils.cast;
+import static solomon.Utils.cast;
 
 @Slf4j
 @RequiredArgsConstructor
