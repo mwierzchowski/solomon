@@ -23,7 +23,7 @@ import static solomon.support.Utils.cast;
 public class CommandExecutor {
     private final Factory factory;
     private final Processor processor;
-    private final Config config;
+    private final Config globalConfig;
 
     @SafeVarargs
     public final <C extends Runnable> Execution<C, C> runnable(Class<C> cmdClass, Consumer<C>... initializers) {
@@ -39,7 +39,7 @@ public class CommandExecutor {
                                              Consumer<C>[] initializers) {
         LOG.debug("Building command: {}", commandClass.getSimpleName());
         var command = this.factory.instantiate(commandClass);
-        var config = this.processor.process(command, this.config.chain());
+        var config = this.processor.process(command, this.globalConfig.chain());
         var execution = new Execution<>(command, handler, config);
         for (int i = 0; i < initializers.length; i++) {
             execution.setup(initializers[i]);
