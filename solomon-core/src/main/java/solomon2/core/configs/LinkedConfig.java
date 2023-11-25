@@ -8,21 +8,21 @@ public class LinkedConfig extends ListConfig {
     private Config previous;
 
     @Override
-    public <T extends Addon> T get(Class<T> clazz, int index) {
-        var previousSize = this.previousSize(clazz);
-        if (index < previousSize) {
-            return this.previous.get(clazz, index);
+    public <T extends Addon> T getAddon(Class<T> addonClass, int position) {
+        var previousSize = this.previousSize(addonClass);
+        if (position < previousSize) {
+            return this.previous.getAddon(addonClass, position);
         } else {
-            return super.get(clazz, index - previousSize);
+            return super.getAddon(addonClass, position - previousSize);
         }
     }
 
     @Override
-    public int size(Class<? extends Addon> clazz) {
-        return this.previousSize(clazz) + super.size(clazz);
+    public int count(Class<? extends Addon> addonClass) {
+        return this.previousSize(addonClass) + super.count(addonClass);
     }
 
     protected int previousSize(Class<? extends Addon> clazz) {
-        return this.previous == null ? 0 : previous.size(clazz);
+        return this.previous == null ? 0 : previous.count(clazz);
     }
 }

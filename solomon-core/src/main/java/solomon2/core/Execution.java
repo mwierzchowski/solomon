@@ -35,7 +35,7 @@ public class Execution<C, V> extends Context<C> {
         try {
             LOG.debug("Decorating before");
             for (int i = 0; this.config.contains(Decorator.class, i); i++, decoratorCount++) {
-                Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
+                Decorator<?, ?> decorator = this.config.getAddon(Decorator.class, i);
                 decorator.before(cast(this));
             }
             LOG.debug("Executed {} decorators", decoratorCount);
@@ -54,7 +54,7 @@ public class Execution<C, V> extends Context<C> {
             assert result != null;
             LOG.debug("Decorating after");
             for (int i = decoratorCount - 1; this.config.contains(Decorator.class, i); i--) {
-                Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
+                Decorator<?, ?> decorator = this.config.getAddon(Decorator.class, i);
                 decorator.safeAfter(cast(this), cast(result));
             }
         }
@@ -62,13 +62,13 @@ public class Execution<C, V> extends Context<C> {
         if (result.isSuccess()) {
             LOG.debug("Sending success notification(s)");
             for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
-                Listener<?, ?> listener = this.config.get(Listener.class, i);
+                Listener<?, ?> listener = this.config.getAddon(Listener.class, i);
                 listener.safeOnSuccess(cast(this.command), cast(result.getValue()));
             }
         } else {
             LOG.debug("Sending failure notification(s)");
             for (int i = 0; this.config.contains(Listener.class, i); i++) {
-                Listener<?, ?> listener = this.config.get(Listener.class, i);
+                Listener<?, ?> listener = this.config.getAddon(Listener.class, i);
                 listener.safeOnError(cast(this.command), result.getException());
             }
             LOG.debug("Sent {} notifications", listenerCount);
@@ -96,7 +96,7 @@ public class Execution<C, V> extends Context<C> {
     }
 
     public Execution<C, V> decorate(Decorator<? super C, ? super V> decorator) {
-        this.config = this.config.add(Decorator.class, decorator);
+        this.config = this.config.addAddon(decorator);
         return this;
     }
 
@@ -106,17 +106,17 @@ public class Execution<C, V> extends Context<C> {
     }
 
     public Execution<C, V> decorateBefore(Consumer<Context<? super C>> decoratorMethod) {
-        this.config = this.config.add(Decorator.class, before(decoratorMethod));
+        this.config = this.config.addAddon(before(decoratorMethod));
         return this;
     }
 
     public Execution<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
-        this.config = this.config.add(Decorator.class, after(decoratorMethod));
+        this.config = this.config.addAddon(after(decoratorMethod));
         return this;
     }
 
     public Execution<C, V> listen(Listener<? super C, ? super V> listener) {
-        this.config = this.config.add(Listener.class, listener);
+        this.config = this.config.addAddon(listener);
         return this;
     }
 
@@ -126,12 +126,12 @@ public class Execution<C, V> extends Context<C> {
     }
 
     public Execution<C, V> listenOnSuccess(BiConsumer<? super C, ? super V> listenerMethod) {
-        this.config = this.config.add(Listener.class, onSuccess(listenerMethod));
+        this.config = this.config.addAddon(onSuccess(listenerMethod));
         return this;
     }
 
     public Execution<C, V> listenOnFailure(BiConsumer<? super C, RuntimeException> listenerMethod) {
-        this.config = this.config.add(Listener.class, onFailure(listenerMethod));
+        this.config = this.config.addAddon(onFailure(listenerMethod));
         return this;
     }
 }

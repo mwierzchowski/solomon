@@ -13,8 +13,12 @@ public class CommandExecutorBuilder {
     private ConfigProcessor processor = new NoOpsConfigProcessor();
 
     public CommandExecutorBuilder withGlobal(Addon addon) {
-        this.config = this.config.add(addon);
+        this.config = this.config.addAddon(addon);
         return this;
+    }
+
+    public CommandExecutorBuilder using(Addon addon) {
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     public CommandExecutor build() {
