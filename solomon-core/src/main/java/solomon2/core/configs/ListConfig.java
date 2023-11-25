@@ -13,7 +13,7 @@ import static java.util.Collections.emptyList;
 
 @Slf4j
 @Setter
-public class FirstConfig implements Config {
+public class ListConfig implements Config {
     private List<Decorator<?, ?>> decorators;
     private List<Listener<?, ?>> listeners;
 
@@ -36,7 +36,7 @@ public class FirstConfig implements Config {
 
     @Override
     public Config chain() {
-        return new NextConfig(this);
+        return new LinkedConfig(this);
     }
 
     @SuppressWarnings("unchecked")

@@ -3,7 +3,7 @@ package solomon2.core.configs;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class NextConfig extends FirstConfig {
+public class LinkedConfig extends ListConfig {
     private Config previous;
 
     @Override

@@ -14,7 +14,7 @@ public class EmptyConfig implements Config {
 
     @Override
     public <T> Config add(Class<T> clazz, T item) {
-        return new FirstConfig().add(clazz, item);
+        return new ListConfig().add(clazz, item);
     }
 
     @Override
