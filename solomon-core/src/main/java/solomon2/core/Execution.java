@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import solomon2.core.configs.Config;
-import solomon2.spi.Handler;
+import solomon2.spi.Context;
 import solomon2.spi.Decorator;
+import solomon2.spi.Handler;
 import solomon2.spi.Listener;
+import solomon2.support.ContextAdapter;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -21,7 +23,7 @@ import static solomon2.support.Utils.cast;
 
 @Slf4j
 @AllArgsConstructor
-public class Execution<C, V> extends Context<C> {
+public class Execution<C, V> extends ContextAdapter<C> {
     @Getter
     private final C command;
     private final Handler<C, V> handler;

@@ -2,10 +2,9 @@ package solomon2.support;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import solomon2.core.Context;
+import solomon2.spi.Context;
 import solomon2.core.Result;
 import solomon2.spi.Decorator;
-import solomon2.support.DecoratorAdapter;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
