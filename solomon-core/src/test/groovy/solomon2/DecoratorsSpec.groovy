@@ -10,7 +10,7 @@ import java.util.function.Consumer
 
 class DecoratorsSpec extends Specification {
     def context = new TestContext()
-    def result = new ExecutionResult(new Object())
+    def result = new Result(new Object())
 
     def "Delegates before method call to handler"() {
         given:

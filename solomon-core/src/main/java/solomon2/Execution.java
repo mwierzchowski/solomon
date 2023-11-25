@@ -31,7 +31,7 @@ public class Execution<C, V> extends ContextAdapter<C> {
 
     public V execute() {
         LOG.debug("Execution started");
-        ExecutionResult<V> result = null;
+        Result<V> result = null;
         int decoratorCount = 0;
         boolean decoratorFailed = true;
         try {
@@ -51,7 +51,7 @@ public class Execution<C, V> extends ContextAdapter<C> {
             } else {
                 LOG.debug("Exception in command: {}", ex.getMessage());
             }
-            result = new ExecutionResult<>(ex);
+            result = new Result<>(ex);
         } finally {
             assert result != null;
             LOG.debug("Decorating after");
@@ -112,7 +112,7 @@ public class Execution<C, V> extends ContextAdapter<C> {
         return this;
     }
 
-    public Execution<C, V> decorateAfter(BiConsumer<Context<? super C>, ExecutionResult<? super V>> decoratorMethod) {
+    public Execution<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
         this.config = this.config.add(after(decoratorMethod));
         return this;
     }

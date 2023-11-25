@@ -2,14 +2,14 @@ package solomon2;
 
 import lombok.NonNull;
 
-public class ExecutionResult<V> {
+public class Result<V> {
     private Object object;
 
-    public ExecutionResult(V value) {
+    public Result(V value) {
         this.change(value);
     }
 
-    public ExecutionResult(RuntimeException exception) {
+    public Result(RuntimeException exception) {
         this.change(exception);
     }
 
