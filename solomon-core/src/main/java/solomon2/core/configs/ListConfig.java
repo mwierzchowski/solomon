@@ -25,20 +25,20 @@ public class ListConfig implements Config {
     @Override
     public <A extends Addon> A getAddon(Class<A> addonClass, int position) {
         LOG.debug("Getting {} on position {}", addonClass, position);
-        var addon = getList(addonClass, false).get(position);
+        var addon = addonList(addonClass, false).get(position);
         return cast(addon);
     }
 
     @Override
     public Config addAddon(Addon addon) {
         LOG.debug("Adding addon: {}", addon);
-        getList(typeOf(addon), true).add(addon);
+        addonList(typeOf(addon), true).add(addon);
         return this;
     }
 
     @Override
     public int count(Class<? extends Addon> addonClass) {
-        return getList(addonClass, false).size();
+        return addonList(addonClass, false).size();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ListConfig implements Config {
         return null;
     }
 
-    protected List<Addon> getList(Class<? extends Addon> addonClass, boolean create) {
+    protected List<Addon> addonList(Class<? extends Addon> addonClass, boolean create) {
         List<? extends Addon> list;
         if (addonClass == Decorator.class) {
             if (this.decorators == null && create) {
