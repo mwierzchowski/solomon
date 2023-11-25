@@ -1,6 +1,5 @@
 package solomon;
 
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.text.MessageFormat;
