@@ -1,7 +1,8 @@
-package solomon.core
+package solomon
 
-import solomon.Execution
 import solomon.configs.Config
+import solomon.core.TestRunnableCmd
+import solomon.core.TestRunnableCmdDecorator
 import solomon.spi.Handler
 import spock.lang.Specification
 

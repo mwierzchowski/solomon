@@ -1,6 +1,5 @@
-package solomon.core
+package solomon
 
-import solomon.Result
 import spock.lang.Specification
 
 class ResultSpec extends Specification {
