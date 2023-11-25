@@ -1,4 +1,4 @@
-package solomon.spring.test
+package solomon.spring.helpers
 
 import groovy.util.logging.Slf4j
 import solomon.spring.annotation.Command

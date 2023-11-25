@@ -1,4 +1,4 @@
-package solomon.spring.test;
+package solomon.spring.helpers;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
