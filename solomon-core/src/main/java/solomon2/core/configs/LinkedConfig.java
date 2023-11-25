@@ -1,7 +1,7 @@
 package solomon2.core.configs;
 
 import lombok.AllArgsConstructor;
-import solomon2.core.Addon;
+import solomon2.spi.Addon;
 
 @AllArgsConstructor
 public class LinkedConfig extends ListConfig {

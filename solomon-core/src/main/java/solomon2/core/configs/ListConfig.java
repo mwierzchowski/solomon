@@ -2,7 +2,7 @@ package solomon2.core.configs;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import solomon2.core.Addon;
+import solomon2.spi.Addon;
 import solomon2.spi.Decorator;
 import solomon2.spi.Listener;
 

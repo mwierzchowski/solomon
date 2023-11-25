@@ -3,7 +3,7 @@ package solomon2;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import solomon2.core.Addon;
+import solomon2.spi.Addon;
 import solomon2.core.Execution;
 import solomon2.core.configs.Config;
 import solomon2.spi.CommandFactory;

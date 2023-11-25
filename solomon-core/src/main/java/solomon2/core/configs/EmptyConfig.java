@@ -2,7 +2,7 @@ package solomon2.core.configs;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import solomon2.core.Addon;
+import solomon2.spi.Addon;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EmptyConfig implements Config {

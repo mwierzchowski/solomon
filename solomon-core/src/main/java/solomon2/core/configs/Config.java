@@ -1,6 +1,6 @@
 package solomon2.core.configs;
 
-import solomon2.core.Addon;
+import solomon2.spi.Addon;
 
 public interface Config {
     static Config emptyConfig() {
