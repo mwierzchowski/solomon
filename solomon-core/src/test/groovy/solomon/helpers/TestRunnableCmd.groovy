@@ -1,4 +1,4 @@
-package solomon.core
+package solomon.helpers
 
 class TestRunnableCmd implements Runnable {
     int runCounter = 0

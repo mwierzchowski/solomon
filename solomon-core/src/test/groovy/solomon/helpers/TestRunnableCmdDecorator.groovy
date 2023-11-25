@@ -1,4 +1,4 @@
-package solomon.core
+package solomon.helpers
 
 import solomon.Context
 import solomon.Result

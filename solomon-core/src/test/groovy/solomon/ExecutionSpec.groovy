@@ -1,8 +1,8 @@
 package solomon
 
 import solomon.configs.Config
-import solomon.core.TestRunnableCmd
-import solomon.core.TestRunnableCmdDecorator
+import solomon.helpers.TestRunnableCmd
+import solomon.helpers.TestRunnableCmdDecorator
 import solomon.spi.Handler
 import spock.lang.Specification
 

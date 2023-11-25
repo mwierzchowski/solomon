@@ -1,6 +1,6 @@
 package solomon
 
-import solomon.core.TestContext
+import solomon.helpers.TestContext
 import spock.lang.Specification
 
 class ContextSpec extends Specification {

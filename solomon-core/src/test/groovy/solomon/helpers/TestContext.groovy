@@ -1,4 +1,4 @@
-package solomon.core
+package solomon.helpers
 
 import groovy.transform.TupleConstructor
 import solomon.Context

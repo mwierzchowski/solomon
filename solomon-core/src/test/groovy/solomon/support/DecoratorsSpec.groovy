@@ -1,8 +1,7 @@
 package solomon.support
 
 import solomon.Result
-import solomon.core.TestContext
-import solomon.support.Decorators
+import solomon.helpers.TestContext
 import spock.lang.Specification
 
 import java.util.function.BiConsumer
