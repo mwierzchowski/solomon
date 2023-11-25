@@ -7,8 +7,8 @@ public interface Config {
         return EmptyConfig.INSTANCE;
     }
 
-    <A extends Addon> A get(Class<A> addonClass, int position);
     Config add(Addon addon);
+    <A extends Addon> A get(Class<A> addonClass, int position);
     int count(Class<? extends Addon> addonClass);
     Config chain();
 

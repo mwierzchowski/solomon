@@ -26,18 +26,6 @@ public class LinkedConfig implements Config {
     private List<Listener<?, ?>> listenerList;
 
     @Override
-    public <A extends Addon> A get(Class<A> addonClass, int position) {
-        LOG.debug("Getting {} on position {}", addonClass, position);
-        var parentSize = this.parentSize(addonClass);
-        if (position < parentSize) {
-            return this.parent.get(addonClass, position);
-        } else {
-            var addon = this.addonList(addonClass, false).get(position - parentSize);
-            return cast(addon);
-        }
-    }
-
-    @Override
     public Config add(Addon addon) {
         LOG.debug("Adding addon: {}", addon);
         Class<? extends Addon> addonClass;
@@ -51,6 +39,20 @@ public class LinkedConfig implements Config {
         }
         addonList(addonClass, true).add(addon);
         return this;
+    }
+
+    @Override
+    public <A extends Addon> A get(Class<A> addonClass, int position) {
+        LOG.debug("Getting {} on position {}", addonClass, position);
+        var parentSize = this.parentSize(addonClass);
+        if (position < 0) {
+            throw new IndexOutOfBoundsException(position);
+        } else if (position < parentSize) {
+            return this.parent.get(addonClass, position);
+        } else {
+            var addon = this.addonList(addonClass, false).get(position - parentSize);
+            return cast(addon);
+        }
     }
 
     @Override
