@@ -5,7 +5,7 @@ import lombok.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Context<C> implements Castable {
+public abstract class Context<C> {
     protected Map<Object, Object> data;
 
     public abstract C getCommand();

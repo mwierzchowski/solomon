@@ -1,10 +1,10 @@
 package solomon2.support;
 
-import solomon2.spi.CmdFactory;
+import solomon2.spi.CommandFactory;
 
 import java.text.MessageFormat;
 
-public class DefaultCmdFactory implements CmdFactory {
+public class DefaultCommandFactory implements CommandFactory {
     @Override
     public <C> C instantiate(Class<C> clazz) {
         try {

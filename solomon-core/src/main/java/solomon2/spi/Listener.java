@@ -2,9 +2,8 @@ package solomon2.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import solomon2.core.Castable;
 
-public interface Listener<C, V> extends Castable {
+public interface Listener<C, V> {
     Logger LOG = LoggerFactory.getLogger(Listener.class);
 
     void onSuccess(C command, V value);

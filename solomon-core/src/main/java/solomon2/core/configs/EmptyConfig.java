@@ -1,24 +1,24 @@
-package solomon2.tmp;
+package solomon2.core.configs;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class EmptyConfig implements  Config {
+public class EmptyConfig implements Config {
     public static final EmptyConfig INSTANCE = new EmptyConfig();
 
     @Override
-    public <T> T get(ItemType type, int index) {
+    public <T> T get(Class<T> clazz, int index) {
         throw new IndexOutOfBoundsException(index);
     }
 
     @Override
-    public Config add(ItemType type, Object item) {
-        return new FirstConfig().add(type, item);
+    public <T> Config add(Class<T> clazz, T item) {
+        return new FirstConfig().add(clazz, item);
     }
 
     @Override
-    public int size(ItemType type) {
+    public int size(Class<?> clazz) {
         return 0;
     }
 

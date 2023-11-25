@@ -1,13 +1,14 @@
 package solomon2.core
 
-import solomon2.spi.CmdHandler
+import solomon2.core.configs.Config
+import solomon2.spi.CommandHandler
 import spock.lang.Specification
 
-class FlowSpec extends Specification {
+class ExecutionSpec extends Specification {
     def command = new TestRunnableCmd()
-    def cmdHandler = CmdHandler.RUNNABLE as CmdHandler<TestRunnableCmd, TestRunnableCmd>
-    def configSet = new ConfigSet(null);
-    def flow = new Flow<>(command, cmdHandler, configSet)
+    def cmdHandler = CommandHandler.RUNNABLE as CommandHandler<TestRunnableCmd, TestRunnableCmd>
+    def config = Config.emptyConfig()
+    def flow = new Execution<>(command, cmdHandler, config)
 
     def "Fluently configures command"() {
         when:

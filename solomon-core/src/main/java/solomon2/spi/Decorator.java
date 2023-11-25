@@ -2,11 +2,10 @@ package solomon2.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import solomon2.core.Castable;
 import solomon2.core.Context;
 import solomon2.core.Result;
 
-public interface Decorator<C, V> extends Castable {
+public interface Decorator<C, V> {
     Logger LOG = LoggerFactory.getLogger(Decorator.class);
 
     void before(Context<C> context);

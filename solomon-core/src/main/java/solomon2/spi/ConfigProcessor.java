@@ -1,7 +1,7 @@
 package solomon2.spi;
 
-import solomon2.core.ConfigSet;
+import solomon2.core.configs.Config;
 
 public interface ConfigProcessor {
-    ConfigSet process(Object command);
+    Config process(Object command, Config config);
 }

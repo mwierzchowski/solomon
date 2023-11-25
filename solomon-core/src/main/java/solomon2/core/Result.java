@@ -2,7 +2,7 @@ package solomon2.core;
 
 import lombok.NonNull;
 
-public class Result<V> implements Castable {
+public class Result<V> {
     private Object object;
 
     public Result(V value) {

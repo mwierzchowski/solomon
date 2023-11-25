@@ -3,7 +3,7 @@ package solomon2.support
 import spock.lang.Specification
 
 class DefaultFactorySpec extends Specification {
-    def factory = new DefaultCmdFactory()
+    def factory = new DefaultCommandFactory()
 
     def "Instantiates class with no arguments constructor"() {
         when:
