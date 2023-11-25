@@ -9,13 +9,13 @@ public class EmptyConfig implements Config {
     public static final EmptyConfig INSTANCE = new EmptyConfig();
 
     @Override
-    public <A extends Addon> A getAddon(Class<A> addonClass, int position) {
+    public <A extends Addon> A get(Class<A> addonClass, int position) {
         throw new IndexOutOfBoundsException(position);
     }
 
     @Override
-    public Config addAddon(Addon addon) {
-        return new ListConfig().addAddon(addon);
+    public Config add(Addon addon) {
+        return new ListConfig().add(addon);
     }
 
     @Override

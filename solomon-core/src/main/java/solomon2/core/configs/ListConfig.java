@@ -23,14 +23,14 @@ public class ListConfig implements Config {
     private List<Listener<?, ?>> listenerList;
 
     @Override
-    public <A extends Addon> A getAddon(Class<A> addonClass, int position) {
+    public <A extends Addon> A get(Class<A> addonClass, int position) {
         LOG.debug("Getting {} on position {}", addonClass, position);
         var addon = addonList(addonClass, false).get(position);
         return cast(addon);
     }
 
     @Override
-    public Config addAddon(Addon addon) {
+    public Config add(Addon addon) {
         LOG.debug("Adding addon: {}", addon);
         addonList(typeOf(addon), true).add(addon);
         return this;

@@ -54,7 +54,7 @@ public class CommandExecutor {
         private Config config = Config.emptyConfig();
 
         public Builder withGlobal(Addon addon) {
-            this.config = this.config.addAddon(addon);
+            this.config = this.config.add(addon);
             return this;
         }
 
