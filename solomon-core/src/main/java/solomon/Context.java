@@ -1,12 +1,11 @@
-package solomon.support;
+package solomon;
 
 import lombok.NonNull;
-import solomon.spi.Context;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ContextAdapter<C> implements Context<C> {
+public abstract class Context<C> {
     protected Map<Object, Object> data;
 
     public void store(@NonNull Object key, Object object) {
@@ -22,4 +21,14 @@ public abstract class ContextAdapter<C> implements Context<C> {
         }
         return this.data.get(key);
     }
+
+    public <T> T retrieve(Object key, Class<T> clazz) {
+        return clazz.cast(this.retrieve(key));
+    }
+
+    public boolean contains(Object key) {
+        return this.retrieve(key) != null;
+    }
+
+    public abstract C getCommand();
 }

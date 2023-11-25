@@ -1,7 +1,7 @@
 package solomon.core
 
+import solomon.Context
 import solomon.Result
-import solomon.spi.Context
 import solomon.spi.Decorator
 
 class TestRunnableCmdDecorator implements Decorator<TestRunnableCmd, Object> {

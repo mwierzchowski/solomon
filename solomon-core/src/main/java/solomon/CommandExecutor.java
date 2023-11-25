@@ -12,10 +12,10 @@ import solomon.spi.Processor;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static solomon.Utils.cast;
 import static solomon.configs.Config.emptyConfig;
 import static solomon.spi.Handler.RUNNABLE;
 import static solomon.spi.Handler.SUPPLIER;
-import static solomon.Utils.cast;
 
 @Slf4j
 @RequiredArgsConstructor

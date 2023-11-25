@@ -4,26 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import solomon.configs.Config;
-import solomon.spi.Context;
 import solomon.spi.Decorator;
 import solomon.spi.Handler;
 import solomon.spi.Listener;
-import solomon.support.ContextAdapter;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static solomon.Utils.cast;
 import static solomon.support.Decorators.after;
 import static solomon.support.Decorators.before;
 import static solomon.support.Listeners.onFailure;
 import static solomon.support.Listeners.onSuccess;
-import static solomon.Utils.cast;
 
 @Slf4j
 @AllArgsConstructor
-public class Execution<C, V> extends ContextAdapter<C> {
+public class Execution<C, V> extends Context<C> {
     @Getter
     private final C command;
     private final Handler<C, V> handler;

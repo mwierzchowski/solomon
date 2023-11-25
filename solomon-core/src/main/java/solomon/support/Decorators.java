@@ -2,7 +2,7 @@ package solomon.support;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import solomon.spi.Context;
+import solomon.Context;
 import solomon.Result;
 import solomon.spi.Decorator;
 

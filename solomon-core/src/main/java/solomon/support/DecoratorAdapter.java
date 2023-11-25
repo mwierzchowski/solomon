@@ -1,6 +1,6 @@
 package solomon.support;
 
-import solomon.spi.Context;
+import solomon.Context;
 import solomon.Result;
 import solomon.spi.Decorator;
 

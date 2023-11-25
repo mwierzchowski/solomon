@@ -2,6 +2,7 @@ package solomon.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import solomon.Context;
 import solomon.Result;
 
 public interface Decorator<C, V> extends Addon {

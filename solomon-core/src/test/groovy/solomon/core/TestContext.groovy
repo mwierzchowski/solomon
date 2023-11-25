@@ -1,9 +1,9 @@
 package solomon.core
 
 import groovy.transform.TupleConstructor
-import solomon.support.ContextAdapter
+import solomon.Context
 
 @TupleConstructor(includeFields = true)
- class TestContext extends ContextAdapter<Object> {
+ class TestContext extends Context<Object> {
     def command
 }
