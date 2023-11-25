@@ -18,7 +18,7 @@ public interface Listener<C, V> extends Addon {
         }
     }
 
-    default  void safeOnError(C command, RuntimeException exception) {
+    default  void safeOnFailure(C command, RuntimeException exception) {
         try {
             this.onFailure(command, exception);
         } catch (RuntimeException ex) {

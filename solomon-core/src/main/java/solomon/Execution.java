@@ -69,7 +69,7 @@ public class Execution<C, V> extends Context<C> {
             LOG.debug("Sending failure notification(s)");
             for (int i = 0; this.config.contains(Listener.class, i); i++) {
                 Listener<?, ?> listener = this.config.get(Listener.class, i);
-                listener.safeOnError(cast(this.command), result.getException());
+                listener.safeOnFailure(cast(this.command), result.getException());
             }
             LOG.debug("Sent {} notifications", listenerCount);
         }
