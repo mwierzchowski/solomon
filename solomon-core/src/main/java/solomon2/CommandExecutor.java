@@ -22,9 +22,9 @@ import static solomon2.spi.CommandHandler.SUPPLIER;
 @Slf4j
 @RequiredArgsConstructor
 public class CommandExecutor {
-    private final Config config;
     private final CommandFactory factory;
     private final ConfigProcessor processor;
+    private final Config config;
 
     @SafeVarargs
     public final <C extends Runnable> Execution<C, C> runnable(Class<C> cmdClass, Consumer<C>... initializers) {
@@ -49,9 +49,9 @@ public class CommandExecutor {
     }
 
     static class Builder {
-        private Config config = Config.emptyConfig();
         private CommandFactory factory = new DefaultCommandFactory();
         private ConfigProcessor processor = new NoOpsConfigProcessor();
+        private Config config = Config.emptyConfig();
 
         public Builder withGlobal(Addon addon) {
             this.config = this.config.addAddon(addon);
@@ -63,7 +63,7 @@ public class CommandExecutor {
         }
 
         public CommandExecutor build() {
-            return new CommandExecutor(config, factory, processor);
+            return new CommandExecutor(factory, processor, config);
         }
     }
 }
