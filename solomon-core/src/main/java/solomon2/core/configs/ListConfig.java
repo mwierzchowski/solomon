@@ -57,9 +57,8 @@ public class ListConfig implements Config {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
     protected List<Addon> getList(Class<? extends Addon> addonClass, boolean create) {
-        List<?> list;
+        List<? extends Addon> list;
         if (addonClass == Decorator.class) {
             if (this.decorators == null && create) {
                 this.decorators = new ArrayList<>();
@@ -74,6 +73,6 @@ public class ListConfig implements Config {
             var message = MessageFormat.format("Class {0} is not supported addon", addonClass);
             throw new IllegalArgumentException(message);
         }
-        return list != null ? (List<Addon>) list : emptyList();
+        return list != null ? cast(list) : emptyList();
     }
 }
