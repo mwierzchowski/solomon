@@ -20,6 +20,10 @@ import static solomon.spi.Handler.SUPPLIER;
 @Slf4j
 @RequiredArgsConstructor
 public class CommandExecutor {
+    public static Builder builder() {
+        return new Builder();
+    }
+
     private final Factory factory;
     private final Processor processor;
     private final Config globalConfig;
@@ -44,10 +48,6 @@ public class CommandExecutor {
             execution.setup(initializers[i]);
         }
         return execution;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

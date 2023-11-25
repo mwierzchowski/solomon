@@ -1,42 +1,61 @@
 package solomon
 
-
+import solomon.helpers.TestRunnableCmd
+import solomon.helpers.TestSupplierCmd
 import spock.lang.Specification
 
 class CommandExecutorSpec extends Specification {
-//    def "Instantiates default command builder"() {
-//        when:
-//        def builder = Command.defaultBuilder()
-//        then:
-//        builder != null
-//    }
-//
-//    def "Caches default command builder instance"() {
-//        when:
-//        def builder1 = Command.defaultBuilder()
-//        def builder2 = Command.defaultBuilder()
-//        then:
-//        builder1 == builder2
-//    }
-//
-//    def "Creates runnable command flow"() {
-//        given:
-//        def cmdClass = TestRunnableCmd
-//        when:
-//        def flow = Command.defaultBuilder().runnable(cmdClass)
-//        then:
-//        flow.command.class == cmdClass
-//    }
-//
-//    def "Creates flow and configures command"() {
-//        given:
-//        def cmdClass = TestRunnableCmd
-//        when:
-//        def flowCommand = null
-//        def flow = Command.defaultBuilder().runnable(cmdClass, configured -> {
-//            flowCommand = configured
-//        })
-//        then:
-//        flowCommand == flow.command
-//    }
+    def "Provides builder"() {
+        when:
+        def builder = CommandExecutor.builder()
+        then:
+        builder != null
+        builder.class == CommandExecutor.Builder
+    }
+
+    def "Creates runnable command execution"() {
+        given:
+        def cmdClass = TestRunnableCmd
+        def executor = CommandExecutor.builder().build()
+        when:
+        def execution = executor.runnable(cmdClass)
+        then:
+        execution.command.class == cmdClass
+    }
+
+    def "Creates runnable execution and configures command"() {
+        given:
+        def cmdClass = TestRunnableCmd
+        def executor = CommandExecutor.builder().build()
+        when:
+        def executionCommand = null
+        def execution = executor.runnable(cmdClass, configured -> {
+            executionCommand = configured
+        })
+        then:
+        executionCommand == execution.command
+    }
+
+    def "Creates supplier command execution"() {
+        given:
+        def cmdClass = TestSupplierCmd
+        def executor = CommandExecutor.builder().build()
+        when:
+        def execution = executor.supplier(cmdClass)
+        then:
+        execution.command.class == cmdClass
+    }
+
+    def "Creates supplier execution and configures command"() {
+        given:
+        def cmdClass = TestSupplierCmd
+        def executor = CommandExecutor.builder().build()
+        when:
+        def executionCommand = null
+        def execution = executor.supplier(cmdClass, configured -> {
+            executionCommand = configured
+        })
+        then:
+        executionCommand == execution.command
+    }
 }
