@@ -34,6 +34,9 @@ public class ListConfig implements Config {
             addonClass = Decorator.class;
         } else if (addon instanceof Listener) {
             addonClass = Listener.class;
+        } else {
+            // this will not work but at least method accessing list can throw exception with meaningful message
+            addonClass = addon.getClass();
         }
         addonList(addonClass, true).add(addon);
         return this;
