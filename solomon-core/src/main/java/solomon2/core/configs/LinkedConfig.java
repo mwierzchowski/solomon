@@ -1,7 +1,7 @@
 package solomon2.core.configs;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import solomon2.spi.Addon;
 import solomon2.spi.Decorator;
@@ -15,16 +15,15 @@ import static java.util.Collections.emptyList;
 import static solomon2.core.Utils.cast;
 
 @Slf4j
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LinkedConfig implements Config {
-    private LinkedConfig parent;
-    private List<Decorator<?, ?>> decoratorList;
-    private List<Listener<?, ?>> listenerList;
+    private final LinkedConfig parent;
 
-    public LinkedConfig(LinkedConfig parent) {
-        this.parent = parent;
-    }
+    @Setter
+    private List<Decorator<?, ?>> decoratorList;
+
+    @Setter
+    private List<Listener<?, ?>> listenerList;
 
     @Override
     public <A extends Addon> A get(Class<A> addonClass, int position) {
