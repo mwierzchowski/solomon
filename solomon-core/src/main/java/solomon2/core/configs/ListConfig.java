@@ -10,15 +10,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static solomon2.core.Utils.cast;
 
 @Slf4j
 @Setter
 public class ListConfig implements Config {
-    protected static final List<Class<? extends Addon>> SUPPORTED_ADDON_CLASSES = asList(Decorator.class, Listener.class);
-
     private List<Decorator<?, ?>> decoratorList;
     private List<Listener<?, ?>> listenerList;
 
@@ -32,7 +29,13 @@ public class ListConfig implements Config {
     @Override
     public Config add(Addon addon) {
         LOG.debug("Adding addon: {}", addon);
-        addonList(typeOf(addon), true).add(addon);
+        Class<? extends Addon> addonClass = null;
+        if (addon instanceof Decorator) {
+            addonClass = Decorator.class;
+        } else if (addon instanceof Listener) {
+            addonClass = Listener.class;
+        }
+        addonList(addonClass, true).add(addon);
         return this;
     }
 
@@ -44,17 +47,6 @@ public class ListConfig implements Config {
     @Override
     public Config chain() {
         return new LinkedConfig(this);
-    }
-
-    protected Class<? extends Addon> typeOf(Addon addon) {
-        var addonClass = addon.getClass();
-        for (int i = 0; i < SUPPORTED_ADDON_CLASSES.size(); i++) {
-            var supportedClass = SUPPORTED_ADDON_CLASSES.get(i);
-            if (supportedClass.isAssignableFrom(addonClass)) {
-                return supportedClass;
-            }
-        }
-        return null;
     }
 
     protected List<Addon> addonList(Class<? extends Addon> addonClass, boolean create) {
