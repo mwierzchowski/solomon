@@ -1,4 +1,4 @@
-package solomon2.core.configs;
+package solomon2.configs;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

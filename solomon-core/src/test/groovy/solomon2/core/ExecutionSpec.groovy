@@ -1,6 +1,7 @@
 package solomon2.core
 
-import solomon2.core.configs.Config
+import solomon2.Execution
+import solomon2.configs.Config
 import solomon2.spi.Handler
 import spock.lang.Specification
 

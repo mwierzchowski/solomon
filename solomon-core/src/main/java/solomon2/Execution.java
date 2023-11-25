@@ -1,9 +1,9 @@
-package solomon2.core;
+package solomon2;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import solomon2.core.configs.Config;
+import solomon2.configs.Config;
 import solomon2.spi.Context;
 import solomon2.spi.Decorator;
 import solomon2.spi.Handler;
@@ -31,7 +31,7 @@ public class Execution<C, V> extends ContextAdapter<C> {
 
     public V execute() {
         LOG.debug("Execution started");
-        Result<V> result = null;
+        ExecutionResult<V> result = null;
         int decoratorCount = 0;
         boolean decoratorFailed = true;
         try {
@@ -51,7 +51,7 @@ public class Execution<C, V> extends ContextAdapter<C> {
             } else {
                 LOG.debug("Exception in command: {}", ex.getMessage());
             }
-            result = new Result<>(ex);
+            result = new ExecutionResult<>(ex);
         } finally {
             assert result != null;
             LOG.debug("Decorating after");
@@ -112,7 +112,7 @@ public class Execution<C, V> extends ContextAdapter<C> {
         return this;
     }
 
-    public Execution<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
+    public Execution<C, V> decorateAfter(BiConsumer<Context<? super C>, ExecutionResult<? super V>> decoratorMethod) {
         this.config = this.config.add(after(decoratorMethod));
         return this;
     }

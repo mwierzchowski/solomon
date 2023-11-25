@@ -2,15 +2,15 @@ package solomon2.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import solomon2.core.Result;
+import solomon2.ExecutionResult;
 
 public interface Decorator<C, V> extends Addon {
     Logger LOG = LoggerFactory.getLogger(Decorator.class);
 
     void before(Context<C> context);
-    void after(Context<C> context, Result<V> result);
+    void after(Context<C> context, ExecutionResult<V> result);
 
-    default void safeAfter(Context<C> context, Result<V> result) {
+    default void safeAfter(Context<C> context, ExecutionResult<V> result) {
         try {
             this.after(context, result);
         } catch (RuntimeException ex) {

@@ -3,8 +3,7 @@ package solomon2;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import solomon2.core.Execution;
-import solomon2.core.configs.Config;
+import solomon2.configs.Config;
 import solomon2.spi.Addon;
 import solomon2.spi.Factory;
 import solomon2.spi.Handler;
@@ -14,7 +13,7 @@ import solomon2.support.Utils;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static solomon2.core.configs.Config.emptyConfig;
+import static solomon2.configs.Config.emptyConfig;
 import static solomon2.spi.Handler.RUNNABLE;
 import static solomon2.spi.Handler.SUPPLIER;
 import static solomon2.support.Utils.cast;

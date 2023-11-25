@@ -1,5 +1,6 @@
 package solomon2.core
 
+import solomon2.ExecutionResult
 import solomon2.spi.Context
 import solomon2.spi.Decorator
 
@@ -13,7 +14,7 @@ class TestRunnableCmdDecorator implements Decorator<TestRunnableCmd, Object> {
     }
 
     @Override
-    void after(Context<TestRunnableCmd> context, Result<Object> result) {
+    void after(Context<TestRunnableCmd> context, ExecutionResult<Object> result) {
         this.counterAfter += 1
     }
 }

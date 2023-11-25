@@ -1,15 +1,15 @@
-package solomon2.core;
+package solomon2;
 
 import lombok.NonNull;
 
-public class Result<V> {
+public class ExecutionResult<V> {
     private Object object;
 
-    public Result(V value) {
+    public ExecutionResult(V value) {
         this.change(value);
     }
 
-    public Result(RuntimeException exception) {
+    public ExecutionResult(RuntimeException exception) {
         this.change(exception);
     }
 

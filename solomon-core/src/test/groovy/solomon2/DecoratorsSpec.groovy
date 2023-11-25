@@ -1,6 +1,6 @@
 package solomon2
 
-import solomon2.core.Result
+
 import solomon2.core.TestContext
 import solomon2.support.Decorators
 import spock.lang.Specification
@@ -10,7 +10,7 @@ import java.util.function.Consumer
 
 class DecoratorsSpec extends Specification {
     def context = new TestContext()
-    def result = new Result(new Object())
+    def result = new ExecutionResult(new Object())
 
     def "Delegates before method call to handler"() {
         given:

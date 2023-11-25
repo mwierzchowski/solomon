@@ -1,6 +1,6 @@
 package solomon2.spi;
 
-import solomon2.core.configs.Config;
+import solomon2.configs.Config;
 
 @FunctionalInterface
 public interface Processor {

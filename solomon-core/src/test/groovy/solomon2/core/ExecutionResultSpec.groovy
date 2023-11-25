@@ -1,13 +1,14 @@
 package solomon2.core
 
+import solomon2.ExecutionResult
 import spock.lang.Specification
 
-class ResultSpec extends Specification {
+class ExecutionResultSpec extends Specification {
     def "Holds command value"() {
         given:
         def value = 1
         when:
-        def result = new Result(value)
+        def result = new ExecutionResult(value)
         then:
         result.getValueOrThrowException() == value
         result.isSuccess()
@@ -15,7 +16,7 @@ class ResultSpec extends Specification {
 
     def "Holds command null value"() {
         when:
-        def result = new Result(null)
+        def result = new ExecutionResult(null)
         then:
         result.getValueOrThrowException() == null
         result.isSuccess()
@@ -25,7 +26,7 @@ class ResultSpec extends Specification {
         given:
         def exception = new IllegalArgumentException()
         when:
-        def result = new Result(exception)
+        def result = new ExecutionResult(exception)
         result.getValueOrThrowException()
         then:
         Exception ex = thrown()
@@ -35,14 +36,14 @@ class ResultSpec extends Specification {
 
     def "Throws NPE when exception is null"() {
         when:
-        new Result((RuntimeException) null)
+        new ExecutionResult((RuntimeException) null)
         then:
         thrown NullPointerException
     }
 
     def "Changes value to exception"() {
         given:
-        def result = new Result(1)
+        def result = new ExecutionResult(1)
         when:
         result.change(new RuntimeException())
         then:
@@ -51,7 +52,7 @@ class ResultSpec extends Specification {
 
     def "Changes exception to value"() {
         given:
-        def result = new Result(new RuntimeException())
+        def result = new ExecutionResult(new RuntimeException())
         when:
         result.change(1)
         then:
@@ -61,7 +62,7 @@ class ResultSpec extends Specification {
     def "Provides value for successful result"() {
         given:
         def value = new Object()
-        def result = new Result(value)
+        def result = new ExecutionResult(value)
         expect:
         result.getValue() == value
     }
@@ -69,14 +70,14 @@ class ResultSpec extends Specification {
     def "Provides exception for failed result"() {
         given:
         def exception = new RuntimeException()
-        def result = new Result(exception)
+        def result = new ExecutionResult(exception)
         expect:
         result.getException() == exception
     }
 
     def "Throws ISE when value is requested from failed result"() {
         given:
-        def result = new Result(new RuntimeException())
+        def result = new ExecutionResult(new RuntimeException())
         when:
         result.getValue()
         then:
@@ -85,7 +86,7 @@ class ResultSpec extends Specification {
 
     def "Throws ISE when exception is requested from successful result"() {
         given:
-        def result = new Result(new Object())
+        def result = new ExecutionResult(new Object())
         when:
         result.getException()
         then:
