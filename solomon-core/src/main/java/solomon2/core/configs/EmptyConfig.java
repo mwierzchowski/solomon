@@ -15,7 +15,7 @@ public class EmptyConfig implements Config {
 
     @Override
     public Config add(Addon addon) {
-        return new ListConfig().add(addon);
+        return new LinkedConfig().add(addon);
     }
 
     @Override
