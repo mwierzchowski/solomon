@@ -2,8 +2,9 @@ package solomon2.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import solomon2.core.Addon;
 
-public interface Listener<C, V> {
+public interface Listener<C, V> extends Addon {
     Logger LOG = LoggerFactory.getLogger(Listener.class);
 
     void onSuccess(C command, V value);

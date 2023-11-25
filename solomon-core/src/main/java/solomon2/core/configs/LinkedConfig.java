@@ -1,13 +1,14 @@
 package solomon2.core.configs;
 
 import lombok.AllArgsConstructor;
+import solomon2.core.Addon;
 
 @AllArgsConstructor
 public class LinkedConfig extends ListConfig {
     private Config previous;
 
     @Override
-    public <T> T get(Class<T> clazz, int index) {
+    public <T extends Addon> T get(Class<T> clazz, int index) {
         var previousSize = this.previousSize(clazz);
         if (index < previousSize) {
             return this.previous.get(clazz, index);
@@ -17,11 +18,11 @@ public class LinkedConfig extends ListConfig {
     }
 
     @Override
-    public int size(Class<?> clazz) {
+    public int size(Class<? extends Addon> clazz) {
         return this.previousSize(clazz) + super.size(clazz);
     }
 
-    protected int previousSize(Class<?> clazz) {
+    protected int previousSize(Class<? extends Addon> clazz) {
         return this.previous == null ? 0 : previous.size(clazz);
     }
 }

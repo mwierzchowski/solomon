@@ -2,10 +2,11 @@ package solomon2.spi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import solomon2.core.Addon;
 import solomon2.core.Context;
 import solomon2.core.Result;
 
-public interface Decorator<C, V> {
+public interface Decorator<C, V> extends Addon {
     Logger LOG = LoggerFactory.getLogger(Decorator.class);
 
     void before(Context<C> context);

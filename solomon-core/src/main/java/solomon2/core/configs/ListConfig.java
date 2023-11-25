@@ -2,6 +2,7 @@ package solomon2.core.configs;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import solomon2.core.Addon;
 import solomon2.spi.Decorator;
 import solomon2.spi.Listener;
 
@@ -18,19 +19,19 @@ public class ListConfig implements Config {
     private List<Listener<?, ?>> listeners;
 
     @Override
-    public <T> T get(Class<T> clazz, int index) {
+    public <T extends Addon> T get(Class<T> clazz, int index) {
         return getList(clazz, false).get(index);
     }
 
     @Override
-    public <T> Config add(Class<T> clazz, T item) {
+    public <T extends Addon> Config add(Class<T> clazz, T item) {
         LOG.debug("Adding {}: {}", clazz, item);
         getList(clazz, true).add(item);
         return this;
     }
 
     @Override
-    public int size(Class<?> clazz) {
+    public int size(Class<? extends Addon> clazz) {
         return getList(clazz, false).size();
     }
 
@@ -40,7 +41,7 @@ public class ListConfig implements Config {
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> List<T> getList(Class<T> clazz, boolean create) {
+    protected <T extends Addon> List<T> getList(Class<T> clazz, boolean create) {
         List<?> list;
         if (clazz == Decorator.class) {
             if (this.decorators == null && create) {
