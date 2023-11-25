@@ -1,6 +1,6 @@
-package solomon
+package solomon.support
 
-
+import solomon.Result
 import solomon.core.TestContext
 import solomon.support.Decorators
 import spock.lang.Specification

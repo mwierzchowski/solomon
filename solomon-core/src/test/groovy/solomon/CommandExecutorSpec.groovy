@@ -3,7 +3,7 @@ package solomon
 
 import spock.lang.Specification
 
-class CommandSpec extends Specification {
+class CommandExecutorSpec extends Specification {
 //    def "Instantiates default command builder"() {
 //        when:
 //        def builder = Command.defaultBuilder()

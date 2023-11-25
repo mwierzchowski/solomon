@@ -1,4 +1,4 @@
-package solomon
+package solomon.support
 
 import solomon.support.Listeners
 import spock.lang.Specification
