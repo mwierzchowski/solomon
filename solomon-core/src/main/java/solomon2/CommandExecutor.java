@@ -3,45 +3,45 @@ package solomon2;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import solomon2.spi.Addon;
 import solomon2.core.Execution;
+import solomon2.support.Utils;
 import solomon2.core.configs.Config;
-import solomon2.spi.CommandFactory;
-import solomon2.spi.CommandHandler;
-import solomon2.spi.ConfigProcessor;
-import solomon2.support.DefaultCommandFactory;
-import solomon2.support.NoOpsConfigProcessor;
+import solomon2.spi.Addon;
+import solomon2.spi.Factory;
+import solomon2.spi.Handler;
+import solomon2.spi.Processor;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static solomon2.core.Utils.cast;
-import static solomon2.spi.CommandHandler.RUNNABLE;
-import static solomon2.spi.CommandHandler.SUPPLIER;
+import static solomon2.support.Utils.cast;
+import static solomon2.core.configs.Config.emptyConfig;
+import static solomon2.spi.Handler.RUNNABLE;
+import static solomon2.spi.Handler.SUPPLIER;
 
 @Slf4j
 @RequiredArgsConstructor
 public class CommandExecutor {
-    private final CommandFactory factory;
-    private final ConfigProcessor processor;
+    private final Factory factory;
+    private final Processor processor;
     private final Config config;
 
     @SafeVarargs
     public final <C extends Runnable> Execution<C, C> runnable(Class<C> cmdClass, Consumer<C>... initializers) {
-        return this.execution(cmdClass, cast(RUNNABLE), initializers);
+        return this.kickoff(cmdClass, cast(RUNNABLE), initializers);
     }
 
     @SafeVarargs
     public final <C extends Supplier<V>, V> Execution<C, V> supplier(Class<C> cmdClass, Consumer<C>... initializers) {
-        return this.execution(cmdClass, cast(SUPPLIER), initializers);
+        return this.kickoff(cmdClass, cast(SUPPLIER), initializers);
     }
 
-    protected <C, V> Execution<C, V> execution(@NonNull Class<C> commandClass, CommandHandler<C, V> commandHandler,
-                                               Consumer<C>[] initializers) {
+    protected <C, V> Execution<C, V> kickoff(@NonNull Class<C> commandClass, Handler<C, V> handler,
+                                             Consumer<C>[] initializers) {
         LOG.debug("Building command: {}", commandClass.getSimpleName());
         var command = this.factory.instantiate(commandClass);
         var config = this.processor.process(command, this.config.chain());
-        var execution = new Execution<>(command, commandHandler, config);
+        var execution = new Execution<>(command, handler, config);
         for (var initializer : initializers) {
             execution.setup(initializer);
         }
@@ -49,9 +49,9 @@ public class CommandExecutor {
     }
 
     static class Builder {
-        private CommandFactory factory = new DefaultCommandFactory();
-        private ConfigProcessor processor = new NoOpsConfigProcessor();
-        private Config config = Config.emptyConfig();
+        private Factory factory = Utils::newInstanceOf;
+        private Processor processor = (cmd, cfg) -> cfg;
+        private Config config = emptyConfig();
 
         public Builder withGlobal(Addon addon) {
             this.config = this.config.add(addon);

@@ -1,12 +1,14 @@
 package solomon2.support;
 
-import solomon2.spi.CommandFactory;
-
 import java.text.MessageFormat;
 
-public class DefaultCommandFactory implements CommandFactory {
-    @Override
-    public <C> C instantiate(Class<C> clazz) {
+public class Utils {
+    @SuppressWarnings("unchecked")
+    public static <T> T cast(Object object) {
+        return (T) object;
+    }
+
+    public static <T> T newInstanceOf(Class<T> clazz) {
         try {
             return clazz.getConstructor().newInstance();
         } catch (Exception ex) {

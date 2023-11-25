@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import solomon2.core.configs.Config;
-import solomon2.spi.CommandHandler;
+import solomon2.spi.Handler;
 import solomon2.spi.Decorator;
 import solomon2.spi.Listener;
 
@@ -13,18 +13,18 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static solomon2.Decorators.after;
-import static solomon2.Decorators.before;
-import static solomon2.Listeners.onFailure;
-import static solomon2.Listeners.onSuccess;
-import static solomon2.core.Utils.cast;
+import static solomon2.support.Decorators.after;
+import static solomon2.support.Decorators.before;
+import static solomon2.support.Listeners.onFailure;
+import static solomon2.support.Listeners.onSuccess;
+import static solomon2.support.Utils.cast;
 
 @Slf4j
 @AllArgsConstructor
 public class Execution<C, V> extends Context<C> {
     @Getter
     private final C command;
-    private final CommandHandler<C, V> commandHandler;
+    private final Handler<C, V> handler;
     private Config config;
 
     public V execute() {
@@ -41,7 +41,7 @@ public class Execution<C, V> extends Context<C> {
             LOG.debug("Executed {} decorators", decoratorCount);
             decoratorFailed = false;
             LOG.debug("Running command");
-            result = commandHandler.apply(command);
+            result = handler.apply(command);
         } catch (RuntimeException ex) {
             if (decoratorFailed) {
                 decoratorCount += 1;

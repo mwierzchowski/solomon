@@ -1,4 +1,4 @@
-package solomon2;
+package solomon2.support;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;

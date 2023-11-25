@@ -1,5 +1,6 @@
 package solomon2.spi;
 
-public interface CommandFactory {
+@FunctionalInterface
+public interface Factory {
     <C> C instantiate(Class<C> clazz);
 }

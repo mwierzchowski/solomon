@@ -1,12 +1,12 @@
 package solomon2.core
 
 import solomon2.core.configs.Config
-import solomon2.spi.CommandHandler
+import solomon2.spi.Handler
 import spock.lang.Specification
 
 class ExecutionSpec extends Specification {
     def command = new TestRunnableCmd()
-    def cmdHandler = CommandHandler.RUNNABLE as CommandHandler<TestRunnableCmd, TestRunnableCmd>
+    def cmdHandler = Handler.RUNNABLE as Handler<TestRunnableCmd, TestRunnableCmd>
     def config = Config.emptyConfig()
     def flow = new Execution<>(command, cmdHandler, config)
 
