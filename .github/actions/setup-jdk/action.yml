@@ -1,0 +1,31 @@
+name: Setup JDK
+description: Setup JDK using SDKMAN!
+
+inputs:
+  env-file:
+    description: 'SDKMAN env file'
+    default: '.sdkmanrc'
+  skip-install:
+    description: 'Should skip installation of Java'
+    default: 'false'
+
+outputs:
+  distribution:
+    description: 'JDK distribution'
+    value: ${{ steps.sdkman.outputs.distribution }}
+  version:
+    description: 'JDK version'
+    value: ${{ steps.sdkman.outputs.version }}
+
+runs:
+  using: composite
+  steps:
+    - id: sdkman
+      shell: bash
+      run: ./.github/actions/setup-jdk/parse-file.sh ${{ inputs.env-file }}
+
+    - uses: actions/setup-java@v3
+      if: inputs.skip-install == 'false'
+      with:
+        distribution: ${{ steps.sdkman.outputs.distribution }}
+        java-version: ${{ steps.sdkman.outputs.version }}

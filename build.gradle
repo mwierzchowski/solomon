@@ -26,6 +26,8 @@ subprojects {
     }
 
     dependencies {
+        annotationProcessor libs.lombok
+        compileOnly libs.lombok
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 

@@ -4,10 +4,11 @@ on:
     branches-ignore:
       - main
     paths-ignore:
-      - .github/**
-      - .gitignore
-      - README.md
-      - LICENSE
+      - '.github/**'
+      - '!.github/workflows/build.yml'
+      - '.gitignore'
+      - 'README.md'
+      - 'LICENSE'
   workflow_dispatch:
 
 permissions:
@@ -21,8 +22,8 @@ jobs:
       - name: 'Check out code'
         uses: actions/checkout@v4
 
-      - name: 'Set up SDK'
-        uses: ./.github/actions/setup-sdk
+      - name: 'Set up JDK'
+        uses: ./.github/actions/setup-jdk
 
       - name: 'Set up Gradle'
         uses: gradle/gradle-build-action@v2
