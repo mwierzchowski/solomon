@@ -47,17 +47,26 @@ public class CommandExecutor {
         return execution;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
         private Factory factory = Utils::newInstanceOf;
         private Processor processor = (cmd, cfg) -> cfg;
         private Config config = emptyConfig();
 
-        public Builder withGlobal(Addon addon) {
+        public Builder withFactory(Factory factory) {
+            this.factory = factory;
+            return this;
+        }
+
+        public Builder withGlobalAddon(Addon addon) {
             this.config = this.config.add(addon);
             return this;
         }
 
-        public Builder using(Addon addon) {
+        public Builder withRegisteredAddon(Addon addon) {
             throw new UnsupportedOperationException("Method not implemented");
         }
 
