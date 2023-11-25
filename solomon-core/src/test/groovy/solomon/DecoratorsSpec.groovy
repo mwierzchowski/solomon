@@ -18,7 +18,6 @@ class DecoratorsSpec extends Specification {
         def decorator = Decorators.before(handler)
         when:
         decorator.before(context)
-        decorator.after(context, result)
         then:
         1 * handler.accept(context)
     }
@@ -35,7 +34,6 @@ class DecoratorsSpec extends Specification {
         def handler = Mock(BiConsumer)
         def decorator = Decorators.after(handler)
         when:
-        decorator.before(context)
         decorator.after(context, result)
         then:
         1 * handler.accept(context, result)

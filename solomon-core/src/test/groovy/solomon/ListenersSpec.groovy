@@ -17,7 +17,7 @@ class ListenersSpec extends Specification {
         when:
         listener.onSuccess(command, value)
         then:
-        1 * handler.accept(_, _)
+        1 * handler.accept(command, value)
     }
 
     def "Throws NPE when success handler is null"() {
@@ -34,7 +34,7 @@ class ListenersSpec extends Specification {
         when:
         listener.onFailure(command, exception)
         then:
-        1 * handler.accept(_, _)
+        1 * handler.accept(command, exception)
     }
 
     def "Throws NPE when failure handler is null"() {
