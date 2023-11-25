@@ -4,20 +4,20 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import solomon2.core.Execution;
-import solomon2.support.Utils;
 import solomon2.core.configs.Config;
 import solomon2.spi.Addon;
 import solomon2.spi.Factory;
 import solomon2.spi.Handler;
 import solomon2.spi.Processor;
+import solomon2.support.Utils;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static solomon2.support.Utils.cast;
 import static solomon2.core.configs.Config.emptyConfig;
 import static solomon2.spi.Handler.RUNNABLE;
 import static solomon2.spi.Handler.SUPPLIER;
+import static solomon2.support.Utils.cast;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -42,13 +42,13 @@ public class CommandExecutor {
         var command = this.factory.instantiate(commandClass);
         var config = this.processor.process(command, this.config.chain());
         var execution = new Execution<>(command, handler, config);
-        for (var initializer : initializers) {
-            execution.setup(initializer);
+        for (int i = 0; i < initializers.length; i++) {
+            execution.setup(initializers[i]);
         }
         return execution;
     }
 
-    static class Builder {
+    public static class Builder {
         private Factory factory = Utils::newInstanceOf;
         private Processor processor = (cmd, cfg) -> cfg;
         private Config config = emptyConfig();
