@@ -8,9 +8,9 @@ import solomon.services.Processor;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static solomon.Utils.cast;
 import static solomon.Handler.RUNNABLE;
 import static solomon.Handler.SUPPLIER;
+import static solomon.Utils.cast;
 
 @Slf4j
 public class CommandExecutor {
@@ -30,16 +30,16 @@ public class CommandExecutor {
     }
 
     @SafeVarargs
-    public final <C extends Runnable> Execution<C, C> runnable(Class<C> cmdClass, Consumer<C>... initializers) {
+    public final <C extends Runnable> Flow<C, C> runnable(Class<C> cmdClass, Consumer<C>... initializers) {
         return this.kickoff(cmdClass, cast(RUNNABLE), initializers);
     }
 
     @SafeVarargs
-    public final <C extends Supplier<V>, V> Execution<C, V> supplier(Class<C> cmdClass, Consumer<C>... initializers) {
+    public final <C extends Supplier<V>, V> Flow<C, V> supplier(Class<C> cmdClass, Consumer<C>... initializers) {
         return this.kickoff(cmdClass, cast(SUPPLIER), initializers);
     }
 
-    protected <C, V> Execution<C, V> kickoff(@NonNull Class<C> commandClass, Handler<C, V> handler,
+    protected <C, V> Flow<C, V> kickoff(@NonNull Class<C> commandClass, Handler<C, V> handler,
                                              Consumer<C>[] initializers) {
         LOG.debug("Building command: {}", commandClass.getSimpleName());
         var command = this.factory.getInstanceOf(commandClass);

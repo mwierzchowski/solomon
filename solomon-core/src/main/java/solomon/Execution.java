@@ -7,25 +7,17 @@ import solomon.addons.Addon;
 import solomon.addons.Decorator;
 import solomon.addons.Listener;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import static solomon.Utils.cast;
-import static solomon.addons.Decorators.after;
-import static solomon.addons.Decorators.before;
-import static solomon.addons.Listeners.onFailure;
-import static solomon.addons.Listeners.onSuccess;
 
 @Slf4j
+@Getter
 @AllArgsConstructor
-public class Execution<C, V> extends Context<C> {
-    @Getter
+public class Execution<C, V> extends Context<C> implements Flow<C, V> {
     private final C command;
     private final Handler<C, V> handler;
     private Config config;
 
+    @Override
     public V execute() {
         LOG.debug("Execution started");
         Result<V> result = null;
@@ -76,59 +68,14 @@ public class Execution<C, V> extends Context<C> {
         return result.getValueOrThrowException();
     }
 
-    public <T> T execute(Function<V, T> mapper) {
-        V value = this.execute();
-        LOG.debug("Converting result: {}", mapper);
-        return mapper.apply(value);
-    }
-
-    public Execution<C, V> setup(Consumer<C> initializer) {
-        LOG.debug("Configuring command");
-        initializer.accept(this.command);
+    @Override
+    public Context<C> getContext() {
         return this;
     }
 
-    public Execution<C, V> setupContext(Consumer<Context<C>> ctxInitializer) {
-        LOG.debug("Configuring context");
-        ctxInitializer.accept(this);
-        return this;
-    }
-
-    public Execution<C, V> decorate(Decorator<? super C, ? super V> decorator) {
-        return this.unlockAndAdd(decorator);
-    }
-
-    public Execution<C, V> decorate(Supplier<Decorator<? super C, ? super V>> decoratorSupplier) {
-        return unlockAndAdd(decoratorSupplier.get());
-    }
-
-    public Execution<C, V> decorateBefore(Consumer<Context<? super C>> decoratorMethod) {
-        return this.unlockAndAdd(before(decoratorMethod));
-    }
-
-    public Execution<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
-        return this.unlockAndAdd(after(decoratorMethod));
-    }
-
-    public Execution<C, V> listen(Listener<? super C, ? super V> listener) {
-        return this.unlockAndAdd(listener);
-    }
-
-    public Execution<C, V> listen(Supplier<Listener<? super C, ? super V>> listenerSupplier) {
-        return this.unlockAndAdd(listenerSupplier.get());
-    }
-
-    public Execution<C, V> listenOnSuccess(BiConsumer<? super C, ? super V> listenerMethod) {
-        return this.unlockAndAdd(onSuccess(listenerMethod));
-    }
-
-    public Execution<C, V> listenOnFailure(BiConsumer<? super C, RuntimeException> listenerMethod) {
-        return this.unlockAndAdd(onFailure(listenerMethod));
-    }
-
-    protected Execution<C, V> unlockAndAdd(Addon addon) {
+    @Override
+    public void updateConfig(Addon addon) {
         this.config = this.config.unlock();
         this.config.add(addon);
-        return this;
     }
 }
