@@ -9,6 +9,15 @@ import solomon.Config
 import spock.lang.Specification
 
 class ConfigSpec extends Specification {
+    def "Creates config with addons"() {
+        given:
+        def addons = [new AnyDecorator(1), new AnyDecorator(2)]
+        when:
+        def config = new Config(addons)
+        then:
+        config.count(Decorator) == 2
+    }
+
     def "Adds addon to config"() {
         given:
         def config = new Config()
