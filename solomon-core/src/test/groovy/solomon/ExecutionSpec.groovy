@@ -1,5 +1,6 @@
 package solomon
 
+import solomon.helpers.TestListener
 import solomon.helpers.TestRunnableCmd
 import solomon.helpers.TestRunnableCmdDecorator
 import solomon.helpers.TestSupplierCmd
@@ -64,6 +65,36 @@ class ExecutionSpec extends Specification {
                 .execute()
         then:
         counter == 1
+    }
+
+    def "Listens to the success"() {
+        given:
+        def inlineSuccessListenerCounter = 0
+        def listener = new TestListener()
+        when:
+        runnableExecution.listen(listener)
+                .listenOnSuccess((a, b) -> inlineSuccessListenerCounter += 1)
+                .execute()
+        then:
+        listener.successCounter == 1
+        listener.failureCounter == 0
+        inlineSuccessListenerCounter == 1
+    }
+
+    def "Listens to the failure"() {
+        given:
+        def inlineFailureListenerCounter = 0
+        def listener = new TestListener()
+        when:
+        runnableExecution.listen(listener)
+                .listenOnFailure((a, b) -> inlineFailureListenerCounter += 1)
+                .decorateAfter((a, b) -> { throw new IllegalArgumentException()})
+                .execute()
+        then:
+        thrown IllegalArgumentException
+        listener.successCounter == 0
+        listener.failureCounter == 1
+        inlineFailureListenerCounter == 1
     }
 
     def "Executes runnable command and returns value"() {

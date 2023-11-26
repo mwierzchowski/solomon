@@ -26,6 +26,15 @@ class CommandExecutorBuilderSpec extends Specification {
         executor.factory == factory
     }
 
+    def "Builds with configuration"() {
+        given:
+        def config = new Config()
+        when:
+        def executor = builder.withConfig(config).build()
+        then:
+        executor.globalConfig == config
+    }
+
     def "Builds with global addons"() {
         given:
         def decorator = Mock(Decorator)
