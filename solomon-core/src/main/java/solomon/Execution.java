@@ -1,21 +1,22 @@
 package solomon;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import solomon.addons.Addon;
 import solomon.addons.Decorator;
 import solomon.addons.Listener;
 
+import java.util.Map;
+
 import static solomon.Utils.cast;
 
 @Slf4j
-@Getter
-@AllArgsConstructor
-public class Execution<C, V> extends Context<C> implements Flow<C, V> {
-    private final C command;
-    private final Handler<C, V> handler;
+@Data
+public class Execution<C, V> implements Flow<C, V>, Context<C> {
+    private C command;
+    private Handler<C, V> handler;
     private Config config;
+    private Map<Object, Object> contextData;
 
     @Override
     public V execute() {
@@ -66,11 +67,6 @@ public class Execution<C, V> extends Context<C> implements Flow<C, V> {
         }
         LOG.debug("Execution finished");
         return result.getValueOrThrowException();
-    }
-
-    @Override
-    public Context<C> getContext() {
-        return this;
     }
 
     @Override

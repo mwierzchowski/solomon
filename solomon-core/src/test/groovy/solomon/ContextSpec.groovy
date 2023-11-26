@@ -8,7 +8,7 @@ class ContextSpec extends Specification {
 
     def "Lazy initializes storage"() {
         expect:
-        context.data == null
+        context.contextData == null
     }
 
     def "Stores object"() {
@@ -18,7 +18,7 @@ class ContextSpec extends Specification {
         when:
         context.store(key, object)
         then:
-        context.data.get(key) == object
+        context.contextData.get(key) == object
     }
 
     def "Retrieves object"() {

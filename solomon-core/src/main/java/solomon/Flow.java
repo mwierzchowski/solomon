@@ -21,7 +21,6 @@ public interface Flow<C, V> {
 
     V execute();
     C getCommand();
-    Context<C> getContext();
     void updateConfig(Addon addon);
 
     default <T> T execute(Function<V, T> mapper) {
@@ -33,12 +32,6 @@ public interface Flow<C, V> {
     default Flow<C, V> setup(Consumer<C> initializer) {
         LOG.debug("Configuring command");
         initializer.accept(this.getCommand());
-        return this;
-    }
-
-    default Flow<C, V> setupContext(Consumer<Context<C>> ctxInitializer) {
-        LOG.debug("Configuring context");
-        ctxInitializer.accept(getContext());
         return this;
     }
 

@@ -5,30 +5,31 @@ import lombok.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class Context<C> {
-    protected Map<Object, Object> data;
+public interface Context<C> {
+    Map<Object, Object> getContextData();
+    void setContextData(Map<Object, Object> contextData);
+    C getCommand();
 
-    public void store(@NonNull Object key, Object object) {
-        if (this.data == null) {
-            this.data = new HashMap<>();
+    default void store(@NonNull Object key, Object object) {
+        if (this.getContextData() == null) {
+            this.setContextData(new HashMap<>());
         }
-        this.data.put(key, object);
+        getContextData().put(key, object);
     }
 
-    public Object retrieve(Object key) {
-        if (this.data == null) {
+    default Object retrieve(Object key) {
+        var data = this.getContextData();
+        if (data == null) {
             return null;
         }
-        return this.data.get(key);
+        return data.get(key);
     }
 
-    public <T> T retrieve(Object key, Class<T> clazz) {
+    default <T> T retrieve(Object key, Class<T> clazz) {
         return clazz.cast(this.retrieve(key));
     }
 
-    public boolean contains(Object key) {
+    default boolean contains(Object key) {
         return this.retrieve(key) != null;
     }
-
-    public abstract C getCommand();
 }
