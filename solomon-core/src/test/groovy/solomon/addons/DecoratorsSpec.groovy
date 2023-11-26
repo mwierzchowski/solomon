@@ -1,4 +1,4 @@
-package solomon.support
+package solomon.addons
 
 import solomon.Result
 import solomon.helpers.TestContext

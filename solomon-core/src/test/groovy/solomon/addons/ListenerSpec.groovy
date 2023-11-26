@@ -1,4 +1,4 @@
-package solomon.spi
+package solomon.addons
 
 import spock.lang.Specification
 

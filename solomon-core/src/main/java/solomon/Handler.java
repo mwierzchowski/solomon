@@ -1,6 +1,4 @@
-package solomon.spi;
-
-import solomon.Result;
+package solomon;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

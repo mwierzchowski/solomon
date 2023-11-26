@@ -1,10 +1,9 @@
-package solomon.support;
+package solomon.addons;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import solomon.Context;
 import solomon.Result;
-import solomon.spi.Decorator;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

@@ -1,11 +1,10 @@
-package solomon.configs;
+package solomon;
 
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import solomon.spi.Addon;
-import solomon.spi.Decorator;
-import solomon.spi.Listener;
+import solomon.addons.Addon;
+import solomon.addons.Decorator;
+import solomon.addons.Listener;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -15,18 +14,37 @@ import static java.util.Collections.emptyList;
 import static solomon.Utils.cast;
 
 @Slf4j
-@RequiredArgsConstructor
-public class LinkedConfig implements Config {
-    private final LinkedConfig parent;
-
-    @Setter
+@NoArgsConstructor
+public class Config {
+    private boolean locked = false;
+    private Config parent;
     private List<Decorator<?, ?>> decoratorList;
-
-    @Setter
     private List<Listener<?, ?>> listenerList;
 
-    @Override
-    public Config add(Addon addon) {
+    public Config(List<Addon> addons) {
+        addons.forEach(this::add);
+    }
+
+    public Config(Config parent) {
+        this.parent = parent;
+    }
+
+    public void lock() {
+        this.locked = true;
+    }
+
+    public Config unlock() {
+        if (locked) {
+            return new Config(this);
+        } else {
+            return this;
+        }
+    }
+
+    public void add(Addon addon) {
+        if (locked) {
+            throw new IllegalStateException("Cannot modify locked config");
+        }
         LOG.debug("Adding addon: {}", addon);
         Class<? extends Addon> addonClass;
         if (addon instanceof Decorator) {
@@ -38,10 +56,8 @@ public class LinkedConfig implements Config {
             addonClass = addon.getClass();
         }
         addonList(addonClass, true).add(addon);
-        return this;
     }
 
-    @Override
     public <A extends Addon> A get(Class<A> addonClass, int position) {
         LOG.debug("Getting {} on position {}", addonClass, position);
         var parentSize = this.parentSize(addonClass);
@@ -55,14 +71,12 @@ public class LinkedConfig implements Config {
         }
     }
 
-    @Override
     public int count(Class<? extends Addon> addonClass) {
         return this.parentSize(addonClass) + addonList(addonClass, false).size();
     }
 
-    @Override
-    public Config chain() {
-        return new LinkedConfig(this);
+    boolean contains(Class<? extends Addon> addonClass, int position) {
+        return position >= 0 && position < this.count(addonClass);
     }
 
     protected int parentSize(Class<? extends Addon> clazz) {

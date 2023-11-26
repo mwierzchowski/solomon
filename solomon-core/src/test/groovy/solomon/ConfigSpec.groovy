@@ -1,25 +1,68 @@
-package solomon.configs
+package solomon
 
 import groovy.transform.TupleConstructor
+import solomon.addons.Addon
+import solomon.addons.Decorator
+import solomon.addons.DecoratorAdapter
 import solomon.helpers.TestRunnableCmdDecorator
-import solomon.spi.Addon
-import solomon.spi.Decorator
-import solomon.support.DecoratorAdapter
+import solomon.Config
 import spock.lang.Specification
 
-class LinkedConfigSpec extends Specification {
+class ConfigSpec extends Specification {
+    def "Creates config with addons"() {
+        given:
+        def addons = [new AnyDecorator(1), new AnyDecorator(2)]
+        when:
+        def config = new Config(addons)
+        then:
+        config.count(Decorator) == 2
+    }
+
     def "Adds addon to config"() {
         given:
-        def config = new LinkedConfig(null)
+        def config = new Config()
         when:
         config.add(new AnyDecorator(1))
         then:
         noExceptionThrown()
     }
 
+    def "Throws ISE on add when config is locked"() {
+        given:
+        def config = new Config()
+        config.lock()
+        when:
+        config.add(new AnyDecorator(1))
+        then:
+        thrown IllegalStateException
+    }
+
+    def "Unlocks creates new unlocked config when already locked"() {
+        given:
+        def config1 = new Config()
+        config1.lock()
+        when:
+        def config2 = config1.unlock()
+        config2.add(new AnyDecorator(1))
+        then:
+        noExceptionThrown()
+        config2 != config1
+    }
+
+    def "Unlock does not create new config when it is not locked"() {
+        given:
+        def config1 = new Config()
+        when:
+        def config2 = config1.unlock()
+        config2.add(new AnyDecorator(1))
+        then:
+        noExceptionThrown()
+        config2 == config1
+    }
+
     def "Throws IAE on add when addon type is not supported"() {
         given:
-        def config = new LinkedConfig(null)
+        def config = new Config()
         when:
         config.add(new FakeAddon())
         then:
@@ -28,10 +71,10 @@ class LinkedConfigSpec extends Specification {
 
     def "Provides addon on given position"() {
         given:
-        def config1 = new LinkedConfig(null)
-        def config2 = new LinkedConfig(config1)
-        config1 = config1.add(new AnyDecorator(1))
-        config2 = config2.add(new AnyDecorator(2))
+        def config1 = new Config()
+        def config2 = new Config(config1)
+        config1.add(new AnyDecorator(1))
+        config2.add(new AnyDecorator(2))
         expect:
         config2.get(Decorator, position).asType(AnyDecorator).id == id
         where:
@@ -42,7 +85,7 @@ class LinkedConfigSpec extends Specification {
 
     def "Throws IOBE on get when position is not valid"() {
         given:
-        def config = new LinkedConfig(null)
+        def config = new Config()
         config.add(new TestRunnableCmdDecorator())
         when:
         config.get(Decorator, index)
@@ -54,7 +97,7 @@ class LinkedConfigSpec extends Specification {
 
     def "Throws IAE on get when addon type is not supported"() {
         given:
-        def config = new LinkedConfig(null)
+        def config = new Config()
         config.add(new TestRunnableCmdDecorator())
         when:
         config.get(FakeAddon, 0)
@@ -73,17 +116,6 @@ class LinkedConfigSpec extends Specification {
         null      | [1, 2]    | 2
         [1, 2, 3] | []        | 3
         [1, 2]    | [3, 4, 5] | 5
-    }
-
-    def "Provides new config linked to this one"() {
-        given:
-        def config1 = new LinkedConfig(null)
-        when:
-        def config2 = config1.chain()
-        then:
-        config2 != config1
-        config2.class == LinkedConfig
-        config2.parent == config1
     }
 
     def "Checks if addon is in the config"() {
@@ -108,14 +140,14 @@ class LinkedConfigSpec extends Specification {
     }
 
     Config buildConfig(List<Integer> parentDecorators, List<Integer> childDecorators) {
-        LinkedConfig parent, child = null;
+        Config parent, child = null
         if (parentDecorators != null) {
-            parent = new LinkedConfig(null)
+            parent = new Config()
             parentDecorators.forEach {
                 parent.add(new AnyDecorator(it))
             }
         }
-        child = new LinkedConfig(parent)
+        child = new Config((Config)parent)
         if (childDecorators != null) {
             childDecorators.forEach {
                 child.add(new AnyDecorator(it))

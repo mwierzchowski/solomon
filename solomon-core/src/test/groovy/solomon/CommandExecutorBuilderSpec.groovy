@@ -1,12 +1,12 @@
 package solomon
 
-import solomon.spi.Decorator
-import solomon.spi.Factory
-import solomon.spi.Listener
+import solomon.addons.Decorator
+import solomon.services.Factory
+import solomon.addons.Listener
 import spock.lang.Specification
 
 class CommandExecutorBuilderSpec extends Specification {
-    def builder = new CommandExecutor.Builder()
+    def builder = new CommandExecutorBuilder()
 
     def "Builds with defaults"() {
         when:
@@ -26,7 +26,16 @@ class CommandExecutorBuilderSpec extends Specification {
         executor.factory == factory
     }
 
-    def "Builds with addons"() {
+    def "Builds with configuration"() {
+        given:
+        def config = new Config()
+        when:
+        def executor = builder.withConfig(config).build()
+        then:
+        executor.globalConfig == config
+    }
+
+    def "Builds with global addons"() {
         given:
         def decorator = Mock(Decorator)
         def listener = Mock(Listener)
@@ -37,5 +46,18 @@ class CommandExecutorBuilderSpec extends Specification {
         then:
         executor.globalConfig.get(Decorator, 0) == decorator
         executor.globalConfig.get(Listener, 0) == listener
+    }
+
+    def "Builds with registered addons"() {
+        given:
+        def decorator = Mock(Decorator)
+        def listener = Mock(Listener)
+        when:
+        def executor = builder.withRegisteredAddon(decorator)
+            .withRegisteredAddon(listener)
+            .build()
+        then:
+        executor.factory.getInstanceOf(decorator.getClass()) == decorator
+        executor.factory.getInstanceOf(listener.getClass()) == listener
     }
 }

@@ -3,10 +3,9 @@ package solomon;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import solomon.configs.Config;
-import solomon.spi.Decorator;
-import solomon.spi.Handler;
-import solomon.spi.Listener;
+import solomon.addons.Addon;
+import solomon.addons.Decorator;
+import solomon.addons.Listener;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -14,10 +13,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static solomon.Utils.cast;
-import static solomon.support.Decorators.after;
-import static solomon.support.Decorators.before;
-import static solomon.support.Listeners.onFailure;
-import static solomon.support.Listeners.onSuccess;
+import static solomon.addons.Decorators.after;
+import static solomon.addons.Decorators.before;
+import static solomon.addons.Listeners.onFailure;
+import static solomon.addons.Listeners.onSuccess;
 
 @Slf4j
 @AllArgsConstructor
@@ -96,42 +95,40 @@ public class Execution<C, V> extends Context<C> {
     }
 
     public Execution<C, V> decorate(Decorator<? super C, ? super V> decorator) {
-        this.config = this.config.add(decorator);
-        return this;
+        return this.unlockAndAdd(decorator);
     }
 
     public Execution<C, V> decorate(Supplier<Decorator<? super C, ? super V>> decoratorSupplier) {
-        LOG.debug("Calling decorator supplier");
-        return this.decorate(decoratorSupplier.get());
+        return unlockAndAdd(decoratorSupplier.get());
     }
 
     public Execution<C, V> decorateBefore(Consumer<Context<? super C>> decoratorMethod) {
-        this.config = this.config.add(before(decoratorMethod));
-        return this;
+        return this.unlockAndAdd(before(decoratorMethod));
     }
 
     public Execution<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
-        this.config = this.config.add(after(decoratorMethod));
-        return this;
+        return this.unlockAndAdd(after(decoratorMethod));
     }
 
     public Execution<C, V> listen(Listener<? super C, ? super V> listener) {
-        this.config = this.config.add(listener);
-        return this;
+        return this.unlockAndAdd(listener);
     }
 
     public Execution<C, V> listen(Supplier<Listener<? super C, ? super V>> listenerSupplier) {
-        LOG.debug("Calling listener supplier");
-        return this.listen(listenerSupplier.get());
+        return this.unlockAndAdd(listenerSupplier.get());
     }
 
     public Execution<C, V> listenOnSuccess(BiConsumer<? super C, ? super V> listenerMethod) {
-        this.config = this.config.add(onSuccess(listenerMethod));
-        return this;
+        return this.unlockAndAdd(onSuccess(listenerMethod));
     }
 
     public Execution<C, V> listenOnFailure(BiConsumer<? super C, RuntimeException> listenerMethod) {
-        this.config = this.config.add(onFailure(listenerMethod));
+        return this.unlockAndAdd(onFailure(listenerMethod));
+    }
+
+    protected Execution<C, V> unlockAndAdd(Addon addon) {
+        this.config = this.config.unlock();
+        this.config.add(addon);
         return this;
     }
 }

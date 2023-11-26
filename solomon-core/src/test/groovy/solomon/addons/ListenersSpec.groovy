@@ -1,6 +1,5 @@
-package solomon.support
+package solomon.addons
 
-import solomon.support.Listeners
 import spock.lang.Specification
 
 import java.util.function.BiConsumer

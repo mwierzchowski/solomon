@@ -1,8 +1,7 @@
-package solomon.support;
+package solomon.addons;
 
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import solomon.spi.Listener;
 
 import java.util.function.BiConsumer;
 

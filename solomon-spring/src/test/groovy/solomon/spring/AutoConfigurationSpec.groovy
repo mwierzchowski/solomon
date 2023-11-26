@@ -8,12 +8,11 @@ import solomon.spring.helpers.TestCommandRunnable
 import spock.lang.Specification
 
 @SpringBootTest(classes = TestApplication)
-class SpringCommandExecutorSpec extends Specification {
+class AutoConfigurationSpec extends Specification {
     @Autowired CommandExecutor executor
 
-    def "Executes command"() {
+    def "Injects executor"() {
         when:
-        executor.runnable(TestCommandRunnable).execute()
         executor.runnable(TestCommandRunnable).execute()
         then:
         noExceptionThrown()

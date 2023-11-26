@@ -2,7 +2,7 @@ package solomon.helpers
 
 import solomon.Context
 import solomon.Result
-import solomon.spi.Decorator
+import solomon.addons.Decorator
 
 class TestRunnableCmdDecorator implements Decorator<TestRunnableCmd, Object> {
     public int counterBefore = 0

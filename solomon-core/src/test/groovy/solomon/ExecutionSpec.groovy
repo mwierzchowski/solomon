@@ -1,10 +1,9 @@
 package solomon
 
-import solomon.configs.Config
+import solomon.helpers.TestListener
 import solomon.helpers.TestRunnableCmd
 import solomon.helpers.TestRunnableCmdDecorator
 import solomon.helpers.TestSupplierCmd
-import solomon.spi.Handler
 import spock.lang.Specification
 
 import static solomon.Utils.cast
@@ -12,7 +11,7 @@ import static solomon.Utils.cast
 class ExecutionSpec extends Specification {
     def runnableCmd = new TestRunnableCmd()
     def supplierCmd = new TestSupplierCmd(123)
-    def config = Config.emptyConfig()
+    def config = new Config()
     def runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), config)
     def supplierExecution = new Execution<>(supplierCmd, cast(Handler.SUPPLIER), config)
 
@@ -68,6 +67,36 @@ class ExecutionSpec extends Specification {
         counter == 1
     }
 
+    def "Listens to the success"() {
+        given:
+        def inlineSuccessListenerCounter = 0
+        def listener = new TestListener()
+        when:
+        runnableExecution.listen(listener)
+                .listenOnSuccess((a, b) -> inlineSuccessListenerCounter += 1)
+                .execute()
+        then:
+        listener.successCounter == 1
+        listener.failureCounter == 0
+        inlineSuccessListenerCounter == 1
+    }
+
+    def "Listens to the failure"() {
+        given:
+        def inlineFailureListenerCounter = 0
+        def listener = new TestListener()
+        when:
+        runnableExecution.listen(listener)
+                .listenOnFailure((a, b) -> inlineFailureListenerCounter += 1)
+                .decorateAfter((a, b) -> { throw new IllegalArgumentException()})
+                .execute()
+        then:
+        thrown IllegalArgumentException
+        listener.successCounter == 0
+        listener.failureCounter == 1
+        inlineFailureListenerCounter == 1
+    }
+
     def "Executes runnable command and returns value"() {
         when:
         def output = runnableExecution.execute()
@@ -94,7 +123,7 @@ class ExecutionSpec extends Specification {
     def "Uses global addons during execution"() {
         given:
         def decorator = new TestRunnableCmdDecorator()
-        config = config.add(decorator)
+        config.add(decorator)
         runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), config)
         when:
         runnableExecution.execute()

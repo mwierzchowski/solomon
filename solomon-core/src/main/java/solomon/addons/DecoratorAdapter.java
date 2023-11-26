@@ -1,8 +1,7 @@
-package solomon.support;
+package solomon.addons;
 
 import solomon.Context;
 import solomon.Result;
-import solomon.spi.Decorator;
 
 public abstract class DecoratorAdapter<C, V> implements Decorator<C, V> {
     @Override

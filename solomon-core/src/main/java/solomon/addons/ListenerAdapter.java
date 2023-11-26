@@ -1,6 +1,4 @@
-package solomon.support;
-
-import solomon.spi.Listener;
+package solomon.addons;
 
 public abstract class ListenerAdapter<C, V> implements Listener<C, V> {
     @Override
