@@ -26,7 +26,7 @@ public class CommandExecutorBuilder {
         return this;
     }
 
-    public CommandExecutorBuilder withGlobalConfig(Config config) {
+    public CommandExecutorBuilder withConfig(Config config) {
         this.config = config;
         return this;
     }
