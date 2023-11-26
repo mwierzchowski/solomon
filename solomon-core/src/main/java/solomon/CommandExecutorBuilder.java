@@ -50,11 +50,9 @@ public class CommandExecutorBuilder {
         }
         if (this.config == null) {
             this.config = new Config();
-        } else if (!globalAddons.isEmpty()) {
-            this.config = this.config.unlock();
         }
-        this.globalAddons.forEach(this.config::add);
         this.registeredAddons.forEach(this.factory::register);
+        this.globalAddons.forEach(this.config::add);
         return new CommandExecutor(factory, processor, config);
     }
 }
