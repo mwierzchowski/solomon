@@ -10,7 +10,7 @@ class CommandExecutorSpec extends Specification {
         def builder = CommandExecutor.builder()
         then:
         builder != null
-        builder.class == CommandExecutor.Builder
+        builder.class == CommandExecutorBuilder
     }
 
     def "Creates runnable command execution"() {

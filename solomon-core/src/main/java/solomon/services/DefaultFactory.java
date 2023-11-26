@@ -1,27 +1,14 @@
-package solomon.support;
+package solomon.services;
 
-import lombok.NoArgsConstructor;
-import solomon.spi.Addon;
-import solomon.spi.Factory;
+import solomon.addons.Addon;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static lombok.AccessLevel.PRIVATE;
 import static solomon.Utils.cast;
 import static solomon.Utils.newInstanceOf;
 
-@NoArgsConstructor(access = PRIVATE)
-public class CacheableFactory implements Factory {
-    protected static CacheableFactory instance;
-
-    public static CacheableFactory getInstance() {
-        if (instance == null) {
-            instance = new CacheableFactory();
-        }
-        return instance;
-    }
-
+public class DefaultFactory implements Factory {
     protected Map<Class<? extends Addon>, ? extends Addon> addonCache = new HashMap<>();
 
     @Override

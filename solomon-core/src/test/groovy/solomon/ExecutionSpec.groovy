@@ -1,10 +1,9 @@
 package solomon
 
-import solomon.configs.Config
 import solomon.helpers.TestRunnableCmd
 import solomon.helpers.TestRunnableCmdDecorator
 import solomon.helpers.TestSupplierCmd
-import solomon.spi.Handler
+import solomon.services.Handler
 import spock.lang.Specification
 
 import static solomon.Utils.cast
@@ -12,7 +11,7 @@ import static solomon.Utils.cast
 class ExecutionSpec extends Specification {
     def runnableCmd = new TestRunnableCmd()
     def supplierCmd = new TestSupplierCmd(123)
-    def config = Config.emptyConfig()
+    def config = new Config()
     def runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), config)
     def supplierExecution = new Execution<>(supplierCmd, cast(Handler.SUPPLIER), config)
 
@@ -94,7 +93,7 @@ class ExecutionSpec extends Specification {
     def "Uses global addons during execution"() {
         given:
         def decorator = new TestRunnableCmdDecorator()
-        config = config.add(decorator)
+        config.add(decorator)
         runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), config)
         when:
         runnableExecution.execute()

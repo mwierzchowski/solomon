@@ -1,8 +1,8 @@
-package solomon.spi;
+package solomon.addons;
 
-import solomon.annotation.AddonConfig;
+import solomon.annotations.AddonConfig;
 
-import static solomon.annotation.AddonConfig.Scope.SERVICE;
+import static solomon.annotations.AddonConfig.Scope.SERVICE;
 
 public interface Addon {
     default boolean isCacheable() {

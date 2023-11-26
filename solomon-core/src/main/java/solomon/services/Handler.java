@@ -1,4 +1,4 @@
-package solomon.spi;
+package solomon.services;
 
 import solomon.Result;
 

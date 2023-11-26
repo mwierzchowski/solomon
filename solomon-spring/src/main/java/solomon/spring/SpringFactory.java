@@ -3,8 +3,8 @@ package solomon.spring;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
-import solomon.spi.Addon;
-import solomon.spi.Factory;
+import solomon.addons.Addon;
+import solomon.services.Factory;
 
 @RequiredArgsConstructor
 public class SpringFactory implements Factory {

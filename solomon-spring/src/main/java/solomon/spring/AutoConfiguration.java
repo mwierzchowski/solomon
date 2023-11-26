@@ -4,18 +4,29 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import solomon.CommandExecutor;
-import solomon.spi.Factory;
-import solomon.support.CacheableFactory;
+import solomon.services.Factory;
+import solomon.services.Processor;
+import solomon.services.DefaultFactory;
+import solomon.services.DefaultProcessor;
 
 @Configuration
 public class AutoConfiguration {
     @Bean
-    public Factory commandFactory(ApplicationContext context) {
-        return new SpringFactory(CacheableFactory.getInstance(), context);
+    public Processor cmdProcessor(Factory commandFactory) {
+        return new DefaultProcessor(commandFactory);
     }
 
     @Bean
-    public CommandExecutor commandExecutor(Factory commandFactory) {
-        return CommandExecutor.builder().withFactory(commandFactory).build();
+    public Factory cmdFactory(ApplicationContext context) {
+        var fallbackFactory = new DefaultFactory();
+        return new SpringFactory(fallbackFactory, context);
+    }
+
+    @Bean
+    public CommandExecutor cmdExecutor(Factory cmdFactory, Processor cmdProcessor) {
+        return CommandExecutor.builder()
+                .withFactory(cmdFactory)
+                .withProcessor(cmdProcessor)
+                .build();
     }
 }

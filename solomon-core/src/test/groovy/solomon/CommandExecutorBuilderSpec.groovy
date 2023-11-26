@@ -1,12 +1,12 @@
 package solomon
 
-import solomon.spi.Decorator
-import solomon.spi.Factory
-import solomon.spi.Listener
+import solomon.addons.Decorator
+import solomon.services.Factory
+import solomon.addons.Listener
 import spock.lang.Specification
 
 class CommandExecutorBuilderSpec extends Specification {
-    def builder = new CommandExecutor.Builder()
+    def builder = new CommandExecutorBuilder()
 
     def "Builds with defaults"() {
         when:

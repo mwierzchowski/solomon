@@ -1,10 +1,9 @@
-package solomon.spi
+package solomon.addons
 
-import solomon.annotation.AddonConfig
-import solomon.support.DecoratorAdapter
+import solomon.annotations.AddonConfig
 import spock.lang.Specification
 
-import static solomon.annotation.AddonConfig.Scope.PROTOTYPE
+import static solomon.annotations.AddonConfig.Scope.PROTOTYPE
 
 class AddonSpec extends Specification {
     def "Addon is cacheable by default"() {
