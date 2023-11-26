@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import solomon.addons.Addon;
 import solomon.addons.Decorator;
 import solomon.addons.Listener;
-import solomon.services.Handler;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;

@@ -3,7 +3,6 @@ package solomon
 import solomon.helpers.TestRunnableCmd
 import solomon.helpers.TestRunnableCmdDecorator
 import solomon.helpers.TestSupplierCmd
-import solomon.services.Handler
 import spock.lang.Specification
 
 import static solomon.Utils.cast

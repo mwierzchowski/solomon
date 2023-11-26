@@ -3,15 +3,14 @@ package solomon;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import solomon.services.Factory;
-import solomon.services.Handler;
 import solomon.services.Processor;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static solomon.Utils.cast;
-import static solomon.services.Handler.RUNNABLE;
-import static solomon.services.Handler.SUPPLIER;
+import static solomon.Handler.RUNNABLE;
+import static solomon.Handler.SUPPLIER;
 
 @Slf4j
 public class CommandExecutor {
