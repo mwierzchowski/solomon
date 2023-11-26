@@ -26,7 +26,7 @@ class CommandExecutorBuilderSpec extends Specification {
         executor.factory == factory
     }
 
-    def "Builds with addons"() {
+    def "Builds with global addons"() {
         given:
         def decorator = Mock(Decorator)
         def listener = Mock(Listener)
@@ -37,5 +37,18 @@ class CommandExecutorBuilderSpec extends Specification {
         then:
         executor.globalConfig.get(Decorator, 0) == decorator
         executor.globalConfig.get(Listener, 0) == listener
+    }
+
+    def "Builds with registered addons"() {
+        given:
+        def decorator = Mock(Decorator)
+        def listener = Mock(Listener)
+        when:
+        def executor = builder.withRegisteredAddon(decorator)
+            .withRegisteredAddon(listener)
+            .build()
+        then:
+        executor.factory.getInstanceOf(decorator.getClass()) == decorator
+        executor.factory.getInstanceOf(listener.getClass()) == listener
     }
 }

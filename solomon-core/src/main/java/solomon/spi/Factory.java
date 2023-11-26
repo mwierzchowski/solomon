@@ -1,6 +1,6 @@
 package solomon.spi;
 
-@FunctionalInterface
 public interface Factory {
-    <C> C instantiate(Class<C> clazz);
+    <C> C getInstanceOf(Class<C> clazz);
+    <A extends Addon> void register(A addon);
 }

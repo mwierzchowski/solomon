@@ -8,12 +8,12 @@ import solomon.spi.Addon;
 import solomon.spi.Factory;
 import solomon.spi.Handler;
 import solomon.spi.Processor;
+import solomon.support.CacheableFactory;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static solomon.Utils.cast;
-import static solomon.configs.Config.emptyConfig;
 import static solomon.spi.Handler.RUNNABLE;
 import static solomon.spi.Handler.SUPPLIER;
 
@@ -41,7 +41,7 @@ public class CommandExecutor {
     protected <C, V> Execution<C, V> kickoff(@NonNull Class<C> commandClass, Handler<C, V> handler,
                                              Consumer<C>[] initializers) {
         LOG.debug("Building command: {}", commandClass.getSimpleName());
-        var command = this.factory.instantiate(commandClass);
+        var command = this.factory.getInstanceOf(commandClass);
         var config = this.processor.process(command, this.globalConfig.chain());
         var execution = new Execution<>(command, handler, config);
         for (int i = 0; i < initializers.length; i++) {
@@ -51,9 +51,9 @@ public class CommandExecutor {
     }
 
     public static class Builder {
-        private Factory factory = Utils::newInstanceOf;
+        private Factory factory = CacheableFactory.getInstance();
         private Processor processor = (cmd, cfg) -> cfg;
-        private Config config = emptyConfig();
+        private Config config = Config.emptyConfig();
 
         public Builder withFactory(Factory factory) {
             this.factory = factory;
@@ -66,7 +66,8 @@ public class CommandExecutor {
         }
 
         public Builder withRegisteredAddon(Addon addon) {
-            throw new UnsupportedOperationException("Method not implemented");
+            this.factory.register(addon);
+            return this;
         }
 
         public CommandExecutor build() {
