@@ -18,8 +18,8 @@ public class AutoConfiguration {
     }
 
     @Bean
-    public Processor cmdProcessor(Factory commandFactory) {
-        return new DefaultProcessor(commandFactory);
+    public Processor cmdProcessor(Factory cmdFactory) {
+        return new DefaultProcessor(cmdFactory);
     }
 
     @Bean
