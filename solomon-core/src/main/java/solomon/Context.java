@@ -8,8 +8,8 @@ import java.util.Map;
 import static solomon.Utils.cast;
 
 public interface Context<C> {
-    Map<Object, Object> getContextData();
     void setContextData(Map<Object, Object> contextData);
+    Map<Object, Object> getContextData();
     C getCommand();
 
     default void store(@NonNull Object key, Object object) {
