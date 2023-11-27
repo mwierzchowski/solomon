@@ -53,20 +53,11 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             }
         }
         int listenerCount = 0;
-        if (this.isSuccess()) {
-            LOG.debug("Sending success notification(s)");
-            for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
-                Listener<?, ?> listener = this.config.get(Listener.class, i);
-                listener.safeOnSuccess(cast(this.getCommand()), cast(this.getValue()));
-            }
-        } else {
-            LOG.debug("Sending failure notification(s)");
-            for (int i = 0; this.config.contains(Listener.class, i); i++) {
-                Listener<?, ?> listener = this.config.get(Listener.class, i);
-                listener.safeOnFailure(cast(this.getCommand()), cast(this.getException()));
-            }
-            LOG.debug("Sent {} notifications", listenerCount);
+        for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
+            Listener<?, ?> listener = this.config.get(Listener.class, i);
+            listener.send(cast(this.getCommand()), this.asResult());
         }
+        LOG.debug("Sent {} notifications", listenerCount);
         LOG.debug("Execution finished");
         return this.getValueOrThrowException();
     }
