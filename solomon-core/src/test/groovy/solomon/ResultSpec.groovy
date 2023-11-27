@@ -9,7 +9,7 @@ class ResultSpec extends Specification {
         given:
         def value = 1
         when:
-        result.setValue(value)
+        result.setSuccess(value)
         then:
         result.getValueOrThrowException() == value
         result.isSuccess()
@@ -17,7 +17,7 @@ class ResultSpec extends Specification {
 
     def "Holds command null value"() {
         when:
-        result.setValue(null)
+        result.setSuccess(null)
         then:
         result.getValueOrThrowException() == null
         result.isSuccess()
@@ -27,7 +27,7 @@ class ResultSpec extends Specification {
         given:
         def exception = new IllegalArgumentException()
         when:
-        result.setException(exception)
+        result.setFailure(exception)
         result.getValueOrThrowException()
         then:
         Exception ex = thrown()
@@ -38,7 +38,7 @@ class ResultSpec extends Specification {
     def "Provides value for successful result"() {
         given:
         def value = new Object()
-        result.setValue(value)
+        result.setSuccess(value)
         expect:
         result.getValue() == value
     }
@@ -46,23 +46,23 @@ class ResultSpec extends Specification {
     def "Provides exception for failed result"() {
         given:
         def exception = new RuntimeException()
-        result.setException(exception)
+        result.setFailure(exception)
         expect:
         result.getException() == exception
     }
 
     def "Changes exception to value"() {
         given:
-        result.setException(new RuntimeException())
+        result.setFailure(new RuntimeException())
         when:
-        result.setValue(1)
+        result.setSuccess(1)
         then:
         result.isSuccess()
     }
 
     def "Changes value to exception"() {
         given:
-        result.setValue(1)
+        result.setSuccess(1)
         when:
         result.setException(new RuntimeException())
         then:
@@ -70,6 +70,7 @@ class ResultSpec extends Specification {
     }
 
     static class TestResult implements Result<Object> {
-        Object resultObject
+        Object value
+        RuntimeException exception
     }
 }

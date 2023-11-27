@@ -3,31 +3,26 @@ package solomon;
 import static solomon.Utils.cast;
 
 public interface Result<V> {
-    Object getResultObject();
-    void setResultObject(Object object);
+    void setValue(V value);
+    void setException(RuntimeException exception);
+    V getValue();
+    RuntimeException getException();
 
-    default void setValue(V value) {
-        setResultObject(value);
+    default void setSuccess(V value) {
+        this.setValue(value);
+        this.setException(null);
     }
 
-    default void setException(RuntimeException exception) {
-        setResultObject(exception);
-    }
-
-    default V getValue() {
-      return cast(getResultObject());
-    }
-
-    default RuntimeException getException() {
-        return cast(getResultObject());
-    }
-
-    default boolean isFailure() {
-        return getResultObject() instanceof RuntimeException;
+    default void setFailure(RuntimeException exception) {
+        this.setException(exception);
     }
 
     default boolean isSuccess() {
-        return !this.isFailure();
+        return this.getException() == null;
+    }
+
+    default boolean isFailure() {
+        return !this.isSuccess();
     }
 
     default V getValueOrThrowException() {

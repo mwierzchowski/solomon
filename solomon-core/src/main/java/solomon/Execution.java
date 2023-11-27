@@ -20,6 +20,8 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
     private @NonNull Config config;
     private Map<Object, Object> contextData;
     private Object resultObject;
+    private V value;
+    private RuntimeException exception;
 
     @Override
     public V execute() {
