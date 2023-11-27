@@ -35,7 +35,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             LOG.debug("Executed {} decorators", decoratorCount);
             decoratorFailed = false;
             LOG.debug("Running command");
-            handler.accept(command, this);
+            this.handler.accept(this.getCommand(), this);
         } catch (RuntimeException ex) {
             if (decoratorFailed) {
                 decoratorCount += 1;
@@ -56,13 +56,13 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             LOG.debug("Sending success notification(s)");
             for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
                 Listener<?, ?> listener = this.config.get(Listener.class, i);
-                listener.safeOnSuccess(cast(this.command), cast(this.getValue()));
+                listener.safeOnSuccess(cast(this.getCommand()), cast(this.getValue()));
             }
         } else {
             LOG.debug("Sending failure notification(s)");
             for (int i = 0; this.config.contains(Listener.class, i); i++) {
                 Listener<?, ?> listener = this.config.get(Listener.class, i);
-                listener.safeOnFailure(cast(this.command), cast(this.getException()));
+                listener.safeOnFailure(cast(this.getCommand()), cast(this.getException()));
             }
             LOG.debug("Sent {} notifications", listenerCount);
         }
