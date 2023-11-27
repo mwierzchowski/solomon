@@ -30,7 +30,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             LOG.debug("Decorating before");
             for (int i = 0; this.config.contains(Decorator.class, i); i++, decoratorCount++) {
                 Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
-                decorator.before(cast(this));
+                decorator.before(this.asContext());
             }
             LOG.debug("Executed {} decorators", decoratorCount);
             decoratorFailed = false;
@@ -48,7 +48,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             LOG.debug("Decorating after");
             for (int i = decoratorCount - 1; this.config.contains(Decorator.class, i); i--) {
                 Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
-                decorator.safeAfter(cast(this), cast(this));
+                decorator.safeAfter(this.asContext(), this.asResult());
             }
         }
         int listenerCount = 0;

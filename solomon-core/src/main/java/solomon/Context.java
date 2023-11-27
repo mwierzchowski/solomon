@@ -5,6 +5,8 @@ import lombok.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import static solomon.Utils.cast;
+
 public interface Context<C> {
     Map<Object, Object> getContextData();
     void setContextData(Map<Object, Object> contextData);
@@ -31,5 +33,9 @@ public interface Context<C> {
 
     default boolean contains(Object key) {
         return this.retrieve(key) != null;
+    }
+
+    default <T> Context<T> asContext() {
+        return cast(this);
     }
 }

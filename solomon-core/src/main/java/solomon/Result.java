@@ -37,4 +37,8 @@ public interface Result<V> {
             throw this.getException();
         }
     }
+
+    default  <T> Result<T> asResult() {
+        return cast(this);
+    }
 }
