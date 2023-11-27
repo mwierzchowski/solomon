@@ -5,15 +5,16 @@ import spock.lang.Specification
 import java.util.function.Supplier
 
 class HandlerSpec extends Specification {
+    def result = Mock(Result)
+
     def "Runnable handler calls run and returns command itself"() {
         given:
         def command = Mock(Runnable)
         when:
-        def result = Handler.RUNNABLE.apply(command)
+        Handler.RUNNABLE.accept(command, result)
         then:
         1 * command.run()
-        result != null
-        result.getValue() == command
+        1 * result.setValue(_)
     }
 
     def "Supplier handler calls get and returns received value"() {
@@ -21,10 +22,9 @@ class HandlerSpec extends Specification {
         def resultObject = new Object()
         def command = Mock(Supplier)
         when:
-        def result = Handler.SUPPLIER.apply(command)
+        Handler.SUPPLIER.accept(command, result)
         then:
         1 * command.get() >> resultObject
-        result != null
-        result.getValue() == resultObject
+        1 * result.setValue(_)
     }
 }

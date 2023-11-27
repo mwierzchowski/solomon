@@ -1,61 +1,40 @@
 package solomon;
 
-import lombok.NonNull;
+import static solomon.Utils.cast;
 
-public class Result<V> {
-    private Object object;
+public interface Result<V> {
+    Object getResultObject();
+    void setResultObject(Object object);
 
-    public Result(V value) {
-        this.change(value);
+    default void setValue(V value) {
+        setResultObject(value);
     }
 
-    public Result(RuntimeException exception) {
-        this.change(exception);
+    default void setException(RuntimeException exception) {
+        setResultObject(exception);
     }
 
-    public void change(V value) {
-        this.object = value;
+    default V getValue() {
+      return cast(getResultObject());
     }
 
-    public void change(@NonNull RuntimeException exception) {
-        this.object = exception;
+    default RuntimeException getException() {
+        return cast(getResultObject());
     }
 
-    public boolean changeIfSuccessful(RuntimeException ex) {
+    default boolean isFailure() {
+        return getResultObject() instanceof RuntimeException;
+    }
+
+    default boolean isSuccess() {
+        return !this.isFailure();
+    }
+
+    default V getValueOrThrowException() {
         if (this.isSuccess()) {
-            this.change(ex);
-            return true;
-        }
-        return false;
-    }
-
-    @SuppressWarnings("unchecked")
-    public V getValue() {
-        if (this.isFailure()) {
-            throw new IllegalStateException("This result is a failure");
-        }
-        return (V) this.object;
-    }
-
-    public RuntimeException getException() {
-        if (this.isSuccess()) {
-            throw new IllegalStateException("This result is a success");
-        }
-        return (RuntimeException) this.object;
-    }
-
-    public V getValueOrThrowException() {
-        if (this.isFailure()) {
+            return this.getValue();
+        } else {
             throw this.getException();
         }
-        return this.getValue();
-    }
-
-    public boolean isFailure() {
-        return this.object instanceof RuntimeException;
-    }
-
-    public boolean isSuccess() {
-        return !this.isFailure();
     }
 }

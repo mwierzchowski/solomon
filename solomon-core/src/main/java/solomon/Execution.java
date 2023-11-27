@@ -1,8 +1,9 @@
 package solomon;
 
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import solomon.addons.Addon;
 import solomon.addons.Decorator;
 import solomon.addons.Listener;
 
@@ -12,16 +13,17 @@ import static solomon.Utils.cast;
 
 @Slf4j
 @Data
-public class Execution<C, V> implements Flow<C, V>, Context<C> {
-    private C command;
-    private Handler<C, V> handler;
-    private Config config;
+@RequiredArgsConstructor
+public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
+    private final C command;
+    private final Handler<C, V> handler;
+    private @NonNull Config config;
     private Map<Object, Object> contextData;
+    private Object resultObject;
 
     @Override
     public V execute() {
         LOG.debug("Execution started");
-        Result<V> result = null;
         int decoratorCount = 0;
         boolean decoratorFailed = true;
         try {
@@ -33,7 +35,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C> {
             LOG.debug("Executed {} decorators", decoratorCount);
             decoratorFailed = false;
             LOG.debug("Running command");
-            result = handler.apply(command);
+            handler.accept(command, this);
         } catch (RuntimeException ex) {
             if (decoratorFailed) {
                 decoratorCount += 1;
@@ -41,37 +43,30 @@ public class Execution<C, V> implements Flow<C, V>, Context<C> {
             } else {
                 LOG.debug("Exception in command: {}", ex.getMessage());
             }
-            result = new Result<>(ex);
+            this.setException(ex);
         } finally {
-            assert result != null;
             LOG.debug("Decorating after");
             for (int i = decoratorCount - 1; this.config.contains(Decorator.class, i); i--) {
                 Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
-                decorator.safeAfter(cast(this), cast(result));
+                decorator.safeAfter(cast(this), cast(this));
             }
         }
         int listenerCount = 0;
-        if (result.isSuccess()) {
+        if (this.isSuccess()) {
             LOG.debug("Sending success notification(s)");
             for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
                 Listener<?, ?> listener = this.config.get(Listener.class, i);
-                listener.safeOnSuccess(cast(this.command), cast(result.getValue()));
+                listener.safeOnSuccess(cast(this.command), cast(this.getValue()));
             }
         } else {
             LOG.debug("Sending failure notification(s)");
             for (int i = 0; this.config.contains(Listener.class, i); i++) {
                 Listener<?, ?> listener = this.config.get(Listener.class, i);
-                listener.safeOnFailure(cast(this.command), result.getException());
+                listener.safeOnFailure(cast(this.command), cast(this.getException()));
             }
             LOG.debug("Sent {} notifications", listenerCount);
         }
         LOG.debug("Execution finished");
-        return result.getValueOrThrowException();
-    }
-
-    @Override
-    public void updateConfig(Addon addon) {
-        this.config = this.config.unlock();
-        this.config.add(addon);
+        return this.getValueOrThrowException();
     }
 }

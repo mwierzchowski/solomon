@@ -15,10 +15,11 @@ public interface Decorator<C, V> extends Addon {
         try {
             this.after(context, result);
         } catch (RuntimeException ex) {
-            if (result.changeIfSuccessful(ex)) {
+            if (result.isSuccess()) {
+                result.setException(ex);
                 LOG.error("Could not execute after callback, marking command as failed");
             } else {
-                LOG.error("Could not execute after callback, command is already failed", ex);
+                LOG.error("Could not execute after callback, command is already failed, this exception is lost", ex);
             }
         }
     }

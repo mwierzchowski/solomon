@@ -21,7 +21,8 @@ public interface Flow<C, V> {
 
     V execute();
     C getCommand();
-    void updateConfig(Addon addon);
+    Config getConfig();
+    void setConfig(Config config);
 
     default <T> T execute(Function<V, T> mapper) {
         V value = this.execute();
@@ -36,42 +37,40 @@ public interface Flow<C, V> {
     }
 
     default Flow<C, V> decorate(Decorator<? super C, ? super V> decorator) {
-        this.updateConfig(decorator);
-        return this;
+        return this.updateConfig(decorator);
     }
 
     default Flow<C, V> decorate(Supplier<Decorator<? super C, ? super V>> decoratorSupplier) {
-        updateConfig(decoratorSupplier.get());
-        return this;
+        return updateConfig(decoratorSupplier.get());
     }
 
     default Flow<C, V> decorateBefore(Consumer<Context<? super C>> decoratorMethod) {
-        this.updateConfig(before(decoratorMethod));
-        return this;
+        return this.updateConfig(before(decoratorMethod));
     }
 
     default Flow<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
-        this.updateConfig(after(decoratorMethod));
-        return this;
+        return this.updateConfig(after(decoratorMethod));
     }
 
     default Flow<C, V> listen(Listener<? super C, ? super V> listener) {
-        this.updateConfig(listener);
-        return this;
+        return this.updateConfig(listener);
     }
 
     default Flow<C, V> listen(Supplier<Listener<? super C, ? super V>> listenerSupplier) {
-        this.updateConfig(listenerSupplier.get());
-        return this;
+        return this.updateConfig(listenerSupplier.get());
     }
 
     default Flow<C, V> listenOnSuccess(BiConsumer<? super C, ? super V> listenerMethod) {
-        this.updateConfig(onSuccess(listenerMethod));
-        return this;
+        return this.updateConfig(onSuccess(listenerMethod));
     }
 
     default Flow<C, V> listenOnFailure(BiConsumer<? super C, RuntimeException> listenerMethod) {
-        this.updateConfig(onFailure(listenerMethod));
+        return this.updateConfig(onFailure(listenerMethod));
+    }
+
+    default Flow<C, V> updateConfig(Addon addon) {
+        this.setConfig(this.getConfig().unlock());
+        this.getConfig().add(addon);
         return this;
     }
 }

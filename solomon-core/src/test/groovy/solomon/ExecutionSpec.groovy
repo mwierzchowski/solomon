@@ -12,16 +12,8 @@ class ExecutionSpec extends Specification {
     def runnableCmd = new TestRunnableCmd()
     def supplierCmd = new TestSupplierCmd(123)
     def globalConfig = new Config()
-    def runnableExecution = new Execution<>().tap {
-        it.command = runnableCmd
-        it.handler = cast(Handler.RUNNABLE)
-        it.config = globalConfig
-    }
-    def supplierExecution = new Execution<>().tap {
-        it.command = supplierCmd
-        it.handler = cast(Handler.SUPPLIER)
-        it.config = globalConfig
-    }
+    def runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
+    def supplierExecution = new Execution<>(supplierCmd, cast(Handler.SUPPLIER), globalConfig)
 
     def "Fluently configures command"() {
         when:
@@ -121,11 +113,7 @@ class ExecutionSpec extends Specification {
         given:
         def decorator = new TestRunnableCmdDecorator()
         globalConfig.add(decorator)
-        runnableExecution = new Execution<>().tap {
-            it.command = runnableCmd
-            it.handler = cast(Handler.RUNNABLE)
-            it.config = globalConfig
-        }
+        runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
         when:
         runnableExecution.execute()
         then:

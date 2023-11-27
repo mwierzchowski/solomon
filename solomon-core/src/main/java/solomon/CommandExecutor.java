@@ -44,10 +44,7 @@ public class CommandExecutor {
         LOG.debug("Building command: {}", commandClass.getSimpleName());
         var command = this.factory.getInstanceOf(commandClass);
         var config = this.processor.process(command, this.globalConfig);
-        var execution = new Execution<C, V>();
-        execution.setCommand(command);
-        execution.setHandler(cast(handler));
-        execution.setConfig(config);
+        var execution = new Execution<>(command, handler, config);
         for (int i = 0; i < initializers.length; i++) {
             execution.setup(initializers[i]);
         }
