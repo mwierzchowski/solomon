@@ -27,7 +27,7 @@ public interface Listener<C, V> extends Addon {
         }
     }
 
-    default void send(C command, Result<V> result) {
+    default void safeSend(C command, Result<V> result) {
         if (result.isSuccess()) {
             this.onSuccess(command, result.getValue());
         } else {

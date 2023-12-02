@@ -50,7 +50,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
         for (int i = 0; this.config.contains(Listener.class, i); i++) {
             LOG.debug("Sending notification");
             Listener<?, ?> listener = this.config.get(Listener.class, i);
-            listener.send(cast(this.command), asResult(this));
+            listener.safeSend(cast(this.command), asResult(this));
         }
         LOG.debug("Execution finished");
         return this.getValueOrThrowException();
