@@ -7,17 +7,20 @@ import lombok.extern.slf4j.Slf4j;
 import solomon.addons.Decorator;
 import solomon.addons.Listener;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
+import static java.util.Objects.requireNonNullElse;
 import static solomon.Utils.cast;
 
 @Slf4j
 @Data
 @RequiredArgsConstructor
 public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
-    private final C command;
-    private final Handler<C, V> handler;
-    private @NonNull Config config;
+    @NonNull private final C command;
+    @NonNull private final Handler<C, V> handler;
+    @NonNull private Config config;
     private Map<Object, Object> contextData;
     private V value;
     private RuntimeException exception;
@@ -36,7 +39,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             LOG.debug("Executed {} decorators", decoratorCount);
             decoratorFailed = false;
             LOG.debug("Running command");
-            this.handler.accept(this.getCommand(), this);
+            this.handler.accept(this.command, this.asResult());
         } catch (RuntimeException ex) {
             if (decoratorFailed) {
                 decoratorCount += 1;
@@ -44,7 +47,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             } else {
                 LOG.debug("Exception in command: {}", ex.getMessage());
             }
-            this.setException(ex);
+            this.exception = ex;
         } finally {
             LOG.debug("Decorating after");
             for (int i = decoratorCount - 1; this.config.contains(Decorator.class, i); i--) {
@@ -60,5 +63,21 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
         LOG.debug("Sent {} notifications", listenerCount);
         LOG.debug("Execution finished");
         return this.getValueOrThrowException();
+    }
+
+    @Override
+    public Config getConfig(boolean forUpdate) {
+        if (forUpdate) {
+            this.config = this.config.unlock();
+        }
+        return config;
+    }
+
+    @Override
+    public Map<Object, Object> getContextData(boolean forUpdate) {
+        if (this.contextData == null && forUpdate) {
+            this.contextData = new HashMap<>();
+        }
+        return requireNonNullElse(this.contextData, emptyMap());
     }
 }

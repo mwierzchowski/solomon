@@ -4,58 +4,32 @@ import solomon.helpers.TestContext
 import spock.lang.Specification
 
 class ContextSpec extends Specification {
-    def context = new TestContext(new Object())
+    def context = new TestContext()
 
     def "Lazy initializes storage"() {
         expect:
         context.contextData == null
     }
 
-    def "Stores object"() {
-        given:
-        def key = "test-key"
-        def object = new Object()
+    def "Storage is empty map when not initialized"() {
         when:
-        context.store(key, object)
+        def data = context.getContextData(false)
         then:
-        context.contextData.get(key) == object
+        data != null
+        data == Collections.emptyMap()
     }
 
-    def "Retrieves object"() {
-        given:
-        def key = "test-key"
-        def object = new Object()
-        context.store(key, object)
-        expect:
-        context.retrieve(key) == object
-    }
-
-    def "Retrieves and casts object"() {
-        given:
-        def key = "test-key"
-        def object = Integer.valueOf(1)
-        context.store(key, object)
+    def "Instantiates storage for update"() {
         when:
-        def retrieved = context.retrieve(key, Integer)
+        context.getContextData(true)
         then:
-        retrieved == object
-        retrieved instanceof Integer
+        context.contextData != null
     }
 
-    def "Check if contains key"() {
-        given:
-        def key1 = "test-key-1"
-        def key2 = "test-key-2"
-        context.store(key1, new Object())
-        expect:
-        context.contains(key1)
-        !context.contains(key2)
-    }
-
-    def "Storing throws NPE when key is null"() {
+    def "Does not instantiate storage for read"() {
         when:
-        context.store(null, null)
+        context.getContextData(false)
         then:
-        thrown NullPointerException
+        context.contextData == null
     }
 }

@@ -8,21 +8,16 @@ public interface Result<V> {
     V getValue();
     RuntimeException getException();
 
-    default void setSuccess(V value) {
-        this.setValue(value);
-        this.setException(null);
-    }
-
-    default void setFailure(RuntimeException exception) {
-        this.setException(exception);
-    }
-
     default boolean isSuccess() {
         return this.getException() == null;
     }
 
     default boolean isFailure() {
-        return !this.isSuccess();
+        return this.getException() != null;
+    }
+
+    default void eraseFailure() {
+        this.setException(null);
     }
 
     default V getValueOrThrowException() {

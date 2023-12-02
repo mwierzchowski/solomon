@@ -1,33 +1,34 @@
 package solomon
 
+import solomon.helpers.TestResult
 import spock.lang.Specification
 
 class ResultSpec extends Specification {
     def result = new TestResult()
 
-    def "Holds command value"() {
+    def "Stores command value"() {
         given:
         def value = 1
         when:
-        result.setSuccess(value)
+        result.setValue(value)
         then:
         result.getValueOrThrowException() == value
         result.isSuccess()
     }
 
-    def "Holds command null value"() {
+    def "Stores command null value"() {
         when:
-        result.setSuccess(null)
+        result.setValue(null)
         then:
         result.getValueOrThrowException() == null
         result.isSuccess()
     }
 
-    def "Holds command exception"() {
+    def "Stores command exception"() {
         given:
         def exception = new IllegalArgumentException()
+        result.setException(exception)
         when:
-        result.setFailure(exception)
         result.getValueOrThrowException()
         then:
         Exception ex = thrown()
@@ -35,42 +36,28 @@ class ResultSpec extends Specification {
         result.isFailure()
     }
 
-    def "Provides value for successful result"() {
+    def "Provides value for success"() {
         given:
         def value = new Object()
-        result.setSuccess(value)
+        result.setValue(value)
         expect:
         result.getValue() == value
     }
 
-    def "Provides exception for failed result"() {
+    def "Provides exception for failure"() {
         given:
         def exception = new RuntimeException()
-        result.setFailure(exception)
+        result.setException(exception)
         expect:
         result.getException() == exception
     }
 
-    def "Changes exception to value"() {
+    def "Erases exception"() {
         given:
-        result.setFailure(new RuntimeException())
+        result.setException(new RuntimeException())
         when:
-        result.setSuccess(1)
+        result.eraseFailure()
         then:
         result.isSuccess()
-    }
-
-    def "Changes value to exception"() {
-        given:
-        result.setSuccess(1)
-        when:
-        result.setException(new RuntimeException())
-        then:
-        result.isFailure()
-    }
-
-    static class TestResult implements Result<Object> {
-        Object value
-        RuntimeException exception
     }
 }
