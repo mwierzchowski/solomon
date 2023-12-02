@@ -2,6 +2,7 @@ package solomon.addons;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import solomon.Result;
 
 public interface Listener<C, V> extends Addon {
     Logger LOG = LoggerFactory.getLogger(Listener.class);
@@ -23,6 +24,14 @@ public interface Listener<C, V> extends Addon {
             this.onFailure(command, exception);
         } catch (RuntimeException ex) {
             LOG.error("Could not send failure notification", ex);
+        }
+    }
+
+    default void safeSend(C command, Result<V> result) {
+        if (result.isSuccess()) {
+            this.onSuccess(command, result.getValue());
+        } else {
+            this.onFailure(command, result.getException());
         }
     }
 }

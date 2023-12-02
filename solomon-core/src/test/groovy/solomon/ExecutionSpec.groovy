@@ -11,9 +11,9 @@ import static solomon.Utils.cast
 class ExecutionSpec extends Specification {
     def runnableCmd = new TestRunnableCmd()
     def supplierCmd = new TestSupplierCmd(123)
-    def config = new Config()
-    def runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), config)
-    def supplierExecution = new Execution<>(supplierCmd, cast(Handler.SUPPLIER), config)
+    def globalConfig = new Config()
+    def runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
+    def supplierExecution = new Execution<>(supplierCmd, cast(Handler.SUPPLIER), globalConfig)
 
     def "Fluently configures command"() {
         when:
@@ -23,17 +23,6 @@ class ExecutionSpec extends Specification {
         })
         then:
         cmdInSetup == runnableCmd
-        flow2 == runnableExecution
-    }
-
-    def "Fluently configures context"() {
-        when:
-        def ctxInSetup = null
-        def flow2 = runnableExecution.setupContext(ctx -> {
-            ctxInSetup = ctx
-        })
-        then:
-        ctxInSetup == runnableExecution
         flow2 == runnableExecution
     }
 
@@ -123,8 +112,8 @@ class ExecutionSpec extends Specification {
     def "Uses global addons during execution"() {
         given:
         def decorator = new TestRunnableCmdDecorator()
-        config.add(decorator)
-        runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), config)
+        globalConfig.add(decorator)
+        runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
         when:
         runnableExecution.execute()
         then:

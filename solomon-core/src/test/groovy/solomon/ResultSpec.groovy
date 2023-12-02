@@ -1,31 +1,34 @@
 package solomon
 
+import solomon.helpers.TestResult
 import spock.lang.Specification
 
 class ResultSpec extends Specification {
-    def "Holds command value"() {
+    def result = new TestResult()
+
+    def "Stores command value"() {
         given:
         def value = 1
         when:
-        def result = new Result(value)
+        result.setValue(value)
         then:
         result.getValueOrThrowException() == value
         result.isSuccess()
     }
 
-    def "Holds command null value"() {
+    def "Stores command null value"() {
         when:
-        def result = new Result(null)
+        result.setValue(null)
         then:
         result.getValueOrThrowException() == null
         result.isSuccess()
     }
 
-    def "Holds command exception"() {
+    def "Stores command exception"() {
         given:
         def exception = new IllegalArgumentException()
+        result.setException(exception)
         when:
-        def result = new Result(exception)
         result.getValueOrThrowException()
         then:
         Exception ex = thrown()
@@ -33,62 +36,28 @@ class ResultSpec extends Specification {
         result.isFailure()
     }
 
-    def "Throws NPE when exception is null"() {
-        when:
-        new Result((RuntimeException) null)
-        then:
-        thrown NullPointerException
-    }
-
-    def "Changes value to exception"() {
-        given:
-        def result = new Result(1)
-        when:
-        result.change(new RuntimeException())
-        then:
-        result.isFailure()
-    }
-
-    def "Changes exception to value"() {
-        given:
-        def result = new Result(new RuntimeException())
-        when:
-        result.change(1)
-        then:
-        result.isSuccess()
-    }
-
-    def "Provides value for successful result"() {
+    def "Provides value for success"() {
         given:
         def value = new Object()
-        def result = new Result(value)
+        result.setValue(value)
         expect:
         result.getValue() == value
     }
 
-    def "Provides exception for failed result"() {
+    def "Provides exception for failure"() {
         given:
         def exception = new RuntimeException()
-        def result = new Result(exception)
+        result.setException(exception)
         expect:
         result.getException() == exception
     }
 
-    def "Throws ISE when value is requested from failed result"() {
+    def "Erases exception"() {
         given:
-        def result = new Result(new RuntimeException())
+        result.setException(new RuntimeException())
         when:
-        result.getValue()
+        result.eraseFailure()
         then:
-        thrown IllegalStateException
-    }
-
-    def "Throws ISE when exception is requested from successful result"() {
-        given:
-        def result = new Result(new Object())
-        when:
-        result.getException()
-        then:
-        thrown IllegalStateException
+        result.isSuccess()
     }
 }
