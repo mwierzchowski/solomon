@@ -12,21 +12,21 @@ import solomon.services.Processor;
 @Configuration
 public class AutoConfiguration {
     @Bean
-    public Factory cmdFactory(ApplicationContext context) {
+    public Factory commandFactory(ApplicationContext context) {
         var fallbackFactory = new DefaultFactory();
         return new SpringFactory(fallbackFactory, context);
     }
 
     @Bean
-    public Processor cmdProcessor(Factory cmdFactory) {
-        return new DefaultProcessor(cmdFactory);
+    public Processor commandProcessor(Factory commandFactory) {
+        return new DefaultProcessor(commandFactory);
     }
 
     @Bean
-    public CommandExecutor cmdExecutor(Factory cmdFactory, Processor cmdProcessor) {
+    public CommandExecutor commandExecutor(Factory commandFactory, Processor commandProcessor) {
         return CommandExecutor.builder()
-                .withFactory(cmdFactory)
-                .withProcessor(cmdProcessor)
+                .withFactory(commandFactory)
+                .withProcessor(commandProcessor)
                 .build();
     }
 }
