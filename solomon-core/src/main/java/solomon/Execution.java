@@ -70,7 +70,7 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
         if (forUpdate) {
             this.config = this.config.unlock();
         }
-        return config;
+        return this.config;
     }
 
     @Override
