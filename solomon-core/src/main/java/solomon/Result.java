@@ -28,7 +28,7 @@ public interface Result<V> {
         }
     }
 
-    default  <T> Result<T> asResult() {
-        return cast(this);
+    static <T> Result<T> asResult(Result<?> result) {
+        return cast(result);
     }
 }

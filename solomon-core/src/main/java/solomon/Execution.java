@@ -12,6 +12,8 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNullElse;
+import static solomon.Context.asContext;
+import static solomon.Result.asResult;
 import static solomon.Utils.cast;
 
 @Slf4j
@@ -34,12 +36,12 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             LOG.debug("Decorating before");
             for (int i = 0; this.config.contains(Decorator.class, i); i++, decoratorCount++) {
                 Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
-                decorator.before(this.asContext());
+                decorator.before(asContext(this));
             }
             LOG.debug("Executed {} decorators", decoratorCount);
             decoratorFailed = false;
             LOG.debug("Running command");
-            this.handler.accept(this.command, this.asResult());
+            this.handler.accept(this.command, asResult(this));
         } catch (RuntimeException ex) {
             if (decoratorFailed) {
                 decoratorCount += 1;
@@ -52,13 +54,13 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             LOG.debug("Decorating after");
             for (int i = decoratorCount - 1; this.config.contains(Decorator.class, i); i--) {
                 Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
-                decorator.safeAfter(this.asContext(), this.asResult());
+                decorator.safeAfter(asContext(this), asResult(this));
             }
         }
         int listenerCount = 0;
         for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
             Listener<?, ?> listener = this.config.get(Listener.class, i);
-            listener.send(cast(this.getCommand()), this.asResult());
+            listener.send(cast(this.command), asResult(this));
         }
         LOG.debug("Sent {} notifications", listenerCount);
         LOG.debug("Execution finished");
