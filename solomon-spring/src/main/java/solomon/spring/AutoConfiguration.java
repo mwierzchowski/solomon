@@ -12,9 +12,9 @@ import solomon.services.Processor;
 @Configuration
 public class AutoConfiguration {
     @Bean
-    public Factory commandFactory(ApplicationContext context) {
+    public Factory commandFactory(ApplicationContext applicationContext) {
         var fallbackFactory = new DefaultFactory();
-        return new SpringFactory(fallbackFactory, context);
+        return new SpringFactory(fallbackFactory, applicationContext);
     }
 
     @Bean

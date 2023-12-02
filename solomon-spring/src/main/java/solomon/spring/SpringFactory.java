@@ -8,22 +8,22 @@ import solomon.services.Factory;
 
 @RequiredArgsConstructor
 public class SpringFactory implements Factory {
-    protected final Factory nonSpringFactory;
-    protected final ApplicationContext springContext;
+    protected final Factory fallbackFactory;
+    protected final ApplicationContext applicationContext;
 
     @Override
     public <C> C getInstanceOf(Class<C> clazz) {
         C bean;
         try {
-            bean = springContext.getBean(clazz);
+            bean = applicationContext.getBean(clazz);
         } catch (NoSuchBeanDefinitionException ex) {
-            bean = nonSpringFactory.getInstanceOf(clazz);
+            bean = fallbackFactory.getInstanceOf(clazz);
         }
         return bean;
     }
 
     @Override
     public <A extends Addon> void register(A addon) {
-        nonSpringFactory.register(addon);
+        fallbackFactory.register(addon);
     }
 }
