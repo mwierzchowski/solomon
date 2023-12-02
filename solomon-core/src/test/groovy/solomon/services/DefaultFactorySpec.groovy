@@ -4,9 +4,6 @@ import solomon.addons.DecoratorAdapter
 import solomon.annotations.AddonConfig
 import spock.lang.Specification
 
-import static solomon.annotations.AddonConfig.Scope.PROTOTYPE
-import static solomon.annotations.AddonConfig.Scope.SERVICE
-
 class DefaultFactorySpec extends Specification {
     def factory = new DefaultFactory()
 
@@ -51,9 +48,9 @@ class DefaultFactorySpec extends Specification {
         addon2 == addon1
     }
 
-    @AddonConfig(scope = SERVICE)
+    @AddonConfig(useCache = true)
     static class CacheableAddon extends DecoratorAdapter<Object, Object> {}
 
-    @AddonConfig(scope = PROTOTYPE)
+    @AddonConfig(useCache = false)
     static class NonCacheableAddon extends DecoratorAdapter<Object, Object> {}
 }
