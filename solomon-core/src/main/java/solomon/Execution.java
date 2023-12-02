@@ -28,39 +28,30 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
     @Override
     public V execute() {
         LOG.debug("Execution started");
-        int decoratorCount = 0;
-        boolean decoratorFailed = true;
-        try {
+        int executedDecoratorsCount = 0;
+        for (int i = 0; this.config.contains(Decorator.class, i); i++) {
             LOG.debug("Decorating before");
-            for (int i = 0; this.config.contains(Decorator.class, i); i++, decoratorCount++) {
-                Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
-                decorator.before(asContext(this));
-            }
-            LOG.debug("Executed {} decorators", decoratorCount);
-            decoratorFailed = false;
-            LOG.debug("Running command");
-            this.handler.accept(this.command, asResult(this));
-        } catch (RuntimeException ex) {
-            if (decoratorFailed) {
-                decoratorCount += 1;
-                LOG.debug("Exception in decorator on position {}: {}", decoratorCount, ex.getMessage());
-            } else {
-                LOG.debug("Exception in command: {}", ex.getMessage());
-            }
-            this.exception = ex;
-        } finally {
-            LOG.debug("Decorating after");
-            for (int i = decoratorCount - 1; this.config.contains(Decorator.class, i); i--) {
-                Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
-                decorator.safeAfter(asContext(this), asResult(this));
+            Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
+            decorator.safeBefore(asContext(this), asResult(this));
+            executedDecoratorsCount += 1;
+            if (this.isFailure()) {
+                break;
             }
         }
-        int listenerCount = 0;
-        for (int i = 0; this.config.contains(Listener.class, i); i++, listenerCount++) {
+        if (this.isSuccess()) {
+            LOG.debug("Running command");
+            this.handler.safeAccept(this.command, asResult(this));
+        }
+        for (int i = executedDecoratorsCount - 1; this.config.contains(Decorator.class, i); i--) {
+            LOG.debug("Decorating after");
+            Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
+            decorator.safeAfter(asContext(this), asResult(this));
+        }
+        for (int i = 0; this.config.contains(Listener.class, i); i++) {
+            LOG.debug("Sending notification");
             Listener<?, ?> listener = this.config.get(Listener.class, i);
             listener.send(cast(this.command), asResult(this));
         }
-        LOG.debug("Sent {} notifications", listenerCount);
         LOG.debug("Execution finished");
         return this.getValueOrThrowException();
     }
