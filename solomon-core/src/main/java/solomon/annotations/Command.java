@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Documented
 @Inherited
-public @interface CommandConfig {
+public @interface Command {
     Class<? extends Decorator>[] decorators() default {};
     Class<? extends Listener>[] listeners() default {};
 }

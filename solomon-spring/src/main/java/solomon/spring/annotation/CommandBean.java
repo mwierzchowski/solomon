@@ -5,7 +5,7 @@ import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 import solomon.addons.Decorator;
 import solomon.addons.Listener;
-import solomon.annotations.CommandConfig;
+import solomon.annotations.Command;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -22,11 +22,11 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Inherited
 @Component
 @Scope(SCOPE_PROTOTYPE)
-@CommandConfig
+@Command
 public @interface CommandBean {
-    @AliasFor(annotation = CommandConfig.class, attribute = "decorators")
+    @AliasFor(annotation = Command.class, attribute = "decorators")
     Class<? extends Decorator>[] decorators() default {};
 
-    @AliasFor(annotation = CommandConfig.class, attribute = "listeners")
+    @AliasFor(annotation = Command.class, attribute = "listeners")
     Class<? extends Listener>[] listeners() default {};
 }

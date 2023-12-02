@@ -2,7 +2,7 @@ package solomon.services;
 
 import lombok.RequiredArgsConstructor;
 import solomon.Config;
-import solomon.annotations.CommandConfig;
+import solomon.annotations.Command;
 
 @RequiredArgsConstructor
 public class DefaultProcessor implements Processor {
@@ -10,7 +10,7 @@ public class DefaultProcessor implements Processor {
 
     @Override
     public Config process(Object command, Config globalConfig) {
-        var metaConfig = command.getClass().getAnnotation(CommandConfig.class);
+        var metaConfig = command.getClass().getAnnotation(Command.class);
         if (metaConfig == null) {
             return globalConfig;
         }
