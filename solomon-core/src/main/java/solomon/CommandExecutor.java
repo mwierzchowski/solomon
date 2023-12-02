@@ -31,16 +31,16 @@ public class CommandExecutor {
 
     @SafeVarargs
     public final <C extends Runnable> Flow<C, C> runnable(Class<C> cmdClass, Consumer<C>... initializers) {
-        return this.kickoff(cmdClass, cast(RUNNABLE), initializers);
+        return this.executionFlow(cmdClass, cast(RUNNABLE), initializers);
     }
 
     @SafeVarargs
     public final <C extends Supplier<V>, V> Flow<C, V> supplier(Class<C> cmdClass, Consumer<C>... initializers) {
-        return this.kickoff(cmdClass, cast(SUPPLIER), initializers);
+        return this.executionFlow(cmdClass, cast(SUPPLIER), initializers);
     }
 
-    protected <C, V> Flow<C, V> kickoff(@NonNull Class<C> commandClass, Handler<C, V> handler,
-                                             Consumer<C>[] initializers) {
+    protected <C, V> Flow<C, V> executionFlow(@NonNull Class<C> commandClass, Handler<C, V> handler,
+                                              Consumer<C>[] initializers) {
         LOG.debug("Building command: {}", commandClass.getSimpleName());
         var command = this.factory.getInstanceOf(commandClass);
         var config = this.processor.process(command, this.globalConfig);
