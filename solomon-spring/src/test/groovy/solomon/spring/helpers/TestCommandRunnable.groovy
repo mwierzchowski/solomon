@@ -1,10 +1,10 @@
 package solomon.spring.helpers
 
 import groovy.util.logging.Slf4j
-import solomon.spring.annotation.Command
+import solomon.spring.annotation.CommandBean
 
 @Slf4j
-@Command
+@CommandBean
 class TestCommandRunnable implements Runnable {
     TestCommandRunnable() {
         log.info("Creating")
