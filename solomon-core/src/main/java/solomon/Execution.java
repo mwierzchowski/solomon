@@ -2,7 +2,6 @@ package solomon;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import solomon.addons.Decorator;
 import solomon.addons.Listener;
@@ -16,9 +15,8 @@ import static solomon.Context.asContext;
 import static solomon.Result.asResult;
 import static solomon.Utils.cast;
 
-@Slf4j
 @Data
-@RequiredArgsConstructor
+@Slf4j
 public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
     @NonNull private final C command;
     @NonNull private final Handler<C, V> handler;
