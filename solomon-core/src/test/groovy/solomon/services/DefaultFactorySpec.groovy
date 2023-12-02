@@ -1,7 +1,7 @@
 package solomon.services
 
 import solomon.addons.DecoratorAdapter
-import solomon.annotations.AddonConfig
+import solomon.annotations.Addon
 import spock.lang.Specification
 
 class DefaultFactorySpec extends Specification {
@@ -48,9 +48,9 @@ class DefaultFactorySpec extends Specification {
         addon2 == addon1
     }
 
-    @AddonConfig(useCache = true)
+    @Addon(useCache = true)
     static class CacheableAddon extends DecoratorAdapter<Object, Object> {}
 
-    @AddonConfig(useCache = false)
+    @Addon(useCache = false)
     static class NonCacheableAddon extends DecoratorAdapter<Object, Object> {}
 }

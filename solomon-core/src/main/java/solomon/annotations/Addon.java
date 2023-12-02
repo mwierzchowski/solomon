@@ -12,6 +12,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Documented
 @Inherited
-public @interface AddonConfig {
+public @interface Addon {
     boolean useCache() default true;
 }

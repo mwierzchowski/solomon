@@ -3,7 +3,7 @@ package solomon.spring.annotation;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
-import solomon.annotations.AddonConfig;
+import solomon.annotations.Addon;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -20,7 +20,7 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Inherited
 @Component
 @Scope
-@AddonConfig
+@Addon
 public @interface AddonBean {
     @AliasFor(annotation = Scope.class, attribute = "scopeName")
     String scope() default SCOPE_SINGLETON;

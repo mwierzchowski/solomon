@@ -1,6 +1,6 @@
 package solomon.addons
 
-import solomon.annotations.AddonConfig
+import solomon.annotations.Addon
 import spock.lang.Specification
 
 class AddonSpec extends Specification {
@@ -20,6 +20,6 @@ class AddonSpec extends Specification {
 
     static class DefaultConfigAddon extends DecoratorAdapter<Object , Object> {}
 
-    @AddonConfig(useCache = false)
+    @Addon(useCache = false)
     static class NonCacheableAddon extends DecoratorAdapter<Object, Object> {}
 }

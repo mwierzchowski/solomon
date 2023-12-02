@@ -1,10 +1,8 @@
 package solomon.addons;
 
-import solomon.annotations.AddonConfig;
-
 public interface Addon {
     default boolean isCacheable() {
-        var config = getClass().getAnnotation(AddonConfig.class);
+        var config = getClass().getAnnotation(solomon.annotations.Addon.class);
         if (config != null) {
             return config.useCache();
         } else {
