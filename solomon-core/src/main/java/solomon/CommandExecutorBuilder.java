@@ -53,13 +53,13 @@ public class CommandExecutorBuilder {
             this.factory = new DefaultFactory();
         }
         if (this.processor == null) {
-            this.processor = new DefaultProcessor(factory);
+            this.processor = new DefaultProcessor(this.factory);
         }
         if (this.config == null) {
             this.config = new Config();
         }
         this.cachedAddons.forEach(this.factory::cache);
         this.globalAddons.forEach(this.config::add);
-        return new CommandExecutor(factory, processor, config);
+        return new CommandExecutor(this.factory, this.processor, this.config);
     }
 }
