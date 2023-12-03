@@ -3,6 +3,8 @@ package solomon.addons
 import solomon.annotations.Addon
 import spock.lang.Specification
 
+import static solomon.annotations.Addon.CacheMode.NONE
+
 class AddonSpec extends Specification {
     def "Addon is cacheable by default"() {
         given:
@@ -20,6 +22,6 @@ class AddonSpec extends Specification {
 
     static class DefaultConfigAddon extends DecoratorAdapter<Object , Object> {}
 
-    @Addon(useCache = false)
+    @Addon(cacheMode = NONE)
     static class NonCacheableAddon extends DecoratorAdapter<Object, Object> {}
 }
