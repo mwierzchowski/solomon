@@ -37,10 +37,10 @@ class DefaultFactorySpec extends Specification {
         object1 == object2
     }
 
-    def "Caches registered instances of addons"() {
+    def "Reuses cached instances of addons"() {
         given:
         def addon1 = new NonCacheableAddon()
-        factory.register(addon1)
+        factory.cache(addon1)
         when:
         def addon2 = factory.getInstanceOf(NonCacheableAddon)
         then:

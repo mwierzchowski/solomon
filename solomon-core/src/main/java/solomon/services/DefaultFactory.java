@@ -21,7 +21,7 @@ public class DefaultFactory implements Factory {
     }
 
     @Override
-    public <A extends Addon> void register(A addon) {
+    public <A extends Addon> void cache(A addon) {
         addonCache.put(addon.getClass(), cast(addon));
     }
 

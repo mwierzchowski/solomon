@@ -23,7 +23,7 @@ public class SpringFactory implements Factory {
     }
 
     @Override
-    public <A extends Addon> void register(A addon) {
-        fallbackFactory.register(addon);
+    public <A extends Addon> void cache(A addon) {
+        fallbackFactory.cache(addon);
     }
 }

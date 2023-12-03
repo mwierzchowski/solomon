@@ -34,13 +34,13 @@ class SpringFactorySpec extends Specification {
         object2 == object1
     }
 
-    def "Registers beans only to non-spring factory"() {
+    def "Caches beans only for non-spring factory"() {
         given:
         def addon = new DummyAddon()
         when:
-        springFactory.register(addon)
+        springFactory.cache(addon)
         then:
-        1 * nonSpringFactory.register(addon)
+        1 * nonSpringFactory.cache(addon)
     }
 
     static class DummyAddon implements Addon {}

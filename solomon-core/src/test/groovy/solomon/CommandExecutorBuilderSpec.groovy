@@ -48,13 +48,13 @@ class CommandExecutorBuilderSpec extends Specification {
         executor.globalConfig.get(Listener, 0) == listener
     }
 
-    def "Builds with registered addons"() {
+    def "Builds with cached addons"() {
         given:
         def decorator = Mock(Decorator)
         def listener = Mock(Listener)
         when:
-        def executor = builder.withRegisteredAddon(decorator)
-            .withRegisteredAddon(listener)
+        def executor = builder.withCachedAddon(decorator)
+            .withCachedAddon(listener)
             .build()
         then:
         executor.factory.getInstanceOf(decorator.getClass()) == decorator
