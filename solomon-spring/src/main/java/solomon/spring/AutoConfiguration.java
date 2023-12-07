@@ -16,8 +16,8 @@ import solomon.services.Processor;
 @Configuration
 public class AutoConfiguration {
     @Bean
-    public AddonBeanProcessor addonBeanProcessor(PropertyResolver propertyResolver, Config config) {
-        return new AddonBeanProcessor(propertyResolver, config);
+    public GlobalAddonProcessor addonBeanProcessor(PropertyResolver propertyResolver, Config config) {
+        return new GlobalAddonProcessor(propertyResolver, config);
     }
 
     @Bean
