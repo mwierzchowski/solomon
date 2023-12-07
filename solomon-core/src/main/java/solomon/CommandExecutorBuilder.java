@@ -65,6 +65,10 @@ public class CommandExecutorBuilder {
             }
             this.config.add(cast(addon));
         }
-        return new CommandExecutor(this.factory, this.processor, this.config);
+        var executor = new CommandExecutor();
+        executor.setFactory(this.factory);
+        executor.setProcessor(this.processor);
+        executor.setGlobalConfig(this.config);
+        return executor;
     }
 }

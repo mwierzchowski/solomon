@@ -3,8 +3,10 @@ package solomon;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import solomon.addons.Addon;
 import solomon.addons.Decorator;
 import solomon.addons.Observer;
+import solomon.services.Factory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +20,7 @@ import static solomon.Utils.cast;
 @Data
 @Slf4j
 public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
+    @NonNull private final Factory factory;
     @NonNull private final C command;
     @NonNull private final Handler<C, V> handler;
     @NonNull private Config config;
@@ -62,6 +65,11 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             this.config = this.config.unlock();
         }
         return this.config;
+    }
+
+    @Override
+    public Addon getAddon(Class<? extends Addon> addonClass) {
+        return this.factory.getInstanceOf(addonClass);
     }
 
     @Override

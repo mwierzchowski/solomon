@@ -4,16 +4,18 @@ import solomon.helpers.TestObserver
 import solomon.helpers.TestRunnableCmd
 import solomon.helpers.TestRunnableCmdDecorator
 import solomon.helpers.TestSupplierCmd
+import solomon.services.DefaultFactory
 import spock.lang.Specification
 
 import static solomon.Utils.cast
 
 class ExecutionSpec extends Specification {
+    def factory = new DefaultFactory()
     def runnableCmd = new TestRunnableCmd()
     def supplierCmd = new TestSupplierCmd(123)
     def globalConfig = new Config()
-    def runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
-    def supplierExecution = new Execution<>(supplierCmd, cast(Handler.SUPPLIER), globalConfig)
+    def runnableExecution = new Execution<>(factory, runnableCmd, cast(Handler.RUNNABLE), globalConfig)
+    def supplierExecution = new Execution<>(factory, supplierCmd, cast(Handler.SUPPLIER), globalConfig)
 
     def "Fluently configures command"() {
         when:
@@ -113,7 +115,7 @@ class ExecutionSpec extends Specification {
         given:
         def decorator = new TestRunnableCmdDecorator()
         globalConfig.add(decorator)
-        runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
+        runnableExecution = new Execution<>(factory, runnableCmd, cast(Handler.RUNNABLE), globalConfig)
         when:
         runnableExecution.execute()
         then:

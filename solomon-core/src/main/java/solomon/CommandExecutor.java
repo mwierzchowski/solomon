@@ -1,6 +1,7 @@
 package solomon;
 
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import solomon.services.Factory;
 import solomon.services.Processor;
@@ -13,18 +14,17 @@ import static solomon.Handler.SUPPLIER;
 import static solomon.Utils.cast;
 
 @Slf4j
+@Setter
 public class CommandExecutor {
     public static CommandExecutorBuilder builder() {
         return new CommandExecutorBuilder();
     }
 
-    private final Factory factory;
-    private final Processor processor;
-    private final Config globalConfig;
+    private Factory factory;
+    private Processor processor;
+    private Config globalConfig;
 
-    public CommandExecutor(Factory factory, Processor processor, Config globalConfig) {
-        this.factory = factory;
-        this.processor = processor;
+    public void setGlobalConfig(Config globalConfig) {
         this.globalConfig = globalConfig;
         this.globalConfig.lock();
     }
@@ -44,7 +44,7 @@ public class CommandExecutor {
         LOG.debug("Building command: {}", commandClass.getSimpleName());
         var command = this.factory.getInstanceOf(commandClass);
         var config = this.processor.process(command, this.globalConfig);
-        var execution = new Execution<>(command, handler, config);
+        var execution = new Execution<>(this.factory, command, handler, config);
         for (int i = 0; i < initializers.length; i++) {
             execution.setup(initializers[i]);
         }

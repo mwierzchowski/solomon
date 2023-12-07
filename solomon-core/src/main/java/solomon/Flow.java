@@ -2,13 +2,13 @@ package solomon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import solomon.addons.Addon;
 import solomon.addons.Decorator;
 import solomon.addons.Observer;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static solomon.addons.Decorators.after;
 import static solomon.addons.Decorators.before;
@@ -19,11 +19,17 @@ public interface Flow<C, V> extends CommandAware<C> {
     Logger LOG = LoggerFactory.getLogger(Flow.class);
 
     Config getConfig(boolean forUpdate);
+    Addon getAddon(Class<? extends Addon> addonClass);
     V execute();
 
     default Flow<C, V> setup(Consumer<C> initializer) {
         LOG.debug("Configuring command");
         initializer.accept(this.getCommand());
+        return this;
+    }
+
+    default Flow<C, V> decorate(Class<? extends Decorator<? super C, ? super V>> decoratorClass) {
+        getConfig(true).add(getAddon(decoratorClass));
         return this;
     }
 
@@ -39,6 +45,11 @@ public interface Flow<C, V> extends CommandAware<C> {
 
     default Flow<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
         getConfig(true).add(after(decoratorMethod));
+        return this;
+    }
+
+    default Flow<C, V> observe(Class<? extends Observer<? super C, ? super V>> observerClass) {
+        getConfig(true).add(getAddon(observerClass));
         return this;
     }
 
