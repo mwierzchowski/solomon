@@ -60,16 +60,16 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
     }
 
     @Override
+    public Addon getAddon(Class<? extends Addon> addonClass) {
+        return this.factory.getInstanceOf(addonClass);
+    }
+
+    @Override
     public Config getConfig(boolean forUpdate) {
         if (forUpdate) {
             this.config = this.config.unlock();
         }
         return this.config;
-    }
-
-    @Override
-    public Addon getAddon(Class<? extends Addon> addonClass) {
-        return this.factory.getInstanceOf(addonClass);
     }
 
     @Override
