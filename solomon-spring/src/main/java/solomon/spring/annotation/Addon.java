@@ -12,22 +12,19 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static solomon.spring.annotation.AddonBean.Priority.REGULAR;
+import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_SINGLETON;
+import static solomon.spring.annotation.Addon.Priority.REGULAR;
 
 @Retention(RUNTIME)
 @Target(TYPE)
 @Documented
 @Inherited
 @Component
-@Scope
 @Order
-public @interface AddonBean {
+@Scope(SCOPE_SINGLETON)
+public @interface Addon {
     @AliasFor(annotation = Order.class, attribute = "value")
     int priority() default REGULAR;
-
-    boolean useGlobally() default false;
-
-    String useGloballyString() default "";
 
     interface Priority {
         int HIGHEST = 100;

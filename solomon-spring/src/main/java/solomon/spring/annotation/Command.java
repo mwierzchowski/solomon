@@ -18,5 +18,5 @@ import static org.springframework.beans.factory.config.ConfigurableBeanFactory.S
 @Inherited
 @Component
 @Scope(SCOPE_PROTOTYPE)
-public @interface CommandBean {
+public @interface Command {
 }
