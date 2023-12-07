@@ -10,7 +10,7 @@ import solomon.spring.annotation.Global;
 
 //@Slf4j TODO
 @RequiredArgsConstructor
-public class GlobalAddonProcessor implements BeanPostProcessor {
+public class GlobalAddonBeanProcessor implements BeanPostProcessor {
     private final PropertyResolver propertyResolver;
     private final Config config;
 
