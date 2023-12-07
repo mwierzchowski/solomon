@@ -9,9 +9,11 @@ import solomon.services.Processor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static solomon.Utils.cast;
+
 public class CommandExecutorBuilder {
     private final List<Addon> cachedAddons = new ArrayList<>();
-    private final List<Addon> globalAddons = new ArrayList<>();
+    private final List<Object> globalAddons = new ArrayList<>();
     private Config config;
     private Factory factory;
     private Processor processor;
@@ -36,10 +38,8 @@ public class CommandExecutorBuilder {
         return this;
     }
 
-    public CommandExecutorBuilder withGlobalAddons(List<Addon> addons) {
-        if (addons != null) {
-            globalAddons.addAll(addons);
-        }
+    public CommandExecutorBuilder withGlobalAddon(Class<? extends Addon> addonClass) {
+        this.globalAddons.add(addonClass);
         return this;
     }
 
@@ -59,7 +59,12 @@ public class CommandExecutorBuilder {
             this.config = new Config();
         }
         this.cachedAddons.forEach(this.factory::cache);
-        this.globalAddons.forEach(this.config::add);
+        for (var addon : globalAddons) {
+            if (addon instanceof Class<?> addonClass) {
+                addon = this.factory.getInstanceOf(addonClass);
+            }
+            this.config.add(cast(addon));
+        }
         return new CommandExecutor(this.factory, this.processor, this.config);
     }
 }

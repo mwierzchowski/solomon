@@ -1,6 +1,7 @@
 package solomon
 
 import solomon.addons.Decorator
+import solomon.addons.DecoratorAdapter
 import solomon.addons.DecoratorSpec
 import solomon.services.Factory
 import solomon.addons.Observer
@@ -36,7 +37,7 @@ class CommandExecutorBuilderSpec extends Specification {
         executor.globalConfig == config
     }
 
-    def "Builds with global addons"() {
+    def "Builds with global addon instance"() {
         given:
         def decorator = Mock(Decorator)
         def observer = Mock(Observer)
@@ -47,6 +48,14 @@ class CommandExecutorBuilderSpec extends Specification {
         then:
         executor.globalConfig.get(Decorator, 0) == decorator
         executor.globalConfig.get(Observer, 0) == observer
+    }
+
+    def "Builds with global addon class"() {
+        when:
+        def executor = builder.withGlobalAddon(TestDecorator).build()
+        then:
+        executor.globalConfig.get(Decorator, 0).getClass() == TestDecorator
+
     }
 
     def "Builds with cached addons"() {
@@ -61,4 +70,6 @@ class CommandExecutorBuilderSpec extends Specification {
         executor.factory.getInstanceOf(decorator.getClass()) == decorator
         executor.factory.getInstanceOf(observer.getClass()) == observer
     }
+
+    static class TestDecorator extends DecoratorAdapter<Object, Object> {}
 }
