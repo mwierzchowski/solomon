@@ -9,7 +9,7 @@ import solomon.Config;
 import solomon.addons.Addon;
 import solomon.spring.annotation.AddonBean;
 
-@Slf4j
+//@Slf4j
 @RequiredArgsConstructor
 public class AddonBeanProcessor implements BeanPostProcessor {
     private final PropertyResolver propertyResolver;

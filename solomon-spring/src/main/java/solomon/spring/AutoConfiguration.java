@@ -21,13 +21,9 @@ public class AutoConfiguration {
     }
 
     @Bean
-    public Factory defaultCommandFactory() {
-        return new DefaultFactory();
-    }
-
-    @Bean
-    public Factory commandFactory(Factory defaultCommandFactory, ApplicationContext applicationContext) {
-        return new SpringFactory(defaultCommandFactory, applicationContext);
+    public Factory commandFactory(ApplicationContext applicationContext) {
+        var fallbackFactory = new DefaultFactory();
+        return new SpringFactory(fallbackFactory, applicationContext);
     }
 
     @Bean

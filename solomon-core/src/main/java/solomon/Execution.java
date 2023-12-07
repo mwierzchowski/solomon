@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import solomon.addons.Decorator;
-import solomon.addons.Listener;
+import solomon.addons.Observer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,10 +47,10 @@ public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
             Decorator<?, ?> decorator = this.config.get(Decorator.class, i);
             decorator.safeAfter(asContext(this), asResult(this));
         }
-        for (int i = 0; this.config.contains(Listener.class, i); i++) {
+        for (int i = 0; this.config.contains(Observer.class, i); i++) {
             LOG.debug("Sending notification");
-            Listener<?, ?> listener = this.config.get(Listener.class, i);
-            listener.safeSend(cast(this.command), asResult(this));
+            Observer<?, ?> observer = this.config.get(Observer.class, i);
+            observer.safeNotification(cast(this.command), asResult(this));
         }
         LOG.debug("Execution finished");
         return this.getValueOrThrowException();

@@ -1,6 +1,6 @@
 package solomon.addons;
 
-public abstract class ListenerAdapter<C, V> implements Listener<C, V> {
+public abstract class ObserverAdapter<C, V> implements Observer<C, V> {
     @Override
     public void onSuccess(C command, V value) {}
 

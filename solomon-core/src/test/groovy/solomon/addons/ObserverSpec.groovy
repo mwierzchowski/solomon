@@ -2,27 +2,27 @@ package solomon.addons
 
 import spock.lang.Specification
 
-class ListenerSpec extends Specification {
-    def listener = Mock(Listener)
+class ObserverSpec extends Specification {
+    def observer = Mock(Observer)
 
     def "Safe onSuccess does not throw exception"() {
         given:
-        listener.onSuccess(_, _) >> {
+        observer.onSuccess(_, _) >> {
             throw new IllegalArgumentException()
         }
         when:
-        listener.safeOnSuccess(null, null)
+        observer.safeOnSuccess(null, null)
         then:
         noExceptionThrown()
     }
 
     def "Safe onError does not throw exception"() {
         given:
-        listener.onFailure(_, _) >> {
+        observer.onFailure(_, _) >> {
             throw new IllegalArgumentException()
         }
         when:
-        listener.safeOnFailure(null, null)
+        observer.safeOnFailure(null, null)
         then:
         noExceptionThrown()
     }

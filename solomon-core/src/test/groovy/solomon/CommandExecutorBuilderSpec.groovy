@@ -2,7 +2,7 @@ package solomon
 
 import solomon.addons.Decorator
 import solomon.services.Factory
-import solomon.addons.Listener
+import solomon.addons.Observer
 import spock.lang.Specification
 
 class CommandExecutorBuilderSpec extends Specification {
@@ -38,26 +38,26 @@ class CommandExecutorBuilderSpec extends Specification {
     def "Builds with global addons"() {
         given:
         def decorator = Mock(Decorator)
-        def listener = Mock(Listener)
+        def observer = Mock(Observer)
         when:
         def executor = builder.withGlobalAddon(decorator)
-                .withGlobalAddon(listener)
+                .withGlobalAddon(observer)
                 .build()
         then:
         executor.globalConfig.get(Decorator, 0) == decorator
-        executor.globalConfig.get(Listener, 0) == listener
+        executor.globalConfig.get(Observer, 0) == observer
     }
 
     def "Builds with cached addons"() {
         given:
         def decorator = Mock(Decorator)
-        def listener = Mock(Listener)
+        def observer = Mock(Observer)
         when:
         def executor = builder.withCachedAddon(decorator)
-            .withCachedAddon(listener)
-            .build()
+                .withCachedAddon(observer)
+                .build()
         then:
         executor.factory.getInstanceOf(decorator.getClass()) == decorator
-        executor.factory.getInstanceOf(listener.getClass()) == listener
+        executor.factory.getInstanceOf(observer.getClass()) == observer
     }
 }

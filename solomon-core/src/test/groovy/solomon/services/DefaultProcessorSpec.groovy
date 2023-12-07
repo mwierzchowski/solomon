@@ -3,8 +3,8 @@ package solomon.services
 import solomon.Config
 import solomon.addons.Decorator
 import solomon.addons.DecoratorAdapter
-import solomon.addons.Listener
-import solomon.addons.ListenerAdapter
+import solomon.addons.Observer
+import solomon.addons.ObserverAdapter
 import solomon.annotations.Command
 import spock.lang.Specification
 
@@ -18,9 +18,9 @@ class DefaultProcessorSpec extends Specification {
         def processedConfig = processor.process(new DummyCommand1(), config)
         then:
         1 * factory.getInstanceOf(DummyDecorator) >> new DummyDecorator()
-        1 * factory.getInstanceOf(DummyListener) >> new DummyListener()
+        1 * factory.getInstanceOf(DummyObserver) >> new DummyObserver()
         processedConfig.count(Decorator) == 1
-        processedConfig.count(Listener) == 1
+        processedConfig.count(Observer) == 1
     }
 
     def "Unlocks config before updating"() {
@@ -30,12 +30,12 @@ class DefaultProcessorSpec extends Specification {
         def processedConfig = processor.process(new DummyCommand1(), config)
         then:
         1 * factory.getInstanceOf(DummyDecorator) >> new DummyDecorator()
-        1 * factory.getInstanceOf(DummyListener) >> new DummyListener()
+        1 * factory.getInstanceOf(DummyObserver) >> new DummyObserver()
         processedConfig.count(Decorator) == 1
-        processedConfig.count(Listener) == 1
+        processedConfig.count(Observer) == 1
         processedConfig != config
         config.count(Decorator) == 0
-        config.count(Listener) == 0
+        config.count(Observer) == 0
     }
 
 
@@ -45,15 +45,15 @@ class DefaultProcessorSpec extends Specification {
         then:
         0 * factory.getInstanceOf(_)
         processedConfig.count(Decorator) == 0
-        processedConfig.count(Listener) == 0
+        processedConfig.count(Observer) == 0
         where:
         command << [new DummyCommand2(), new DummyCommand3()]
     }
 
     static class DummyDecorator extends DecoratorAdapter<Object, Object> {}
-    static class DummyListener extends ListenerAdapter<Object, Object> {}
+    static class DummyObserver extends ObserverAdapter<Object, Object> {}
 
-    @Command(decorators = [DummyDecorator], listeners = [DummyListener])
+    @Command(decorators = [DummyDecorator], observers = [DummyObserver])
     static class DummyCommand1 {}
 
     @Command

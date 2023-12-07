@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 import solomon.addons.Decorator;
-import solomon.addons.Listener;
+import solomon.addons.Observer;
 import solomon.annotations.Command;
 
 import java.lang.annotation.Documented;
@@ -27,6 +27,6 @@ public @interface CommandBean {
     @AliasFor(annotation = Command.class, attribute = "decorators")
     Class<? extends Decorator>[] decorators() default {};
 
-    @AliasFor(annotation = Command.class, attribute = "listeners")
-    Class<? extends Listener>[] listeners() default {};
+    @AliasFor(annotation = Command.class, attribute = "observers")
+    Class<? extends Observer>[] observers() default {};
 }

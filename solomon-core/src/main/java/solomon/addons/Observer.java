@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import solomon.Result;
 
-public interface Listener<C, V> extends Addon {
-    Logger LOG = LoggerFactory.getLogger(Listener.class);
+public interface Observer<C, V> extends Addon {
+    Logger LOG = LoggerFactory.getLogger(Observer.class);
 
     void onSuccess(C command, V value);
 
@@ -27,7 +27,7 @@ public interface Listener<C, V> extends Addon {
         }
     }
 
-    default void safeSend(C command, Result<V> result) {
+    default void safeNotification(C command, Result<V> result) {
         if (result.isSuccess()) {
             this.onSuccess(command, result.getValue());
         } else {

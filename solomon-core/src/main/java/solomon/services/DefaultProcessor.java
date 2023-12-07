@@ -15,7 +15,7 @@ public class DefaultProcessor implements Processor {
             return globalConfig;
         }
         var decorators = metaConfig.decorators();
-        var listeners = metaConfig.listeners();
+        var listeners = metaConfig.observers();
         if (decorators.length == 0 && listeners.length == 0) {
             return globalConfig;
         }
