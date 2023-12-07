@@ -32,11 +32,6 @@ public interface Flow<C, V> extends CommandAware<C> {
         return this;
     }
 
-    default Flow<C, V> decorate(Supplier<Decorator<? super C, ? super V>> decoratorSupplier) {
-        getConfig(true).add(decoratorSupplier.get());
-        return this;
-    }
-
     default Flow<C, V> decorateBefore(Consumer<Context<? super C>> decoratorMethod) {
         getConfig(true).add(before(decoratorMethod));
         return this;
@@ -49,11 +44,6 @@ public interface Flow<C, V> extends CommandAware<C> {
 
     default Flow<C, V> observe(Observer<? super C, ? super V> observer) {
         getConfig(true).add(observer);
-        return this;
-    }
-
-    default Flow<C, V> observe(Supplier<Observer<? super C, ? super V>> observerSupplier) {
-        getConfig(true).add(observerSupplier.get());
         return this;
     }
 
