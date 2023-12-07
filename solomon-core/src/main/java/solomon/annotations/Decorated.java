@@ -1,7 +1,6 @@
 package solomon.annotations;
 
 import solomon.addons.Decorator;
-import solomon.addons.Observer;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -15,7 +14,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Documented
 @Inherited
-public @interface Command {
-    Class<? extends Decorator>[] decorators() default {};
-    Class<? extends Observer>[] observers() default {};
+public @interface Decorated {
+    Class<? extends Decorator>[] value() default {};
 }

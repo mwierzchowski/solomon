@@ -5,7 +5,8 @@ import solomon.addons.Decorator
 import solomon.addons.DecoratorAdapter
 import solomon.addons.Observer
 import solomon.addons.ObserverAdapter
-import solomon.annotations.Command
+import solomon.annotations.Decorated
+import solomon.annotations.Observed
 import spock.lang.Specification
 
 class DefaultProcessorSpec extends Specification {
@@ -53,10 +54,10 @@ class DefaultProcessorSpec extends Specification {
     static class DummyDecorator extends DecoratorAdapter<Object, Object> {}
     static class DummyObserver extends ObserverAdapter<Object, Object> {}
 
-    @Command(decorators = [DummyDecorator], observers = [DummyObserver])
+    @Decorated(DummyDecorator)
+    @Observed(DummyObserver)
     static class DummyCommand1 {}
 
-    @Command
     static class DummyCommand2 {}
 
     static class DummyCommand3 {}

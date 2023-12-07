@@ -1,6 +1,7 @@
 package solomon
 
 import solomon.addons.Decorator
+import solomon.addons.DecoratorSpec
 import solomon.services.Factory
 import solomon.addons.Observer
 import spock.lang.Specification

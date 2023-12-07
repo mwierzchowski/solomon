@@ -29,9 +29,7 @@ public class DefaultFactory implements Factory {
         var addon = addonCache.get(addonClass);
         if (addon == null) {
             addon = newInstanceOf(addonClass);
-            if (addon.isCacheable()) {
-                addonCache.put(addonClass, cast(addon));
-            }
+            addonCache.put(addonClass, cast(addon));
         }
         return cast(addon);
     }
