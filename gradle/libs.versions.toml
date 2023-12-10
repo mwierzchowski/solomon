@@ -7,9 +7,11 @@ spring-boot = '3.2.0'
 lombok = 'org.projectlombok:lombok:1.18.30'
 slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j' }
 slf4j-simple = { module = 'org.slf4j:slf4j-simple', version.ref = 'slf4j' }
+jakarta-validation = 'jakarta.validation:jakarta.validation-api:3.0.2'
 spock-core = { module = 'org.spockframework:spock-core', version.ref = 'spock' }
 spock-spring = { module = 'org.spockframework:spock-spring', version.ref = 'spock' }
 spring-boot-autoconfigure = { module = 'org.springframework.boot:spring-boot-autoconfigure', version.ref = 'spring-boot' }
+spring-boot-validation = { module = 'org.springframework.boot:spring-boot-starter-validation', version.ref = 'spring-boot' }
 spring-boot-test = { module = 'org.springframework.boot:spring-boot-starter-test', version.ref = 'spring-boot' }
 
 [plugins]

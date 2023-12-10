@@ -1,6 +1,8 @@
 dependencies {
     api project(':solomon-core')
-    implementation libs.spring.boot.autoconfigure
+    compileOnly libs.spring.boot.autoconfigure
+    compileOnly libs.spring.boot.validation
     testImplementation libs.spring.boot.test
     testImplementation libs.spock.spring
+    testImplementation libs.spring.boot.validation
 }

@@ -1,3 +1,4 @@
 dependencies {
+    compileOnly libs.jakarta.validation
     testImplementation libs.slf4j.simple
 }

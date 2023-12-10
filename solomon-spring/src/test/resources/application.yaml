@@ -5,3 +5,4 @@ logging:
 
 solomon:
   event-broadcaster.global: true
+  validator.global: true
