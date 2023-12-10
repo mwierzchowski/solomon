@@ -34,7 +34,7 @@ public class GlobalBeanProcessor implements BeanPostProcessor {
                     config.add(addon);
                     LOG.info("Marked addon {} as global", addon);
                 } else {
-                    LOG.info("Marked addon {} as not global", addon);
+                    LOG.debug("Marked addon {} as not global", addon);
                 }
             } else {
                 LOG.debug("Ignoring addon {} as it does not have @Global annotation", beanName);
