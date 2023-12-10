@@ -2,8 +2,8 @@ package solomon.spring;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.PropertyResolver;
 import solomon.CommandExecutor;
 import solomon.Config;
@@ -11,12 +11,12 @@ import solomon.services.DefaultFactory;
 import solomon.services.DefaultProcessor;
 import solomon.services.Factory;
 import solomon.services.Processor;
+import solomon.spring.events.CommandEventBroadcaster;
 
-@ComponentScan
 @Configuration
 public class AutoConfiguration {
     @Bean
-    public GlobalAddonBeanProcessor globalAddonBeanProcessor(PropertyResolver propertyResolver, Config config) {
+    public static GlobalAddonBeanProcessor globalAddonBeanProcessor(PropertyResolver propertyResolver, @Lazy Config config) {
         return new GlobalAddonBeanProcessor(propertyResolver, config);
     }
 
@@ -36,6 +36,7 @@ public class AutoConfiguration {
         return new Config();
     }
 
+    @Lazy
     @Bean
     public CommandExecutor commandExecutor(Factory commandFactory, Processor commandProcessor, Config commandConfig) {
         return CommandExecutor.builder()
@@ -43,5 +44,10 @@ public class AutoConfiguration {
                 .withProcessor(commandProcessor)
                 .withConfig(commandConfig)
                 .build();
+    }
+
+    @Bean
+    public CommandEventBroadcaster commandEventBroadcaster(ApplicationContext applicationContext) {
+        return new CommandEventBroadcaster(applicationContext);
     }
 }
