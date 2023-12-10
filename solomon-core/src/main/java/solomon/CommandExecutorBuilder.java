@@ -17,6 +17,7 @@ public class CommandExecutorBuilder {
     private Config config;
     private Factory factory;
     private Processor processor;
+    private boolean initialize = true;
 
     public CommandExecutorBuilder withFactory(Factory factory) {
         this.factory = factory;
@@ -48,6 +49,11 @@ public class CommandExecutorBuilder {
         return this;
     }
 
+    public CommandExecutorBuilder initialize(boolean initialize) {
+        this.initialize = initialize;
+        return this;
+    }
+
     public CommandExecutor build() {
         if (this.factory == null) {
             this.factory = new DefaultFactory();
@@ -65,10 +71,10 @@ public class CommandExecutorBuilder {
             }
             this.config.add(cast(addon));
         }
-        var executor = new CommandExecutor();
-        executor.setFactory(this.factory);
-        executor.setProcessor(this.processor);
-        executor.setGlobalConfig(this.config);
+        var executor = new CommandExecutor(this.factory, this.processor, this.config);
+        if (this.initialize) {
+            executor.initialize();
+        }
         return executor;
     }
 }
