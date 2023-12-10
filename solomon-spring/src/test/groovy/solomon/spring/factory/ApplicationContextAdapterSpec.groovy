@@ -1,4 +1,4 @@
-package solomon.spring
+package solomon.spring.factory
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext
@@ -6,18 +6,18 @@ import solomon.addons.Addon
 import solomon.services.Factory
 import spock.lang.Specification
 
-class SpringFactorySpec extends Specification {
-    def nonSpringFactory = Mock(Factory)
-    def springContext = Mock(ApplicationContext)
-    def springFactory = new SpringFactory(nonSpringFactory, springContext)
+class ApplicationContextAdapterSpec extends Specification {
+    def applicationContext = Mock(ApplicationContext)
+    def fallbackFactory = Mock(Factory)
+    def adapter = new ApplicationContextAdapter(applicationContext, fallbackFactory)
 
     def "Uses application context to instantiate bean"() {
         given:
         def object1 = new Object()
         when:
-        def object2 = springFactory.getInstanceOf(Object)
+        def object2 = adapter.getInstanceOf(Object)
         then:
-        1 * springContext.getBean(Object) >> object1
+        1 * applicationContext.getBean(Object) >> object1
         object2 == object1
     }
 
@@ -25,12 +25,12 @@ class SpringFactorySpec extends Specification {
         given:
         def object1 = new Object()
         when:
-        def object2 = springFactory.getInstanceOf(Object)
+        def object2 = adapter.getInstanceOf(Object)
         then:
-        1 * springContext.getBean(Object) >> {
+        1 * applicationContext.getBean(Object) >> {
             throw new NoSuchBeanDefinitionException(Object)
         }
-        1 * nonSpringFactory.getInstanceOf(Object) >> object1
+        1 * fallbackFactory.getInstanceOf(Object) >> object1
         object2 == object1
     }
 
@@ -38,9 +38,9 @@ class SpringFactorySpec extends Specification {
         given:
         def addon = new DummyAddon()
         when:
-        springFactory.cache(addon)
+        adapter.cache(addon)
         then:
-        1 * nonSpringFactory.cache(addon)
+        1 * fallbackFactory.cache(addon)
     }
 
     static class DummyAddon implements Addon {}

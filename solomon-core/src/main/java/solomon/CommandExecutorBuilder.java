@@ -14,7 +14,7 @@ import static solomon.Utils.cast;
 public class CommandExecutorBuilder {
     private final List<Addon> cachedAddons = new ArrayList<>();
     private final List<Object> globalAddons = new ArrayList<>();
-    private Config config;
+    private Config globalConfig;
     private Factory factory;
     private Processor processor;
     private boolean initialize = true;
@@ -29,8 +29,8 @@ public class CommandExecutorBuilder {
         return this;
     }
 
-    public CommandExecutorBuilder withConfig(Config config) {
-        this.config = config;
+    public CommandExecutorBuilder withGlobalConfig(Config globalConfig) {
+        this.globalConfig = globalConfig;
         return this;
     }
 
@@ -61,17 +61,17 @@ public class CommandExecutorBuilder {
         if (this.processor == null) {
             this.processor = new DefaultProcessor(this.factory);
         }
-        if (this.config == null) {
-            this.config = new Config();
+        if (this.globalConfig == null) {
+            this.globalConfig = new Config();
         }
         this.cachedAddons.forEach(this.factory::cache);
         for (var addon : globalAddons) {
             if (addon instanceof Class<?> addonClass) {
                 addon = this.factory.getInstanceOf(addonClass);
             }
-            this.config.add(cast(addon));
+            this.globalConfig.add(cast(addon));
         }
-        var executor = new CommandExecutor(this.factory, this.processor, this.config);
+        var executor = new CommandExecutor(this.factory, this.processor, this.globalConfig);
         if (this.initialize) {
             executor.initialize();
         }

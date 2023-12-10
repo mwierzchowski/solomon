@@ -1,17 +1,19 @@
-package solomon.spring;
+package solomon.spring.annotation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.PropertyResolver;
+import org.springframework.stereotype.Service;
 import solomon.Config;
 import solomon.addons.Addon;
-import solomon.spring.annotation.Global;
 
 @Slf4j
-@RequiredArgsConstructor
-public class GlobalAddonBeanProcessor implements BeanPostProcessor {
+@Service
+@RequiredArgsConstructor(onConstructor_ = @Lazy)
+public class GlobalBeanProcessor implements BeanPostProcessor {
     private final PropertyResolver propertyResolver;
     private final Config config;
 

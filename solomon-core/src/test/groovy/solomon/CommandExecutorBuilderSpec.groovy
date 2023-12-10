@@ -2,7 +2,6 @@ package solomon
 
 import solomon.addons.Decorator
 import solomon.addons.DecoratorAdapter
-import solomon.addons.DecoratorSpec
 import solomon.services.Factory
 import solomon.addons.Observer
 import spock.lang.Specification
@@ -32,7 +31,7 @@ class CommandExecutorBuilderSpec extends Specification {
         given:
         def config = new Config()
         when:
-        def executor = builder.withConfig(config).build()
+        def executor = builder.withGlobalConfig(config).build()
         then:
         executor.globalConfig == config
     }

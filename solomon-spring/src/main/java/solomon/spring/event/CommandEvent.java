@@ -1,4 +1,4 @@
-package solomon.spring.events;
+package solomon.spring.event;
 
 public interface CommandEvent {
     Object command();

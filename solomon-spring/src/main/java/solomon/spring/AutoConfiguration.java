@@ -1,53 +1,41 @@
 package solomon.spring;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.core.env.PropertyResolver;
 import solomon.CommandExecutor;
 import solomon.Config;
 import solomon.services.DefaultFactory;
 import solomon.services.DefaultProcessor;
 import solomon.services.Factory;
 import solomon.services.Processor;
-import solomon.spring.events.CommandEventBroadcaster;
 
 @Configuration
+@ComponentScan
 public class AutoConfiguration {
-    @Bean
-    public static GlobalAddonBeanProcessor globalAddonBeanProcessor(PropertyResolver propertyResolver, @Lazy Config config) {
-        return new GlobalAddonBeanProcessor(propertyResolver, config);
+    @Bean("fallbackCommandFactory")
+    public DefaultFactory defaultFactory() {
+        return new DefaultFactory();
     }
 
     @Bean
-    public Factory commandFactory(ApplicationContext applicationContext) {
-        var fallbackFactory = new DefaultFactory();
-        return new SpringFactory(fallbackFactory, applicationContext);
+    public DefaultProcessor defaultProcessor(Factory factory) {
+        return new DefaultProcessor(factory);
     }
 
     @Bean
-    public Processor commandProcessor(Factory commandFactory) {
-        return new DefaultProcessor(commandFactory);
-    }
-
-    @Bean
-    public Config commandConfig() {
+    public Config globalConfig() {
         return new Config();
     }
 
     @Lazy
     @Bean
-    public CommandExecutor commandExecutor(Factory commandFactory, Processor commandProcessor, Config commandConfig) {
+    public CommandExecutor commandExecutor(Factory factory, Processor processor, Config globalConfig) {
         return CommandExecutor.builder()
-                .withFactory(commandFactory)
-                .withProcessor(commandProcessor)
-                .withConfig(commandConfig)
+                .withFactory(factory)
+                .withProcessor(processor)
+                .withGlobalConfig(globalConfig)
                 .build();
-    }
-
-    @Bean
-    public CommandEventBroadcaster commandEventBroadcaster(ApplicationContext applicationContext) {
-        return new CommandEventBroadcaster(applicationContext);
     }
 }

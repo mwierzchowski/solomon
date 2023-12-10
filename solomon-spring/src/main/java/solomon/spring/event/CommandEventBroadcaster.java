@@ -1,13 +1,15 @@
-package solomon.spring.events;
+package solomon.spring.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 import solomon.addons.Observer;
 import solomon.spring.annotation.Global;
 
 @Slf4j
 @Global
+@Service
 @RequiredArgsConstructor
 public class CommandEventBroadcaster implements Observer<Object, Object> {
     private final ApplicationContext applicationContext;

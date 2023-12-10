@@ -1,15 +1,19 @@
-package solomon.spring;
+package solomon.spring.factory;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 import solomon.addons.Addon;
 import solomon.services.Factory;
 
+@Primary
+@Service
 @RequiredArgsConstructor
-public class SpringFactory implements Factory {
-    protected final Factory fallbackFactory;
+public class ApplicationContextAdapter implements Factory {
     protected final ApplicationContext applicationContext;
+    protected final Factory fallbackCommandFactory;
 
     @Override
     public <C> C getInstanceOf(Class<C> clazz) {
@@ -17,13 +21,13 @@ public class SpringFactory implements Factory {
         try {
             bean = applicationContext.getBean(clazz);
         } catch (NoSuchBeanDefinitionException ex) {
-            bean = fallbackFactory.getInstanceOf(clazz);
+            bean = fallbackCommandFactory.getInstanceOf(clazz);
         }
         return bean;
     }
 
     @Override
     public <A extends Addon> void cache(A addon) {
-        fallbackFactory.cache(addon);
+        fallbackCommandFactory.cache(addon);
     }
 }
