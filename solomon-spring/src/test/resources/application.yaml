@@ -6,6 +6,7 @@ logging:
 solomon:
   event-broadcaster.global: true
   validator.global: true
+  counting.global: true
   logging:
     global: true
     details: true
