@@ -1,4 +1,4 @@
-package solomon.spring.adapter
+package solomon.spring
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext
@@ -6,10 +6,10 @@ import solomon.addons.Addon
 import solomon.services.Factory
 import spock.lang.Specification
 
-class ApplicationContextAdapterSpec extends Specification {
+class CommandFactorySpec extends Specification {
     def applicationContext = Mock(ApplicationContext)
     def fallbackFactory = Mock(Factory)
-    def adapter = new ApplicationContextAdapter(applicationContext, fallbackFactory)
+    def adapter = new CommandFactory(applicationContext, fallbackFactory)
 
     def "Uses application context to instantiate bean"() {
         given:

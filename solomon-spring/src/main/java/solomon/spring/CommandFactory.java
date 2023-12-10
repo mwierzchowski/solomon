@@ -1,4 +1,4 @@
-package solomon.spring.adapter;
+package solomon.spring;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -11,7 +11,7 @@ import solomon.services.Factory;
 @Primary
 @Service
 @RequiredArgsConstructor
-public class ApplicationContextAdapter implements Factory {
+public class CommandFactory implements Factory {
     protected final ApplicationContext applicationContext;
     protected final Factory fallbackCommandFactory;
 
