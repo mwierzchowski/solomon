@@ -27,9 +27,6 @@ subprojects {
 
     dependencies {
         annotationProcessor libs.lombok
-        compileOnly libs.lombok
-        implementation libs.slf4j.api
-        testImplementation libs.spock.core
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
