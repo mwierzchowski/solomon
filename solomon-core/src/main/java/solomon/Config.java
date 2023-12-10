@@ -31,6 +31,7 @@ public class Config {
 
     public void lock() {
         this.locked = true;
+        LOG.debug("Configuration locked");
     }
 
     public Config unlock() {
