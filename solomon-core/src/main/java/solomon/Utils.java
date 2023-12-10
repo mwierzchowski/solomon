@@ -21,4 +21,8 @@ public class Utils {
             throw new IllegalArgumentException(msg, ex);
         }
     }
+
+    public static String shortNameFor(Object object) {
+        return object.getClass().getSimpleName();
+    }
 }

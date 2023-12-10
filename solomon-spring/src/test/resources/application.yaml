@@ -6,3 +6,9 @@ logging:
 solomon:
   event-broadcaster.global: true
   validator.global: true
+  logging:
+    global: true
+    details: true
+    level:
+      regular: INFO
+      failure: ERROR
