@@ -1,5 +1,6 @@
 package solomon.spring.annotation;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -18,7 +19,7 @@ public class GlobalBeanProcessor implements BeanPostProcessor {
     private final Config config;
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         if (bean instanceof Addon addon) {
             var globalAnnotation = bean.getClass().getAnnotation(Global.class);
             if (globalAnnotation != null) {
