@@ -2,15 +2,17 @@ package solomon.spring.event;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import solomon.addons.Observer;
 import solomon.spring.annotation.Global;
 
 @Slf4j
-@Global
-@Service
+@Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "solomon.event-broadcaster.enabled", matchIfMissing = true)
+@Global(onProperty = "solomon.event-broadcaster.global")
 public class CommandEventBroadcaster implements Observer<Object, Object> {
     private final ApplicationContext applicationContext;
 

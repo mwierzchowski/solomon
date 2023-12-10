@@ -1,7 +1,6 @@
 [versions]
 slf4j = '2.0.9'
 spock = '2.4-M1-groovy-4.0'
-spring-framework = '6.1.1'
 spring-boot = '3.2.0'
 
 [libraries]
@@ -10,7 +9,7 @@ slf4j-api = { module = 'org.slf4j:slf4j-api', version.ref = 'slf4j' }
 slf4j-simple = { module = 'org.slf4j:slf4j-simple', version.ref = 'slf4j' }
 spock-core = { module = 'org.spockframework:spock-core', version.ref = 'spock' }
 spock-spring = { module = 'org.spockframework:spock-spring', version.ref = 'spock' }
-spring-context = { module = 'org.springframework:spring-context', version.ref = 'spring-framework' }
+spring-boot-autoconfigure = { module = 'org.springframework.boot:spring-boot-autoconfigure', version.ref = 'spring-boot' }
 spring-boot-test = { module = 'org.springframework.boot:spring-boot-starter-test', version.ref = 'spring-boot' }
 
 [plugins]

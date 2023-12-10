@@ -2,3 +2,6 @@ logging:
   level:
     root: WARN
     solomon: DEBUG
+
+solomon:
+  event-broadcaster.global: true

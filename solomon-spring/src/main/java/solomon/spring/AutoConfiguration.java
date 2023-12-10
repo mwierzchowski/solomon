@@ -1,5 +1,6 @@
 package solomon.spring;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import solomon.services.Processor;
 
 @Configuration
 @ComponentScan
+@EnableConfigurationProperties
 public class AutoConfiguration {
     @Bean("fallbackCommandFactory")
     public DefaultFactory defaultFactory() {

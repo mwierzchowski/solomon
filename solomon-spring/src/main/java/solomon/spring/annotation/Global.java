@@ -15,5 +15,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Global {
     boolean value() default true;
 
-    String property()  default "";
+    String onProperty()  default "";
 }

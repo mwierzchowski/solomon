@@ -25,9 +25,9 @@ public class GlobalBeanProcessor implements BeanPostProcessor {
             if (globalAnnotation != null) {
                 LOG.debug("Processing addon {}", beanName);
                 var globalFlag = globalAnnotation.value();
-                var globalProperty = globalAnnotation.property();
+                var globalProperty = globalAnnotation.onProperty();
                 if (globalProperty != null && !globalProperty.isEmpty()) {
-                    globalProperty = propertyResolver.resolvePlaceholders(globalProperty);
+                    globalProperty = propertyResolver.getProperty(globalProperty);
                     globalFlag = Boolean.parseBoolean(globalProperty);
                 }
                 if (globalFlag) {
