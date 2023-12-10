@@ -1,4 +1,4 @@
-package solomon.spring.factory
+package solomon.spring.adapter
 
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationContext

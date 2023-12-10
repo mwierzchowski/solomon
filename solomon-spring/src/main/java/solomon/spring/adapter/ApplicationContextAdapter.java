@@ -1,4 +1,4 @@
-package solomon.spring.factory;
+package solomon.spring.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
