@@ -55,7 +55,7 @@ jobs:
 
       - name: 'Upload failed tests report'
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: 'Tests report'
           path: build/reports/tests/unit-test/aggregated-results
