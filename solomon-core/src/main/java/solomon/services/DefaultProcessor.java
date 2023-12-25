@@ -6,29 +6,47 @@ import solomon.addons.Addon;
 import solomon.annotations.Decorated;
 import solomon.annotations.Observed;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import static java.util.Optional.ofNullable;
+
 @RequiredArgsConstructor
 public class DefaultProcessor implements Processor {
+    protected final ConcurrentMap<Class<?>, Config> configCache = new ConcurrentHashMap<>();
     protected final Factory factory;
 
     @Override
     public Config process(Object command, Config globalConfig) {
-        var decorationData = command.getClass().getAnnotation(Decorated.class);
-        var observationData = command.getClass().getAnnotation(Observed.class);
-        if ((decorationData == null || decorationData.value() == null)
-                && (observationData == null || observationData.value() == null)) {
+        return configCache.computeIfAbsent(command.getClass(), aClass -> processClass(aClass, globalConfig));
+    }
+
+    private Config processClass(Class<?> cmdClass, Config globalConfig) {
+        var addonList = new ArrayList<Addon>();
+        ofNullable(cmdClass.getAnnotation(Decorated.class))
+                .map(Decorated::value)
+                .map(this::processAnnotationData)
+                .ifPresent(addonList::addAll);
+        ofNullable(cmdClass.getAnnotation(Observed.class))
+                .map(Observed::value)
+                .map(this::processAnnotationData)
+                .ifPresent(addonList::addAll);
+        if (addonList.isEmpty()) {
             return globalConfig;
         }
-        var config = globalConfig.unlock();
-        process(decorationData.value(), config);
-        process(observationData.value(), config);
+        var config = new Config(globalConfig);
+        config.addAll(addonList);
+        config.lock();
         return config;
     }
 
-    private void process(Class<? extends Addon>[] addonClasses, Config config) {
-        for (int i = 0; i < addonClasses.length; i++) {
-            var addonClass = addonClasses[i];
-            var addon = factory.getInstanceOf(addonClass);
-            config.add(addon);
+    private List<Addon> processAnnotationData(Class<? extends Addon>[] addonClasses) {
+        var addonList = new ArrayList<Addon>();
+        for (Class<? extends Addon> addonClass : addonClasses) {
+            addonList.add(factory.getInstanceOf(addonClass));
         }
+        return addonList;
     }
 }

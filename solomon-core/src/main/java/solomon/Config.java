@@ -21,10 +21,6 @@ public class Config {
     private List<Decorator<?, ?>> decoratorList;
     private List<Observer<?, ?>> observerList;
 
-    public Config(List<Addon> addons) {
-        addons.forEach(this::add);
-    }
-
     public Config(Config parent) {
         this.parent = parent;
     }
@@ -57,6 +53,10 @@ public class Config {
             addonClass = addon.getClass();
         }
         addonList(addonClass, true).add(addon);
+    }
+
+    public void addAll(List<Addon> addons) {
+        addons.forEach(this::add);
     }
 
     public <A extends Addon> A get(Class<A> addonClass, int position) {

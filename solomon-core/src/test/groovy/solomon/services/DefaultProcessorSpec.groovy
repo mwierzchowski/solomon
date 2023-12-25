@@ -24,6 +24,18 @@ class DefaultProcessorSpec extends Specification {
         processedConfig.count(Observer) == 1
     }
 
+    def "Caches config read from annotation"() {
+        given:
+        factory.getInstanceOf(DummyDecorator) >> new DummyDecorator()
+        factory.getInstanceOf(DummyObserver) >> new DummyObserver()
+        def command = new DummyCommand1()
+        when:
+        def config1 = processor.process(command, config)
+        def config2 = processor.process(command, config)
+        then:
+        config1 == config2
+    }
+
     def "Unlocks config before updating"() {
         given:
         config.lock()
