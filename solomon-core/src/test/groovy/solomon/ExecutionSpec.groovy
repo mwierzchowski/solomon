@@ -80,7 +80,7 @@ class ExecutionSpec extends Specification {
         runnableExecution.observe(listener)
                 .observeFailure((a, b) -> inlineFailureObserverCounter += 1)
                 .decorateAfter((a, b) -> { throw new IllegalArgumentException()})
-                .execute()
+                .execute().get()
         then:
         thrown IllegalArgumentException
         listener.successCounter == 0
@@ -90,7 +90,7 @@ class ExecutionSpec extends Specification {
 
     def "Executes runnable command and returns value"() {
         when:
-        def output = runnableExecution.execute()
+        def output = runnableExecution.execute().get()
         then:
         output == runnableCmd
         output.runCounter == 1
@@ -98,7 +98,7 @@ class ExecutionSpec extends Specification {
 
     def "Executes supplier command and returns value"() {
         when:
-        def output = supplierExecution.execute()
+        def output = supplierExecution.execute().get()
         then:
         output == 123
     }
@@ -106,7 +106,7 @@ class ExecutionSpec extends Specification {
     def "Executes command and converts value"() {
         when:
         def mapper = cmd -> "Value=${cmd.runCounter}"
-        def output = runnableExecution.execute(mapper)
+        def output = runnableExecution.execute().map(mapper)
         then:
         output instanceof GString
     }

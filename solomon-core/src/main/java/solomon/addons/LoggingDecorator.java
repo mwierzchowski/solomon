@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
 import solomon.ExecutionContext;
-import solomon.Result;
+import solomon.MutableResult;
 
 import static org.slf4j.event.Level.DEBUG;
 import static solomon.Utils.shortNameFor;
@@ -30,7 +30,7 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     }
 
     @Override
-    public void after(ExecutionContext<Object> context, Result<Object> result) {
+    public void after(ExecutionContext<Object> context, MutableResult<Object> result) {
         if (result.isSuccess()) {
             if (LOG.isEnabledForLevel(regularLevel)) {
                 var message = includeDetails

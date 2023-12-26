@@ -1,10 +1,10 @@
 package solomon
 
-import solomon.helpers.TestResult
+import solomon.helpers.TestMutableResult
 import spock.lang.Specification
 
-class ResultSpec extends Specification {
-    def result = new TestResult()
+class MutableResultSpec extends Specification {
+    def result = new TestMutableResult()
 
     def "Stores command value"() {
         given:
@@ -12,7 +12,7 @@ class ResultSpec extends Specification {
         when:
         result.setValue(value)
         then:
-        result.getValueOrThrowException() == value
+        result.get() == value
         result.isSuccess()
     }
 
@@ -20,7 +20,7 @@ class ResultSpec extends Specification {
         when:
         result.setValue(null)
         then:
-        result.getValueOrThrowException() == null
+        result.get() == null
         result.isSuccess()
     }
 
@@ -29,7 +29,7 @@ class ResultSpec extends Specification {
         def exception = new IllegalArgumentException()
         result.setException(exception)
         when:
-        result.getValueOrThrowException()
+        result.get()
         then:
         Exception ex = thrown()
         ex == exception
@@ -41,7 +41,7 @@ class ResultSpec extends Specification {
         def value = new Object()
         result.setValue(value)
         expect:
-        result.getValue() == value
+        result.value() == value
     }
 
     def "Provides exception for failure"() {
@@ -49,7 +49,7 @@ class ResultSpec extends Specification {
         def exception = new RuntimeException()
         result.setException(exception)
         expect:
-        result.getException() == exception
+        result.exception() == exception
     }
 
     def "Erases exception"() {

@@ -10,26 +10,28 @@ import solomon.services.Factory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNullElse;
 import static solomon.ExecutionContext.asContext;
-import static solomon.Result.asResult;
+import static solomon.MutableResult.asResult;
 import static solomon.Utils.cast;
 
 @Data
 @Slf4j
-public class Execution<C, V> implements Flow<C, V>, ExecutionContext<C>, Result<V> {
+public class Execution<C, V> implements Flow<C, V>, ExecutionContext<C>, MutableResult<V> {
     @NonNull private final Factory factory;
     @NonNull private final C command;
     @NonNull private final Handler<C, V> handler;
     @NonNull private Config config;
     private Map<Object, Object> contextData;
     private V value;
+    private Supplier<V> defaultValueSupplier;
     private RuntimeException exception;
 
     @Override
-    public V execute() {
+    public Result<V> execute() {
         LOG.debug("Execution started");
         int executedDecoratorsCount = 0;
         for (int i = 0; this.config.contains(Decorator.class, i); i++) {
@@ -56,7 +58,7 @@ public class Execution<C, V> implements Flow<C, V>, ExecutionContext<C>, Result<
             observer.safeNotification(cast(this.command), asResult(this));
         }
         LOG.debug("Execution finished");
-        return this.getValueOrThrowException();
+        return this;
     }
 
     @Override

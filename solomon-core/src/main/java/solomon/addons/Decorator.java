@@ -3,15 +3,15 @@ package solomon.addons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import solomon.ExecutionContext;
-import solomon.Result;
+import solomon.MutableResult;
 
 public interface Decorator<C, V> extends Addon {
     Logger LOG = LoggerFactory.getLogger(Decorator.class);
 
     void before(ExecutionContext<C> context);
-    void after(ExecutionContext<C> context, Result<V> result);
+    void after(ExecutionContext<C> context, MutableResult<V> result);
 
-    default void safeBefore(ExecutionContext<C> context, Result<V> result) {
+    default void safeBefore(ExecutionContext<C> context, MutableResult<V> result) {
         try {
             this.before(context);
         } catch (RuntimeException ex) {
@@ -20,7 +20,7 @@ public interface Decorator<C, V> extends Addon {
         }
     }
 
-    default void safeAfter(ExecutionContext<C> context, Result<V> result) {
+    default void safeAfter(ExecutionContext<C> context, MutableResult<V> result) {
         try {
             this.after(context, result);
         } catch (RuntimeException ex) {

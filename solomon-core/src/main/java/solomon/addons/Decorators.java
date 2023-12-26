@@ -3,7 +3,7 @@ package solomon.addons;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import solomon.ExecutionContext;
-import solomon.Result;
+import solomon.MutableResult;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -21,10 +21,10 @@ public class Decorators {
         };
     }
 
-    public static <C, V> Decorator<C, V> after(@NonNull BiConsumer<ExecutionContext<? super C>, Result<? super V>> afterHandler) {
+    public static <C, V> Decorator<C, V> after(@NonNull BiConsumer<ExecutionContext<? super C>, MutableResult<? super V>> afterHandler) {
         return new DecoratorAdapter<>() {
             @Override
-            public void after(ExecutionContext<C> context, Result<V> result) {
+            public void after(ExecutionContext<C> context, MutableResult<V> result) {
                 afterHandler.accept(context, result);
             }
         };

@@ -8,7 +8,6 @@ import solomon.addons.Observer;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static solomon.addons.Decorators.after;
 import static solomon.addons.Decorators.before;
@@ -20,7 +19,7 @@ public interface Flow<C, V> extends CommandAware<C> {
 
     Config getConfig(boolean forUpdate);
     Addon getAddon(Class<? extends Addon> addonClass);
-    V execute();
+    Result<V> execute();
 
     default Flow<C, V> setup(Consumer<C> initializer) {
         LOG.debug("Configuring command");
@@ -43,7 +42,7 @@ public interface Flow<C, V> extends CommandAware<C> {
         return this;
     }
 
-    default Flow<C, V> decorateAfter(BiConsumer<ExecutionContext<? super C>, Result<? super V>> decoratorMethod) {
+    default Flow<C, V> decorateAfter(BiConsumer<ExecutionContext<? super C>, MutableResult<? super V>> decoratorMethod) {
         getConfig(true).add(after(decoratorMethod));
         return this;
     }
@@ -66,11 +65,5 @@ public interface Flow<C, V> extends CommandAware<C> {
     default Flow<C, V> observeFailure(BiConsumer<? super C, RuntimeException> observerMethod) {
         getConfig(true).add(onFailure(observerMethod));
         return this;
-    }
-
-    default <T> T execute(Function<V, T> mapper) {
-        V value = this.execute();
-        LOG.debug("Converting result: {}", mapper);
-        return mapper.apply(value);
     }
 }

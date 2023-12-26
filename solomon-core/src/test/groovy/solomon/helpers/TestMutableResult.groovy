@@ -4,8 +4,8 @@ import solomon.Config
 import solomon.Execution
 import solomon.services.DefaultFactory
 
-class TestResult extends Execution<Object, Object> {
-    TestResult() {
+class TestMutableResult extends Execution<Object, Object> {
+    TestMutableResult() {
         super(new DefaultFactory(), new DummyCommand(), new DummyHandler(), new Config())
     }
 }

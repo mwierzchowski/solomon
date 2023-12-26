@@ -2,7 +2,7 @@ package solomon.addons;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import solomon.Result;
+import solomon.MutableResult;
 
 public interface Observer<C, V> extends Addon {
     Logger LOG = LoggerFactory.getLogger(Observer.class);
@@ -27,7 +27,7 @@ public interface Observer<C, V> extends Addon {
         }
     }
 
-    default void safeNotification(C command, Result<V> result) {
+    default void safeNotification(C command, MutableResult<V> result) {
         if (result.isSuccess()) {
             this.onSuccess(command, result.getValue());
         } else {
