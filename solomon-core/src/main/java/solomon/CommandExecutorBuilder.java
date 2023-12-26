@@ -5,7 +5,9 @@ import solomon.services.DefaultFactory;
 import solomon.services.DefaultProcessor;
 import solomon.services.Factory;
 import solomon.services.Processor;
+import solomon.services.Processor.AnnotationMap;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class CommandExecutorBuilder {
     private Config globalConfig;
     private Factory factory;
     private Processor processor;
+    private AnnotationMap annotationMap = new AnnotationMap();
     private boolean initialize = true;
 
     public CommandExecutorBuilder withFactory(Factory factory) {
@@ -49,6 +52,11 @@ public class CommandExecutorBuilder {
         return this;
     }
 
+    public CommandExecutorBuilder withMappedAnnotation(Class<? extends Annotation> annotationType, Class<? extends Addon> addonType) {
+        this.annotationMap.put(annotationType, addonType);
+        return this;
+    }
+
     public CommandExecutorBuilder initialize(boolean initialize) {
         this.initialize = initialize;
         return this;
@@ -59,7 +67,7 @@ public class CommandExecutorBuilder {
             this.factory = new DefaultFactory();
         }
         if (this.processor == null) {
-            this.processor = new DefaultProcessor(this.factory);
+            this.processor = new DefaultProcessor();
         }
         if (this.globalConfig == null) {
             this.globalConfig = new Config();
@@ -71,7 +79,7 @@ public class CommandExecutorBuilder {
             }
             this.globalConfig.add(cast(addon));
         }
-        var executor = new CommandExecutor(this.factory, this.processor, this.globalConfig);
+        var executor = new CommandExecutor(this.factory, this.processor, this.globalConfig, this.annotationMap);
         if (this.initialize) {
             executor.initialize();
         }

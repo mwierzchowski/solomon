@@ -7,46 +7,47 @@ import solomon.annotations.Decorated;
 import solomon.annotations.Observed;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static java.util.Optional.ofNullable;
+import static java.util.Arrays.stream;
 
 @RequiredArgsConstructor
 public class DefaultProcessor implements Processor {
     protected final ConcurrentMap<Class<?>, Config> configCache = new ConcurrentHashMap<>();
-    protected final Factory factory;
 
     @Override
-    public Config process(Object command, Config globalConfig) {
-        return configCache.computeIfAbsent(command.getClass(), aClass -> processClass(aClass, globalConfig));
+    public Config process(Object command, Context context) {
+        return configCache.computeIfAbsent(command.getClass(), aClass -> processClass(aClass, context));
     }
 
-    private Config processClass(Class<?> cmdClass, Config globalConfig) {
+    private Config processClass(Class<?> cmdClass, Context context) {
         var addonList = new ArrayList<Addon>();
-        ofNullable(cmdClass.getAnnotation(Decorated.class))
-                .map(Decorated::value)
-                .map(this::processAnnotationData)
-                .ifPresent(addonList::addAll);
-        ofNullable(cmdClass.getAnnotation(Observed.class))
-                .map(Observed::value)
-                .map(this::processAnnotationData)
-                .ifPresent(addonList::addAll);
+        stream(cmdClass.getAnnotations())
+                .filter(context.annotationMap()::containsKey)
+                .map(context.annotationMap()::get)
+                .map(context.factory()::getInstanceOf)
+                .forEach(addonList::add);
+        stream(cmdClass.getAnnotations())
+                .filter(annotation -> Decorated.class.isAssignableFrom(annotation.annotationType()))
+                .map(annotation -> ((Decorated)annotation).value())
+                .flatMap(Arrays::stream)
+                .map(context.factory()::getInstanceOf)
+                .forEach(addonList::add);
+        stream(cmdClass.getAnnotations())
+                .filter(annotation -> Observed.class.isAssignableFrom(annotation.annotationType()))
+                .map(annotation -> ((Observed)annotation).value())
+                .flatMap(Arrays::stream)
+                .map(context.factory()::getInstanceOf)
+                .forEach(addonList::add);
         if (addonList.isEmpty()) {
-            return globalConfig;
+            return context.globalConfig();
         }
-        var config = new Config(globalConfig);
+        var config = new Config(context.globalConfig());
         config.addAll(addonList);
         config.lock();
         return config;
     }
-
-    private List<Addon> processAnnotationData(Class<? extends Addon>[] addonClasses) {
-        var addonList = new ArrayList<Addon>();
-        for (Class<? extends Addon> addonClass : addonClasses) {
-            addonList.add(factory.getInstanceOf(addonClass));
-        }
-        return addonList;
-    }
 }
+

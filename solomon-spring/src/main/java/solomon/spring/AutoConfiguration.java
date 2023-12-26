@@ -22,8 +22,8 @@ public class AutoConfiguration {
     }
 
     @Bean
-    public DefaultProcessor defaultProcessor(Factory factory) {
-        return new DefaultProcessor(factory);
+    public DefaultProcessor defaultProcessor() {
+        return new DefaultProcessor();
     }
 
     @Bean
