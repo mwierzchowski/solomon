@@ -1,12 +1,12 @@
 package solomon.addons;
 
-import solomon.Context;
+import solomon.ExecutionContext;
 import solomon.Result;
 
 public abstract class DecoratorAdapter<C, V> implements Decorator<C, V> {
     @Override
-    public void before(Context<C> context) {}
+    public void before(ExecutionContext<C> context) {}
 
     @Override
-    public void after(Context<C> context, Result<V> result) {}
+    public void after(ExecutionContext<C> context, Result<V> result) {}
 }

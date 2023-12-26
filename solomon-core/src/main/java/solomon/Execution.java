@@ -13,13 +13,13 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNullElse;
-import static solomon.Context.asContext;
+import static solomon.ExecutionContext.asContext;
 import static solomon.Result.asResult;
 import static solomon.Utils.cast;
 
 @Data
 @Slf4j
-public class Execution<C, V> implements Flow<C, V>, Context<C>, Result<V> {
+public class Execution<C, V> implements Flow<C, V>, ExecutionContext<C>, Result<V> {
     @NonNull private final Factory factory;
     @NonNull private final C command;
     @NonNull private final Handler<C, V> handler;

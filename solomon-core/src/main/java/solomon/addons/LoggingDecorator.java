@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
-import solomon.Context;
+import solomon.ExecutionContext;
 import solomon.Result;
 
 import static org.slf4j.event.Level.DEBUG;
@@ -19,7 +19,7 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     private boolean includeDetails = true;
 
     @Override
-    public void before(Context<Object> context) {
+    public void before(ExecutionContext<Object> context) {
         if (LOG.isEnabledForLevel(regularLevel)) {
             var message = includeDetails
                     ? "Executing command {}: {}"
@@ -30,7 +30,7 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     }
 
     @Override
-    public void after(Context<Object> context, Result<Object> result) {
+    public void after(ExecutionContext<Object> context, Result<Object> result) {
         if (result.isSuccess()) {
             if (LOG.isEnabledForLevel(regularLevel)) {
                 var message = includeDetails

@@ -1,10 +1,10 @@
 package solomon
 
-import solomon.helpers.TestContext
+import solomon.helpers.TestExecutionContext
 import spock.lang.Specification
 
-class ContextSpec extends Specification {
-    def context = new TestContext()
+class ExecutionContextSpec extends Specification {
+    def context = new TestExecutionContext()
 
     def "Lazy initializes storage"() {
         expect:

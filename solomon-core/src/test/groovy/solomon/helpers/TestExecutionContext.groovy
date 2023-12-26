@@ -4,8 +4,8 @@ import solomon.Config
 import solomon.Execution
 import solomon.services.DefaultFactory
 
-class TestContext extends Execution<Object, Object> {
-    TestContext() {
+class TestExecutionContext extends Execution<Object, Object> {
+    TestExecutionContext() {
         super(new DefaultFactory(), new DummyCommand(), new DummyHandler(), new Config())
     }
 }

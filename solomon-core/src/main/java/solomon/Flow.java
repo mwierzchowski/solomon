@@ -38,12 +38,12 @@ public interface Flow<C, V> extends CommandAware<C> {
         return this;
     }
 
-    default Flow<C, V> decorateBefore(Consumer<Context<? super C>> decoratorMethod) {
+    default Flow<C, V> decorateBefore(Consumer<ExecutionContext<? super C>> decoratorMethod) {
         getConfig(true).add(before(decoratorMethod));
         return this;
     }
 
-    default Flow<C, V> decorateAfter(BiConsumer<Context<? super C>, Result<? super V>> decoratorMethod) {
+    default Flow<C, V> decorateAfter(BiConsumer<ExecutionContext<? super C>, Result<? super V>> decoratorMethod) {
         getConfig(true).add(after(decoratorMethod));
         return this;
     }
