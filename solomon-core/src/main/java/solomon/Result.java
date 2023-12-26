@@ -3,6 +3,7 @@ package solomon;
 import lombok.Data;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -43,7 +44,7 @@ public interface Result<V> {
         if (this.isSuccess()) {
             return this;
         } else {
-            return new ResultRecord<>(value, null);
+            return new ResultData<>(value, null);
         }
     }
 
@@ -51,7 +52,7 @@ public interface Result<V> {
         if (this.isSuccess()) {
             return this;
         } else {
-            return new ResultRecord<>(valueSupplier.get(), null);
+            return new ResultData<>(valueSupplier.get(), null);
         }
     }
 
@@ -59,7 +60,7 @@ public interface Result<V> {
         if (this.isSuccess()) {
             return this;
         } else {
-            return new ResultRecord<>(null, exceptionSupplier.get());
+            return new ResultData<>(null, exceptionSupplier.get());
         }
     }
 
@@ -67,7 +68,7 @@ public interface Result<V> {
         if (this.isSuccess()) {
             return this;
         } else {
-            return new ResultRecord<>(null, exceptionMapper.apply(this.getException()));
+            return new ResultData<>(null, exceptionMapper.apply(this.getException()));
         }
     }
 
@@ -103,8 +104,20 @@ public interface Result<V> {
         }
     }
 
+    default void ifSuccess(Consumer<V> successConsumer) {
+        if (this.isSuccess()) {
+            successConsumer.accept(this.getValue());
+        }
+    }
+
+    default void ifFailure(Consumer<RuntimeException> failureConsumer) {
+        if (this.isFailure()) {
+            failureConsumer.accept(this.getException());
+        }
+    }
+
     @Data
-    class ResultRecord<V> implements Result<V> {
+    class ResultData<V> implements Result<V> {
         final V value;
         final RuntimeException exception;
     }
