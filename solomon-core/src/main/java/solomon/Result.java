@@ -62,18 +62,6 @@ public interface Result<V> {
         }
     }
 
-    default <T> T getMapped(@NonNull Function<V, T> valueMapper) {
-        return valueMapper.apply(this.get());
-    }
-
-    default Optional<V> getOptional() {
-        return Optional.ofNullable(this.get());
-    }
-
-    default Stream<V> getStream() {
-        return Stream.ofNullable(this.get());
-    }
-
     default V getOr(V defaultValue) {
         if (this.isSuccess()) {
             return this.getValue();
@@ -104,6 +92,18 @@ public interface Result<V> {
         } else {
             throw exceptionSupplier.get();
         }
+    }
+
+    default <T> T getMapped(@NonNull Function<V, T> valueMapper) {
+        return valueMapper.apply(this.get());
+    }
+
+    default Optional<V> getOptional() {
+        return Optional.ofNullable(this.get());
+    }
+
+    default Stream<V> getStream() {
+        return Stream.ofNullable(this.get());
     }
 
     default void ifSuccess(@NonNull Consumer<V> successConsumer) {
