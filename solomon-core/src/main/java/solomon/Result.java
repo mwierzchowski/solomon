@@ -29,7 +29,7 @@ public interface Result<V> {
         return this;
     }
 
-    default Result<V> orGet(@NonNull Supplier<V> valueSupplier) {
+    default Result<V> orCompute(@NonNull Supplier<V> valueSupplier) {
         if (this.isFailure()) {
             var newValue = valueSupplier.get();
             asMutable(this).eraseFailure(newValue);
@@ -74,7 +74,7 @@ public interface Result<V> {
         return Stream.ofNullable(this.get());
     }
 
-    default V orElse(V defaultValue) {
+    default V getOr(V defaultValue) {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -82,7 +82,7 @@ public interface Result<V> {
         }
     }
 
-    default V orElseGet(@NonNull Supplier<V> defaultValueSupplier) {
+    default V getOrCompute(@NonNull Supplier<V> defaultValueSupplier) {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -90,7 +90,7 @@ public interface Result<V> {
         }
     }
 
-    default <X extends RuntimeException> V orElseThrow(@NonNull Function<RuntimeException, X> exceptionMapper) throws X {
+    default <X extends RuntimeException> V getOrThrow(@NonNull Function<RuntimeException, X> exceptionMapper) throws X {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -98,7 +98,7 @@ public interface Result<V> {
         }
     }
 
-    default <X extends RuntimeException> V orElseThrow(@NonNull Supplier<? extends X> exceptionSupplier) throws X {
+    default <X extends RuntimeException> V getOrThrow(@NonNull Supplier<? extends X> exceptionSupplier) throws X {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
