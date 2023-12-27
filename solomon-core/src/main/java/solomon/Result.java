@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import static solomon.MutableResult.asMutable;
 
+// TODO add logging
 public interface Result<V> {
     V getValue();
     RuntimeException getException();
