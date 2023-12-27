@@ -16,7 +16,15 @@ public interface MutableResult<V> extends Result<V> {
         this.eraseFailure();
     }
 
-    static <T> MutableResult<T> asResult(MutableResult<?> result) {
+    static <T> MutableResult<T> asMutable(Result<T> result) {
+        if (result instanceof MutableResult<T> mutableResult) {
+            return mutableResult;
+        } else {
+            throw new UnsupportedOperationException("Result is immutable");
+        }
+    }
+
+    static <T> MutableResult<T> asMutableResult(MutableResult<?> result) {
         return cast(result);
     }
 }

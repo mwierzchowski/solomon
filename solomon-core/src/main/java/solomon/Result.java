@@ -6,6 +6,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static solomon.MutableResult.asMutable;
+
 public interface Result<V> {
     V getValue();
     RuntimeException getException();
@@ -20,45 +22,32 @@ public interface Result<V> {
 
     default Result<V> or(V value) {
         if (this.isFailure()) {
-            if (this instanceof MutableResult<V> mutableResult) {
-                mutableResult.eraseFailure(value);
-            } else {
-                throw new UnsupportedOperationException("Result is immutable");
-            }
+            asMutable(this).eraseFailure(value);
         }
         return this;
     }
 
     default Result<V> orGet(Supplier<V> valueSupplier) {
         if (this.isFailure()) {
-            if (this instanceof MutableResult<V> mutableResult) {
-                mutableResult.eraseFailure(valueSupplier.get());
-            } else {
-                throw new UnsupportedOperationException("Result is immutable");
-            }
+            var newValue = valueSupplier.get();
+            asMutable(this).eraseFailure(newValue);
         }
         return this;
     }
 
     default <X extends RuntimeException> Result<V> orThrow(Supplier<? extends X> exceptionSupplier) {
         if (this.isFailure()) {
-            if (this instanceof MutableResult<V> mutableResult) {
-                mutableResult.setException(exceptionSupplier.get());
-            } else {
-                throw new UnsupportedOperationException("Result is immutable");
-            }
+            var newException = exceptionSupplier.get();
+            asMutable(this).setException(newException);
         }
         return this;
     }
 
     default <X extends RuntimeException> Result<V> orThrow(Function<RuntimeException, ? extends X> exceptionMapper) {
         if (this.isFailure()) {
-            if (this instanceof MutableResult<V> mutableResult) {
-                var currentException = this.getException();
-                mutableResult.setException(exceptionMapper.apply(currentException));
-            } else {
-                throw new UnsupportedOperationException("Result is immutable");
-            }
+            var currentException = this.getException();
+            var newException = exceptionMapper.apply(currentException);
+            asMutable(this).setException(newException);
         }
         return this;
     }
