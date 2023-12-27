@@ -78,7 +78,7 @@ public interface Result<V> {
         }
     }
 
-    default <X extends RuntimeException> V getOrThrow(@NonNull Function<RuntimeException, X> exceptionMapper) throws X {
+    default <X extends RuntimeException> V getOrThrow(@NonNull Function<RuntimeException, X> exceptionMapper) {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -86,7 +86,7 @@ public interface Result<V> {
         }
     }
 
-    default <X extends RuntimeException> V getOrThrow(@NonNull Supplier<? extends X> exceptionSupplier) throws X {
+    default <X extends RuntimeException> V getOrThrow(@NonNull Supplier<? extends X> exceptionSupplier) {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
