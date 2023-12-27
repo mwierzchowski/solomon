@@ -1,5 +1,7 @@
 package solomon;
 
+import lombok.NonNull;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -27,7 +29,7 @@ public interface Result<V> {
         return this;
     }
 
-    default Result<V> orGet(Supplier<V> valueSupplier) {
+    default Result<V> orGet(@NonNull Supplier<V> valueSupplier) {
         if (this.isFailure()) {
             var newValue = valueSupplier.get();
             asMutable(this).eraseFailure(newValue);
@@ -35,7 +37,7 @@ public interface Result<V> {
         return this;
     }
 
-    default <X extends RuntimeException> Result<V> orThrow(Supplier<? extends X> exceptionSupplier) {
+    default <X extends RuntimeException> Result<V> orThrow(@NonNull Supplier<? extends X> exceptionSupplier) {
         if (this.isFailure()) {
             var newException = exceptionSupplier.get();
             asMutable(this).setException(newException);
@@ -43,7 +45,7 @@ public interface Result<V> {
         return this;
     }
 
-    default <X extends RuntimeException> Result<V> orThrow(Function<RuntimeException, ? extends X> exceptionMapper) {
+    default <X extends RuntimeException> Result<V> orThrow(@NonNull Function<RuntimeException, ? extends X> exceptionMapper) {
         if (this.isFailure()) {
             var currentException = this.getException();
             var newException = exceptionMapper.apply(currentException);
@@ -60,7 +62,7 @@ public interface Result<V> {
         }
     }
 
-    default <T> T get(Function<V, T> valueMapper) {
+    default <T> T getMapped(@NonNull Function<V, T> valueMapper) {
         return valueMapper.apply(this.get());
     }
 
@@ -80,7 +82,7 @@ public interface Result<V> {
         }
     }
 
-    default V orElseGet(Supplier<V> defaultValueSupplier) {
+    default V orElseGet(@NonNull Supplier<V> defaultValueSupplier) {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -88,7 +90,7 @@ public interface Result<V> {
         }
     }
 
-    default <X extends RuntimeException> V orElseThrow(Function<RuntimeException, X> exceptionMapper) throws X {
+    default <X extends RuntimeException> V orElseThrow(@NonNull Function<RuntimeException, X> exceptionMapper) throws X {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -96,7 +98,7 @@ public interface Result<V> {
         }
     }
 
-    default <X extends RuntimeException> V orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+    default <X extends RuntimeException> V orElseThrow(@NonNull Supplier<? extends X> exceptionSupplier) throws X {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -104,13 +106,13 @@ public interface Result<V> {
         }
     }
 
-    default void ifSuccess(Consumer<V> successConsumer) {
+    default void ifSuccess(@NonNull Consumer<V> successConsumer) {
         if (this.isSuccess()) {
             successConsumer.accept(this.getValue());
         }
     }
 
-    default void ifFailure(Consumer<RuntimeException> failureConsumer) {
+    default void ifFailure(@NonNull Consumer<RuntimeException> failureConsumer) {
         if (this.isFailure()) {
             failureConsumer.accept(this.getException());
         }
