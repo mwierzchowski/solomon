@@ -1,7 +1,5 @@
 package solomon;
 
-import lombok.Data;
-
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -21,35 +19,48 @@ public interface Result<V> {
     }
 
     default Result<V> or(V value) {
-        if (this.isSuccess()) {
-            return this;
-        } else {
-            return new ResultData<>(value, null);
+        if (this.isFailure()) {
+            if (this instanceof MutableResult<V> mutableResult) {
+                mutableResult.eraseFailure(value);
+            } else {
+                throw new UnsupportedOperationException("Result is immutable");
+            }
         }
+        return this;
     }
 
     default Result<V> orGet(Supplier<V> valueSupplier) {
-        if (this.isSuccess()) {
-            return this;
-        } else {
-            return new ResultData<>(valueSupplier.get(), null);
+        if (this.isFailure()) {
+            if (this instanceof MutableResult<V> mutableResult) {
+                mutableResult.eraseFailure(valueSupplier.get());
+            } else {
+                throw new UnsupportedOperationException("Result is immutable");
+            }
         }
+        return this;
     }
 
-    default <X extends RuntimeException> Result<V> orThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        if (this.isSuccess()) {
-            return this;
-        } else {
-            return new ResultData<>(null, exceptionSupplier.get());
+    default <X extends RuntimeException> Result<V> orThrow(Supplier<? extends X> exceptionSupplier) {
+        if (this.isFailure()) {
+            if (this instanceof MutableResult<V> mutableResult) {
+                mutableResult.setException(exceptionSupplier.get());
+            } else {
+                throw new UnsupportedOperationException("Result is immutable");
+            }
         }
+        return this;
     }
 
-    default <X extends RuntimeException> Result<V> orThrow(Function<RuntimeException, ? extends X> exceptionMapper) throws X {
-        if (this.isSuccess()) {
-            return this;
-        } else {
-            return new ResultData<>(null, exceptionMapper.apply(this.getException()));
+    default <X extends RuntimeException> Result<V> orThrow(Function<RuntimeException, ? extends X> exceptionMapper) {
+        if (this.isFailure()) {
+            if (this instanceof MutableResult<V> mutableResult) {
+                var currentException = this.getException();
+                mutableResult.setException(exceptionMapper.apply(currentException));
+            } else {
+                throw new UnsupportedOperationException("Result is immutable");
+            }
         }
+        return this;
     }
 
     default V get() {
@@ -114,11 +125,5 @@ public interface Result<V> {
         if (this.isFailure()) {
             failureConsumer.accept(this.getException());
         }
-    }
-
-    @Data
-    class ResultData<V> implements Result<V> {
-        final V value;
-        final RuntimeException exception;
     }
 }
