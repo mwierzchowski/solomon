@@ -6,14 +6,9 @@ public interface MutableResult<V> extends Result<V> {
     void setValue(V value);
     void setException(RuntimeException exception);
 
-
-    default void eraseFailure() {
-        this.setException(null);
-    }
-
     default void eraseFailure(V value) {
         this.setValue(value);
-        this.eraseFailure();
+        this.setException(null);
     }
 
     static <T> MutableResult<T> asMutable(Result<T> result) {

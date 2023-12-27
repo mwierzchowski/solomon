@@ -56,7 +56,7 @@ class MutableResultSpec extends Specification {
         given:
         result.setException(new RuntimeException())
         when:
-        result.eraseFailure()
+        result.eraseFailure(null)
         then:
         result.isSuccess()
     }
