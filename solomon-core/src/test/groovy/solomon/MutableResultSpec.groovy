@@ -41,7 +41,7 @@ class MutableResultSpec extends Specification {
         def value = new Object()
         result.setValue(value)
         expect:
-        result.value() == value
+        result.getValue() == value
     }
 
     def "Provides exception for failure"() {
@@ -49,7 +49,7 @@ class MutableResultSpec extends Specification {
         def exception = new RuntimeException()
         result.setException(exception)
         expect:
-        result.exception() == exception
+        result.getException() == exception
     }
 
     def "Erases exception"() {
