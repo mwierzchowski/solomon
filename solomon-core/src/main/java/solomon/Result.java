@@ -20,26 +20,6 @@ public interface Result<V> {
         return this.getException() != null;
     }
 
-    default V get() {
-        if (this.isSuccess()) {
-            return this.getValue();
-        } else {
-            throw this.getException();
-        }
-    }
-
-    default <T> T map(Function<V, T> valueMapper) {
-        return valueMapper.apply(this.get());
-    }
-
-    default Optional<V> optional() {
-        return Optional.ofNullable(this.get());
-    }
-
-    default Stream<V> stream() {
-        return Stream.ofNullable(this.get());
-    }
-
     default Result<V> or(V value) {
         if (this.isSuccess()) {
             return this;
@@ -48,7 +28,7 @@ public interface Result<V> {
         }
     }
 
-    default Result<V> or(Supplier<V> valueSupplier) {
+    default Result<V> orGet(Supplier<V> valueSupplier) {
         if (this.isSuccess()) {
             return this;
         } else {
@@ -72,6 +52,26 @@ public interface Result<V> {
         }
     }
 
+    default V get() {
+        if (this.isSuccess()) {
+            return this.getValue();
+        } else {
+            throw this.getException();
+        }
+    }
+
+    default <T> T get(Function<V, T> valueMapper) {
+        return valueMapper.apply(this.get());
+    }
+
+    default Optional<V> getOptional() {
+        return Optional.ofNullable(this.get());
+    }
+
+    default Stream<V> getStream() {
+        return Stream.ofNullable(this.get());
+    }
+
     default V orElse(V defaultValue) {
         if (this.isSuccess()) {
             return this.getValue();
@@ -80,7 +80,7 @@ public interface Result<V> {
         }
     }
 
-    default V orElse(Supplier<V> defaultValueSupplier) {
+    default V orElseGet(Supplier<V> defaultValueSupplier) {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
