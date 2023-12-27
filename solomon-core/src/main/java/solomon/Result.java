@@ -22,7 +22,7 @@ public interface Result<V> {
         return this.getException() != null;
     }
 
-    default Result<V> or(V value) {
+    default Result<V> orDefault(V value) {
         if (this.isFailure()) {
             asMutable(this).eraseFailure(value);
         }
@@ -62,7 +62,7 @@ public interface Result<V> {
         }
     }
 
-    default V getOr(V defaultValue) {
+    default V getOrDefault(V defaultValue) {
         if (this.isSuccess()) {
             return this.getValue();
         } else {
@@ -94,15 +94,15 @@ public interface Result<V> {
         }
     }
 
-    default <T> T getMapped(@NonNull Function<V, T> valueMapper) {
+    default <T> T map(@NonNull Function<V, T> valueMapper) {
         return valueMapper.apply(this.get());
     }
 
-    default Optional<V> getOptional() {
+    default Optional<V> mapToOptional() {
         return Optional.ofNullable(this.get());
     }
 
-    default Stream<V> getStream() {
+    default Stream<V> mapToStream() {
         return Stream.ofNullable(this.get());
     }
 

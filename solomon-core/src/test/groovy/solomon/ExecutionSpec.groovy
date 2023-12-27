@@ -106,7 +106,7 @@ class ExecutionSpec extends Specification {
     def "Executes command and converts value"() {
         when:
         def mapper = cmd -> "Value=${cmd.runCounter}"
-        def output = runnableExecution.execute().getMapped(mapper)
+        def output = runnableExecution.execute().map(mapper)
         then:
         output instanceof GString
     }
