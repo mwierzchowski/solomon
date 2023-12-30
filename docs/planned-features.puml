@@ -1,0 +1,25 @@
+@startmindmap
+
+*[#Orange] Spring support
+	* Addons config
+		* Elements
+			* Global
+				* Order
+			* MapAnnotation
+			* MapClass
+		* Sources
+			* Builder
+			* Annotation
+				* Vanilla
+				* Spring Boot
+	* Helpers
+		* Warning on duplication
+		* Automatic mapping for Validated
+	* Cleanup
+		* Properties
+		* Packages
+	* Test
+		* Unit
+		* Spring integration
+
+@endmindmap
