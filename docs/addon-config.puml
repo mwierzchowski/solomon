@@ -1,0 +1,123 @@
+Executor.builder()
+	.mapType(AddonA.class, [AddonB.class, AddonC.class])
+	.mapAnnotation(AddonA.class, [Validated.class, Valid.class])
+	.map(AddonA.class, AddonB.class) // ???
+	.decorate(AddonG.class)
+	.observe(ObserverA.class)
+	.add(AddonG.class) // ???
+	.add(ListenerG.class) // ???
+	.disable(AddonD.class)
+	.cache(new AddonX(), [Addon.class])
+
+executor.runnable(CommandA.class)
+	.decorate(AddonL.class)
+	.mapType(AddonA.class, [AddonB.class, AddonC.class])
+	.mapAnnotation(AddonA.class, [Validated.class, Valid.class])
+	.map(AddonA.class, [AddonB.class, AddonC.class]) // ???
+	.map(AddonA.class, [Validated.class, Valid.class]) // ???
+	.decorate(AddonG.class)
+	.observe(ObserverA.class)
+	.add(AddonG.class) // ???
+	.disable(AddonD.class)
+
+@MappedType(LegacyCommandA.class)
+@Validated
+class CommandA {...}
+
+@Global(order = 1)
+@MappedType(LegacyAddonA.class)
+@MappedAnnotation(Validated.class)
+class AddonA {...}
+
+Operations
+- map command (builder API, Annotation) 						- factory
+- map addon (builder API, execution API, Annotation)			- factory
+- map addon annotation (builder API, execution API, Annotation) - factory
+- disable addon (builder API, execution API) 					- factory
+
+@startuml
+hide footbox
+title Command Execution Updated
+actor Controller
+participant Executor
+participant Factory
+participant Processor
+participant ConfigG as "Global Config"
+participant Config as "Command Config"
+participant Addon
+participant Execution
+participant Command
+
+==Instantiation==
+Controller	->	Executor++		: runnable
+Executor	->	ConfigG++		: getCommandType
+ConfigG		-->	Executor--		: type
+Executor	->	Factory++		: getInstance
+Factory 	->	Command**		: new
+Factory 	-->	Executor--		: command
+Executor	->	Processor++		: process
+Processor	->	Command			: getAnnotations
+Processor	->	ConfigG++		: unlock
+ConfigG		->	Config **		: new
+ConfigG 	-->	Processor--		: config
+loop annotations
+	Processor	-> Config++		: updateAddonType
+	Config		-> ConfigG--		: mapType
+end
+Processor	->	Processor		: cache
+Processor 	-->	Executor--		: command config
+Executor	->	Execution**		: new
+Executor	-->	Controller--	: execution
+
+==Setup==
+Controller	->	Execution++		: customize
+Execution	->	Config			: updateAddonTypes
+Execution	-->	Controller--	: self
+Controller	->	Execution++		: initialize
+Execution	->	Command			: set
+Execution	-->	Controller --	: self
+
+==Execution==
+Controller 	->	Execution++		: execute
+Execution 	->	Config++		: getAddonTypes
+Config		->	ConfigG++		: getAddonTypes
+ConfigG		-->	Config--		: addonTypes
+Config 		-->	Execution--		: addonTypes
+loop addonTypes
+	Execution	->	Factory++	: getInstance
+	Factory		->	Addon**		: new
+	Factory		-> Factory		: cache
+	Factory		-->	Execution--	: addon
+end
+loop addons
+	Execution 	->	Addon		: before
+end
+Execution 	->	Command++		: run
+Command		-->	Execution--		: result
+loop addons
+	Execution 	->	Addon		: after
+end
+Execution	-->	Controller--	: self
+
+==Finalization==
+Controller	->	Execution++		: get
+Execution	-->	Controller--	: output
+@enduml
+
+@startuml
+'Executor
+[Executor]	..> [Factory]				: uses
+[Executor]	..> [Processor]				: uses
+[Executor]	-->	[Config <<Global>>]		: has
+[Executor]	--> [Execution]				: creates
+'Factory
+[Factory]	-->	[Cache <<Addon>>]		: has
+'Processor
+[Processor]	--> [Config <<Command>>]	: has
+'Execution
+[Execution]	..>	[Config <<Global>>]		: uses
+[Execution]	..>	[Config <<Command>>]	: uses
+[Execution]	-->	[Config <<Local>>]		: has
+'Mapping <<Annotation>>
+'Mapping <<Type>>
+@enduml
