@@ -1,8 +1,8 @@
 package solomon.helpers
 
-import solomon.addons.Listener
+import solomon.addons.Observer
 
-class TestListener implements Listener<Object, Object> {
+class TestObserver implements Observer<Object, Object> {
     def successCounter = 0
     def failureCounter = 0
 

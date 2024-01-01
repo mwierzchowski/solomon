@@ -1,19 +1,21 @@
 package solomon
 
-import solomon.helpers.TestListener
+import solomon.helpers.TestObserver
 import solomon.helpers.TestRunnableCmd
 import solomon.helpers.TestRunnableCmdDecorator
 import solomon.helpers.TestSupplierCmd
+import solomon.services.DefaultFactory
 import spock.lang.Specification
 
 import static solomon.Utils.cast
 
 class ExecutionSpec extends Specification {
+    def factory = new DefaultFactory()
     def runnableCmd = new TestRunnableCmd()
     def supplierCmd = new TestSupplierCmd(123)
     def globalConfig = new Config()
-    def runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
-    def supplierExecution = new Execution<>(supplierCmd, cast(Handler.SUPPLIER), globalConfig)
+    def runnableExecution = new Execution<>(factory, runnableCmd, cast(Handler.RUNNABLE), globalConfig)
+    def supplierExecution = new Execution<>(factory, supplierCmd, cast(Handler.SUPPLIER), globalConfig)
 
     def "Fluently configures command"() {
         when:
@@ -56,39 +58,39 @@ class ExecutionSpec extends Specification {
         counter == 1
     }
 
-    def "Listens to the success"() {
+    def "Observers success"() {
         given:
-        def inlineSuccessListenerCounter = 0
-        def listener = new TestListener()
+        def inlineSuccessObserverCounter = 0
+        def observer = new TestObserver()
         when:
-        runnableExecution.listen(listener)
-                .listenOnSuccess((a, b) -> inlineSuccessListenerCounter += 1)
+        runnableExecution.observe(observer)
+                .observeSuccess((a, b) -> inlineSuccessObserverCounter += 1)
                 .execute()
         then:
-        listener.successCounter == 1
-        listener.failureCounter == 0
-        inlineSuccessListenerCounter == 1
+        observer.successCounter == 1
+        observer.failureCounter == 0
+        inlineSuccessObserverCounter == 1
     }
 
-    def "Listens to the failure"() {
+    def "Observers failure"() {
         given:
-        def inlineFailureListenerCounter = 0
-        def listener = new TestListener()
+        def inlineFailureObserverCounter = 0
+        def listener = new TestObserver()
         when:
-        runnableExecution.listen(listener)
-                .listenOnFailure((a, b) -> inlineFailureListenerCounter += 1)
+        runnableExecution.observe(listener)
+                .observeFailure((a, b) -> inlineFailureObserverCounter += 1)
                 .decorateAfter((a, b) -> { throw new IllegalArgumentException()})
-                .execute()
+                .execute().get()
         then:
         thrown IllegalArgumentException
         listener.successCounter == 0
         listener.failureCounter == 1
-        inlineFailureListenerCounter == 1
+        inlineFailureObserverCounter == 1
     }
 
     def "Executes runnable command and returns value"() {
         when:
-        def output = runnableExecution.execute()
+        def output = runnableExecution.execute().get()
         then:
         output == runnableCmd
         output.runCounter == 1
@@ -96,7 +98,7 @@ class ExecutionSpec extends Specification {
 
     def "Executes supplier command and returns value"() {
         when:
-        def output = supplierExecution.execute()
+        def output = supplierExecution.execute().get()
         then:
         output == 123
     }
@@ -104,7 +106,7 @@ class ExecutionSpec extends Specification {
     def "Executes command and converts value"() {
         when:
         def mapper = cmd -> "Value=${cmd.runCounter}"
-        def output = runnableExecution.execute(mapper)
+        def output = runnableExecution.execute().map(mapper)
         then:
         output instanceof GString
     }
@@ -113,7 +115,7 @@ class ExecutionSpec extends Specification {
         given:
         def decorator = new TestRunnableCmdDecorator()
         globalConfig.add(decorator)
-        runnableExecution = new Execution<>(runnableCmd, cast(Handler.RUNNABLE), globalConfig)
+        runnableExecution = new Execution<>(factory, runnableCmd, cast(Handler.RUNNABLE), globalConfig)
         when:
         runnableExecution.execute()
         then:

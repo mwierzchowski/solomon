@@ -1,7 +1,4 @@
-package solomon.annotations;
-
-import solomon.addons.Decorator;
-import solomon.addons.Listener;
+package solomon.spring.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -15,7 +12,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 @Documented
 @Inherited
-public @interface CommandConfig {
-    Class<? extends Decorator>[] decorators() default {};
-    Class<? extends Listener>[] listeners() default {};
+public @interface Global {
+    boolean value() default true;
+
+    String onProperty()  default "";
 }

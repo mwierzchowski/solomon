@@ -21,7 +21,7 @@ public class DefaultFactory implements Factory {
     }
 
     @Override
-    public <A extends Addon> void register(A addon) {
+    public <A extends Addon> void cache(A addon) {
         addonCache.put(addon.getClass(), cast(addon));
     }
 
@@ -29,9 +29,7 @@ public class DefaultFactory implements Factory {
         var addon = addonCache.get(addonClass);
         if (addon == null) {
             addon = newInstanceOf(addonClass);
-            if (addon.isCacheable()) {
-                addonCache.put(addonClass, cast(addon));
-            }
+            addonCache.put(addonClass, cast(addon));
         }
         return cast(addon);
     }

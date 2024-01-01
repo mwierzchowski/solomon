@@ -1,11 +1,7 @@
 package solomon.services
 
 import solomon.addons.DecoratorAdapter
-import solomon.annotations.AddonConfig
 import spock.lang.Specification
-
-import static solomon.annotations.AddonConfig.Scope.PROTOTYPE
-import static solomon.annotations.AddonConfig.Scope.SERVICE
 
 class DefaultFactorySpec extends Specification {
     def factory = new DefaultFactory()
@@ -20,40 +16,27 @@ class DefaultFactorySpec extends Specification {
         object1 != object2
     }
 
-    def "Creates new instances for non cacheable addons"() {
-        when:
-        def object1 = factory.getInstanceOf(NonCacheableAddon)
-        def object2 = factory.getInstanceOf(NonCacheableAddon)
-        then:
-        object1 != null
-        object2 != null
-        object1 != object2
-    }
 
-    def "Creates and caches instances for cacheable addons"() {
+    def "Creates and caches addon instances"() {
         when:
-        def object1 = factory.getInstanceOf(CacheableAddon)
-        def object2 = factory.getInstanceOf(CacheableAddon)
+        def object1 = factory.getInstanceOf(TestAddon)
+        def object2 = factory.getInstanceOf(TestAddon)
         then:
         object1 != null
         object2 != null
         object1 == object2
     }
 
-    def "Caches registered instances of addons"() {
+    def "Reuses cached instances of addons"() {
         given:
-        def addon1 = new NonCacheableAddon()
-        factory.register(addon1)
+        def addon1 = new TestAddon()
+        factory.cache(addon1)
         when:
-        def addon2 = factory.getInstanceOf(NonCacheableAddon)
+        def addon2 = factory.getInstanceOf(TestAddon)
         then:
         addon2 != null
         addon2 == addon1
     }
 
-    @AddonConfig(scope = SERVICE)
-    static class CacheableAddon extends DecoratorAdapter<Object, Object> {}
-
-    @AddonConfig(scope = PROTOTYPE)
-    static class NonCacheableAddon extends DecoratorAdapter<Object, Object> {}
+    static class TestAddon extends DecoratorAdapter<Object, Object> {}
 }

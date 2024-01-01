@@ -5,16 +5,22 @@ import solomon.services.DefaultFactory;
 import solomon.services.DefaultProcessor;
 import solomon.services.Factory;
 import solomon.services.Processor;
+import solomon.services.Processor.AnnotationMap;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
+import static solomon.Utils.cast;
+
 public class CommandExecutorBuilder {
-    private final List<Addon> registeredAddons = new ArrayList<>();
-    private final List<Addon> globalAddons = new ArrayList<>();
-    private Config config;
+    private final List<Addon> cachedAddons = new ArrayList<>();
+    private final List<Object> globalAddons = new ArrayList<>();
+    private final AnnotationMap annotationMap = new AnnotationMap();
+    private Config globalConfig;
     private Factory factory;
     private Processor processor;
+    private boolean initialize = true;
 
     public CommandExecutorBuilder withFactory(Factory factory) {
         this.factory = factory;
@@ -26,8 +32,8 @@ public class CommandExecutorBuilder {
         return this;
     }
 
-    public CommandExecutorBuilder withConfig(Config config) {
-        this.config = config;
+    public CommandExecutorBuilder withGlobalConfig(Config globalConfig) {
+        this.globalConfig = globalConfig;
         return this;
     }
 
@@ -36,8 +42,23 @@ public class CommandExecutorBuilder {
         return this;
     }
 
-    public CommandExecutorBuilder withRegisteredAddon(Addon addon) {
-        this.registeredAddons.add(addon);
+    public CommandExecutorBuilder withGlobalAddon(Class<? extends Addon> addonClass) {
+        this.globalAddons.add(addonClass);
+        return this;
+    }
+
+    public CommandExecutorBuilder withCachedAddon(Addon addon) {
+        this.cachedAddons.add(addon);
+        return this;
+    }
+
+    public CommandExecutorBuilder withMappedAnnotation(Class<? extends Annotation> annotationType, Class<? extends Addon> addonType) {
+        this.annotationMap.put(annotationType, addonType);
+        return this;
+    }
+
+    public CommandExecutorBuilder initialize(boolean initialize) {
+        this.initialize = initialize;
         return this;
     }
 
@@ -46,13 +67,22 @@ public class CommandExecutorBuilder {
             this.factory = new DefaultFactory();
         }
         if (this.processor == null) {
-            this.processor = new DefaultProcessor(factory);
+            this.processor = new DefaultProcessor();
         }
-        if (this.config == null) {
-            this.config = new Config();
+        if (this.globalConfig == null) {
+            this.globalConfig = new Config();
         }
-        this.registeredAddons.forEach(this.factory::register);
-        this.globalAddons.forEach(this.config::add);
-        return new CommandExecutor(factory, processor, config);
+        this.cachedAddons.forEach(this.factory::cache);
+        for (var addon : globalAddons) {
+            if (addon instanceof Class<?> addonClass) {
+                addon = this.factory.getInstanceOf(addonClass);
+            }
+            this.globalConfig.add(cast(addon));
+        }
+        var executor = new CommandExecutor(this.factory, this.processor, this.globalConfig, this.annotationMap);
+        if (this.initialize) {
+            executor.initialize();
+        }
+        return executor;
     }
 }

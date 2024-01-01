@@ -4,7 +4,7 @@ import spock.lang.Specification
 
 import java.util.function.BiConsumer
 
-class ListenersSpec extends Specification {
+class ObserversSpec extends Specification {
     def command = new Object()
     def value = new Object()
     def exception = new RuntimeException()
@@ -12,16 +12,16 @@ class ListenersSpec extends Specification {
     def "Delegates onSuccess method call to handler"() {
         given:
         def handler = Mock(BiConsumer)
-        def listener = Listeners.onSuccess(handler)
+        def observer = Observers.onSuccess(handler)
         when:
-        listener.onSuccess(command, value)
+        observer.onSuccess(command, value)
         then:
         1 * handler.accept(command, value)
     }
 
     def "Throws NPE when success handler is null"() {
         when:
-        Listeners.onSuccess(null)
+        Observers.onSuccess(null)
         then:
         thrown NullPointerException
     }
@@ -29,16 +29,16 @@ class ListenersSpec extends Specification {
     def "Delegates onFailure method call to handler"() {
         given:
         def handler = Mock(BiConsumer)
-        def listener = Listeners.onFailure(handler)
+        def observer = Observers.onFailure(handler)
         when:
-        listener.onFailure(command, exception)
+        observer.onFailure(command, exception)
         then:
         1 * handler.accept(command, exception)
     }
 
     def "Throws NPE when failure handler is null"() {
         when:
-        Listeners.onFailure(null)
+        Observers.onFailure(null)
         then:
         thrown NullPointerException
     }

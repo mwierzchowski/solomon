@@ -1,7 +1,6 @@
-package solomon.spring.annotation;
+package solomon.annotations;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
+import solomon.addons.Decorator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -10,13 +9,11 @@ import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static org.springframework.beans.factory.config.ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 @Retention(RUNTIME)
 @Target(TYPE)
 @Documented
 @Inherited
-@Component
-@Scope(SCOPE_PROTOTYPE)
-public @interface Command {
+public @interface Decorated {
+    Class<? extends Decorator>[] value() default {};
 }

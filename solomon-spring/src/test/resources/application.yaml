@@ -1,0 +1,15 @@
+logging:
+  level:
+    root: WARN
+    solomon: DEBUG
+
+solomon:
+  event-broadcaster.global: true
+  validator.global: true
+  counting.global: true
+  logging:
+    global: true
+    details: true
+    level:
+      regular: INFO
+      failure: ERROR

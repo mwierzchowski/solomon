@@ -1,7 +1,7 @@
 package solomon.helpers
 
-import solomon.Context
-import solomon.Result
+import solomon.ExecutionContext
+import solomon.MutableResult
 import solomon.addons.Decorator
 
 class TestRunnableCmdDecorator implements Decorator<TestRunnableCmd, Object> {
@@ -9,12 +9,12 @@ class TestRunnableCmdDecorator implements Decorator<TestRunnableCmd, Object> {
     public int counterAfter = 0
 
     @Override
-    void before(Context<TestRunnableCmd> context) {
+    void before(ExecutionContext<TestRunnableCmd> context) {
         this.counterBefore += 1
     }
 
     @Override
-    void after(Context<TestRunnableCmd> context, Result<Object> result) {
+    void after(ExecutionContext<TestRunnableCmd> context, MutableResult<Object> result) {
         this.counterAfter += 1
     }
 }

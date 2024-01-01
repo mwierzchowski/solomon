@@ -1,15 +1,15 @@
 package solomon.addons
 
-import solomon.Context
-import solomon.Result
+import solomon.ExecutionContext
+import solomon.MutableResult
 import spock.lang.Specification
 
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
 class DecoratorsSpec extends Specification {
-    def context = Mock(Context)
-    def result = Mock(Result)
+    def context = Mock(ExecutionContext)
+    def result = Mock(MutableResult)
 
     def "Delegates before method call to handler"() {
         given:

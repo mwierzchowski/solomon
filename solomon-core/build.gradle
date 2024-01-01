@@ -1,5 +1,7 @@
 dependencies {
+    compileOnly libs.lombok
+    compileOnly libs.jakarta.validation
     implementation libs.slf4j.api
-    testImplementation libs.slf4j.simple
     testImplementation libs.spock.core
+    testImplementation libs.slf4j.simple
 }

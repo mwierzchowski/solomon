@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import solomon.addons.Addon;
 import solomon.addons.Decorator;
-import solomon.addons.Listener;
+import solomon.addons.Observer;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -19,11 +19,7 @@ public class Config {
     private boolean locked = false;
     private Config parent;
     private List<Decorator<?, ?>> decoratorList;
-    private List<Listener<?, ?>> listenerList;
-
-    public Config(List<Addon> addons) {
-        addons.forEach(this::add);
-    }
+    private List<Observer<?, ?>> observerList;
 
     public Config(Config parent) {
         this.parent = parent;
@@ -31,6 +27,7 @@ public class Config {
 
     public void lock() {
         this.locked = true;
+        LOG.debug("Configuration locked");
     }
 
     public Config unlock() {
@@ -49,13 +46,17 @@ public class Config {
         Class<? extends Addon> addonClass;
         if (addon instanceof Decorator) {
             addonClass = Decorator.class;
-        } else if (addon instanceof Listener) {
-            addonClass = Listener.class;
+        } else if (addon instanceof Observer) {
+            addonClass = Observer.class;
         } else {
             // this will not work but at least method accessing list can throw exception with meaningful message
             addonClass = addon.getClass();
         }
         addonList(addonClass, true).add(addon);
+    }
+
+    public void addAll(List<Addon> addons) {
+        addons.forEach(this::add);
     }
 
     public <A extends Addon> A get(Class<A> addonClass, int position) {
@@ -90,11 +91,11 @@ public class Config {
                 this.decoratorList = new ArrayList<>();
             }
             list = this.decoratorList;
-        } else if (addonClass == Listener.class) {
-            if (this.listenerList == null && create) {
-                this.listenerList = new ArrayList<>();
+        } else if (addonClass == Observer.class) {
+            if (this.observerList == null && create) {
+                this.observerList = new ArrayList<>();
             }
-            list = this.listenerList;
+            list = this.observerList;
         } else {
             var message = MessageFormat.format("Class {0} is not supported addon", addonClass);
             throw new IllegalArgumentException(message);

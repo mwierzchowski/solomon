@@ -5,7 +5,7 @@ import spock.lang.Specification
 import java.util.function.Supplier
 
 class HandlerSpec extends Specification {
-    def result = Mock(Result)
+    def result = Mock(MutableResult)
 
     def "Runnable handler calls run and returns command itself"() {
         given:

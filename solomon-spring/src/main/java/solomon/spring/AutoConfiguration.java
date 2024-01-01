@@ -1,32 +1,43 @@
 package solomon.spring;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import solomon.CommandExecutor;
+import solomon.Config;
 import solomon.services.DefaultFactory;
 import solomon.services.DefaultProcessor;
 import solomon.services.Factory;
 import solomon.services.Processor;
 
 @Configuration
+@ComponentScan
+@EnableConfigurationProperties
 public class AutoConfiguration {
-    @Bean
-    public Factory cmdFactory(ApplicationContext context) {
-        var fallbackFactory = new DefaultFactory();
-        return new SpringFactory(fallbackFactory, context);
+    @Bean("fallbackCommandFactory")
+    public DefaultFactory defaultFactory() {
+        return new DefaultFactory();
     }
 
     @Bean
-    public Processor cmdProcessor(Factory cmdFactory) {
-        return new DefaultProcessor(cmdFactory);
+    public DefaultProcessor defaultProcessor() {
+        return new DefaultProcessor();
     }
 
     @Bean
-    public CommandExecutor cmdExecutor(Factory cmdFactory, Processor cmdProcessor) {
+    public Config globalConfig() {
+        return new Config();
+    }
+
+    @Lazy
+    @Bean
+    public CommandExecutor commandExecutor(Factory factory, Processor processor, Config globalConfig) {
         return CommandExecutor.builder()
-                .withFactory(cmdFactory)
-                .withProcessor(cmdProcessor)
+                .withFactory(factory)
+                .withProcessor(processor)
+                .withGlobalConfig(globalConfig)
                 .build();
     }
 }

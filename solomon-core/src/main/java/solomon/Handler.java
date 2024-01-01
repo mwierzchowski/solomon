@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-public interface Handler<C, V> extends BiConsumer<C, Result<V>> {
+public interface Handler<C, V> extends BiConsumer<C, MutableResult<V>> {
     Logger LOG = LoggerFactory.getLogger(Handler.class);
 
-    default void safeAccept(C command, Result<V> result) {
+    default void safeAccept(C command, MutableResult<V> result) {
         try {
             this.accept(command, result);
         } catch (RuntimeException ex) {
