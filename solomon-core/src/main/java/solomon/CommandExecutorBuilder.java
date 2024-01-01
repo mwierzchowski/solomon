@@ -16,10 +16,10 @@ import static solomon.Utils.cast;
 public class CommandExecutorBuilder {
     private final List<Addon> cachedAddons = new ArrayList<>();
     private final List<Object> globalAddons = new ArrayList<>();
+    private final AnnotationMap annotationMap = new AnnotationMap();
     private Config globalConfig;
     private Factory factory;
     private Processor processor;
-    private AnnotationMap annotationMap = new AnnotationMap();
     private boolean initialize = true;
 
     public CommandExecutorBuilder withFactory(Factory factory) {
