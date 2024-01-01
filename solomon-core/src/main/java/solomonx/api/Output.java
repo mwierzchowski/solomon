@@ -1,6 +1,7 @@
 package solomonx.api;
 
 import lombok.NonNull;
+import solomonx.utils.Cast;
 
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -117,6 +118,6 @@ public interface Output<V> {
     RuntimeException getException();
 
     private static <V> OutputStore<V> outputStore(Output<V> output) {
-        return (OutputStore<V>) output;
+        return Cast.unchecked(output);
     }
 }
