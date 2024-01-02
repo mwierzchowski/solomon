@@ -5,10 +5,13 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import solomon.Config;
-import solomon.services.Factory;
-import solomon.services.Processor;
-import solomonx.api.*;
+import solomonx.api.Context;
+import solomonx.api.Flow;
+import solomonx.api.Output;
+import solomonx.api.OutputStore;
 import solomonx.spi.AbstractBootstrap;
+import solomonx.spi.Factory;
+import solomonx.spi.Processor;
 
 import java.util.function.Consumer;
 
@@ -33,7 +36,7 @@ public class Bootstrap extends AbstractBootstrap {
     @Data
     private class Execution<C, V> implements Flow<C, V>, OutputStore<V>, Context<C> {
         private final C command;
-        private final Runner<C, V> caller;
+        private final Runner<C, V> runner;
         private V value;
         private RuntimeException exception;
 
@@ -43,7 +46,7 @@ public class Bootstrap extends AbstractBootstrap {
             // TODO Decorators before
             if (this.isSuccess()) {
                 LOG.debug("Running command");
-                this.caller.safeAccept(this.command, this);
+                this.runner.safeAccept(this.command, this);
             }
             // TODO Decorators after
             // TODO Observers

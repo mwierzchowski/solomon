@@ -1,14 +1,25 @@
 package solomonx.spi;
 
 import lombok.NonNull;
-import solomonx.api.Runner;
 import solomonx.api.Flow;
+import solomonx.api.OutputStore;
 import solomonx.util.Cast;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class AbstractBootstrap {
+    protected interface Runner<C, V> extends BiConsumer<C, OutputStore<V>> {
+        default void safeAccept(C command, OutputStore<V> outputStore) {
+            try {
+                this.accept(command, outputStore);
+            } catch (RuntimeException ex) {
+                outputStore.setException(ex);
+            }
+        }
+    }
+
     private static final Runner<? extends Runnable, ? extends Runnable> RUNNABLE_RUNNER = (command, outputStore) -> {
         command.run();
         outputStore.setValue(command);

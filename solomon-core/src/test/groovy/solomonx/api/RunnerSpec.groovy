@@ -1,5 +1,6 @@
 package solomonx.api
 
+import solomonx.spi.Runner
 import spock.lang.Specification
 
 // TODO remove ?? replace ??
