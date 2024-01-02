@@ -15,7 +15,7 @@ public class ValidatorDecorator extends DecoratorAdapter<Object, Object> {
     private final Validator validator;
 
     @Override
-    public void before(Context<Object> context) {
+    public void before(Context<Object, Object> context) {
         var command = context.getCommand();
         Set<ConstraintViolation<Object>> violations = validator.validate(command);
         if (violations.isEmpty()) {

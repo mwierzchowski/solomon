@@ -22,11 +22,11 @@ public interface Observer<C, V> extends Addon {
         }
     }
 
-    default void safeNotification(C command, OutputStore<V> outputStore) {
-        if (outputStore.isSuccess()) {
-            this.onSuccess(command, outputStore.getValue());
+    default void safeNotification(C command, Output<V> output) {
+        if (output.isSuccess()) {
+            this.onSuccess(command, output.getValue());
         } else {
-            this.onFailure(command, outputStore.getException());
+            this.onFailure(command, output.getException());
         }
     }
 

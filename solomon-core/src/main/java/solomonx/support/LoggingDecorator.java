@@ -20,7 +20,7 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     private boolean includeDetails = true;
 
     @Override
-    public void before(Context<Object> context) {
+    public void before(Context<Object, Object> context) {
         if (LOG.isEnabledForLevel(regularLevel)) {
             var message = includeDetails
                     ? "Executing command {}: {}"
@@ -31,19 +31,19 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     }
 
     @Override
-    public void after(Context<Object> context, OutputStore<Object> outputStore) {
-        if (outputStore.isSuccess()) {
+    public void after(Context<Object, Object> context) {
+        if (context.isSuccess()) {
             if (LOG.isEnabledForLevel(regularLevel)) {
                 var message = includeDetails
                         ? "Command {} finished with success: {}"
                         : "Command {} finished with success";
                 var command = context.getCommand();
-                LOG.atLevel(regularLevel).log(message, shortNameFor(command), outputStore.getValue());
+                LOG.atLevel(regularLevel).log(message, shortNameFor(command), context.getValue());
             }
         } else {
             if (LOG.isEnabledForLevel(failureLevel)) {
                 var command = context.getCommand();
-                var exception = outputStore.getException();
+                var exception = context.getException();
                 LOG.atLevel(failureLevel).log("Command {} finished with {}: {}",
                         shortNameFor(command), shortNameFor(exception), exception.getMessage());
             }

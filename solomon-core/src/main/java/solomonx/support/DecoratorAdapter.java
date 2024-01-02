@@ -6,8 +6,8 @@ import solomonx.api.Decorator;
 
 public abstract class DecoratorAdapter<C, V> implements Decorator<C, V> {
     @Override
-    public void before(Context<C> context) {}
+    public void before(Context<C, V> context) {}
 
     @Override
-    public void after(Context<C> context, OutputStore<V> outputStore) {}
+    public void after(Context<C, V> context) {}
 }
