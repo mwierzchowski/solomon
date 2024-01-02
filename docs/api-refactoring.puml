@@ -1,0 +1,11 @@
+@startmindmap
+* Refactoring
+	* Config
+		* data format
+		* Overriding
+	* Unit Tests
+		* Consistent strategy
+		* Missing
+	* Remove old package
+	* Spring update
+@endmindmap

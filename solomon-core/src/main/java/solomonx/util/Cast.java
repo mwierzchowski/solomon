@@ -1,4 +1,4 @@
-package solomonx.utils;
+package solomonx.util;
 
 public interface Cast {
     @SuppressWarnings("unchecked")

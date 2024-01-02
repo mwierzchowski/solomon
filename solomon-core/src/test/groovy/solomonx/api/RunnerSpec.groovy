@@ -2,8 +2,9 @@ package solomonx.api
 
 import spock.lang.Specification
 
-class CallerSpec extends Specification {
-    def caller = Spy(Caller)
+// TODO remove ?? replace ??
+class RunnerSpec extends Specification {
+    def caller = Spy(Runner)
     def command = new Object()
     def outputStore = Mock(OutputStore)
 
@@ -14,7 +15,7 @@ class CallerSpec extends Specification {
             throw exception
         }
         when:
-        caller.callSafe(command, outputStore)
+        caller.safeAccept(command, outputStore)
         then:
         noExceptionThrown()
         1 * outputStore.setException(exception)

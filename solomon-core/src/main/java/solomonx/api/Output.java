@@ -1,7 +1,7 @@
 package solomonx.api;
 
 import lombok.NonNull;
-import solomonx.utils.Cast;
+import solomonx.util.Cast;
 
 import java.util.Optional;
 import java.util.function.Consumer;
