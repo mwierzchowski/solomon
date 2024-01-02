@@ -1,6 +1,6 @@
 package solomonx.spi;
 
-import solomon.addons.Addon;
+import solomonx.api.Addon;
 
 public interface Factory {
     <C> C getInstanceOf(Class<C> clazz);

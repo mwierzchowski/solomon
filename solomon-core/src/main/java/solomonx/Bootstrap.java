@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import solomon.Config;
 import solomonx.api.Context;
 import solomonx.api.Flow;
 import solomonx.api.Output;

@@ -1,6 +1,6 @@
 package solomonx.spi;
 
-import solomon.addons.Addon;
+import solomonx.api.Addon;
 
 import java.util.HashMap;
 import java.util.Map;
