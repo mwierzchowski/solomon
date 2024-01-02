@@ -3,7 +3,7 @@ package solomonx.support;
 import lombok.Data;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import solomon.addons.Observer;
+import solomonx.api.Observer;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import solomon.ExecutionContext;
+import solomonx.api.Context;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ public class ValidatorDecorator extends DecoratorAdapter<Object, Object> {
     private final Validator validator;
 
     @Override
-    public void before(ExecutionContext<Object> context) {
+    public void before(Context<Object> context) {
         var command = context.getCommand();
         Set<ConstraintViolation<Object>> violations = validator.validate(command);
         if (violations.isEmpty()) {

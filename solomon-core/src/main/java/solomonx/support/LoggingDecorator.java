@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
-import solomon.ExecutionContext;
-import solomon.MutableResult;
-import solomon.addons.Decorator;
+import solomonx.api.Context;
+import solomonx.api.OutputStore;
+import solomonx.api.Decorator;
 
 import static org.slf4j.event.Level.DEBUG;
-import static solomon.Utils.shortNameFor;
+import static solomon.Utils.shortNameFor; // TODO
 
 @Slf4j
 @NoArgsConstructor
@@ -20,7 +20,7 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     private boolean includeDetails = true;
 
     @Override
-    public void before(ExecutionContext<Object> context) {
+    public void before(Context<Object> context) {
         if (LOG.isEnabledForLevel(regularLevel)) {
             var message = includeDetails
                     ? "Executing command {}: {}"
@@ -31,19 +31,19 @@ public class LoggingDecorator implements Decorator<Object, Object> {
     }
 
     @Override
-    public void after(ExecutionContext<Object> context, MutableResult<Object> result) {
-        if (result.isSuccess()) {
+    public void after(Context<Object> context, OutputStore<Object> outputStore) {
+        if (outputStore.isSuccess()) {
             if (LOG.isEnabledForLevel(regularLevel)) {
                 var message = includeDetails
                         ? "Command {} finished with success: {}"
                         : "Command {} finished with success";
                 var command = context.getCommand();
-                LOG.atLevel(regularLevel).log(message, shortNameFor(command), result.getValue());
+                LOG.atLevel(regularLevel).log(message, shortNameFor(command), outputStore.getValue());
             }
         } else {
             if (LOG.isEnabledForLevel(failureLevel)) {
                 var command = context.getCommand();
-                var exception = result.getException();
+                var exception = outputStore.getException();
                 LOG.atLevel(failureLevel).log("Command {} finished with {}: {}",
                         shortNameFor(command), shortNameFor(exception), exception.getMessage());
             }
