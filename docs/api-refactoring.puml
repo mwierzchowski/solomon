@@ -9,3 +9,39 @@
 	* Remove old package
 	* Spring update
 @endmindmap
+
+
+
+
+
+
+Config.builder()
+	.mapType(AddonA.class, [AddonB.class, AddonC.class])
+	.mapAnnotation(AddonA.class, [Validated.class, Valid.class])
+	.map(AddonA.class, AddonB.class) // ???
+	.decorate(AddonG.class)
+	.observe(ObserverA.class)
+	.add(AddonG.class) // ???
+	.add(ListenerG.class) // ???
+	.disable(AddonD.class)
+	.cache(new AddonX(), [Addon.class])
+
+bootstrap.runnable(SomeCommand.class)
+	.decorate(LoggingDecorator.class)
+	.mapType(...)
+	.mapAnnotation(...)
+	.map(AddonA.class, [AddonB.class, AddonC.class]) // ???
+	.map(AddonA.class, [Validated.class, Valid.class]) // ???
+	.decorate(AddonG.class)
+	.observe(ObserverA.class)
+	.add(AddonG.class) // ???
+	.disable(AddonD.class)
+
+@MappedType(LegacyCommand.class)
+@Validated
+class SomeCommand {...}
+
+@Global(order = 1)
+@MappedType(LegacyValidatorDecorator.class)
+@MappedAnnotation(Validated.class)
+class NewValidatorDecorator {...}

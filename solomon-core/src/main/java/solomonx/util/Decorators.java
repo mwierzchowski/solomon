@@ -8,7 +8,7 @@ import solomonx.support.DecoratorAdapter;
 import java.util.function.Consumer;
 
 public interface Decorators {
-    static <C, V> Decorator<C, V> before(@NonNull Consumer<Context<? super C, ? super V>> beforeHandler) {
+    static <C, V> Decorator<C, V> before(@NonNull Consumer<Context<C, V>> beforeHandler) {
         return new DecoratorAdapter<>() {
             @Override
             public void before(Context<C, V> context) {
@@ -17,7 +17,7 @@ public interface Decorators {
         };
     }
 
-    static <C, V> Decorator<C, V> after(@NonNull Consumer<Context<? super C, ? super V>> afterHandler) {
+    static <C, V> Decorator<C, V> after(@NonNull Consumer<Context<C, V>> afterHandler) {
         return new DecoratorAdapter<>() {
             @Override
             public void after(Context<C, V> context) {

@@ -7,7 +7,7 @@ import solomonx.support.ObserverAdapter;
 import java.util.function.BiConsumer;
 
 public interface Observers {
-    static <C, V> Observer<C, V> onSuccess(@NonNull BiConsumer<? super C, ? super V> successHandler) {
+    static <C, V> Observer<C, V> onSuccess(@NonNull BiConsumer<C, V> successHandler) {
         return new ObserverAdapter<>() {
             @Override
             public void onSuccess(C command, V value) {

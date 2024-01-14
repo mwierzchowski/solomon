@@ -1,7 +1,6 @@
 package solomonx.support;
 
 import solomonx.api.Context;
-import solomonx.api.OutputStore;
 import solomonx.api.Decorator;
 
 public abstract class DecoratorAdapter<C, V> implements Decorator<C, V> {
