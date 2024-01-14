@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 @RequiredArgsConstructor
 public class ConfigBuilder {
     protected final List<AddonProcessor> addonProcessors;
-    protected final Map<Class<Addon>, AddonData> addonDataMap = new LinkedHashMap<>();
+    protected final Map<Class<? extends Addon>, AddonData> addonDataMap = new LinkedHashMap<>();
 
     public ConfigBuilder register(Addon addon) {
         var data = new AddonData(addon);

@@ -4,28 +4,28 @@ import spock.lang.Title
 
 @Title("ConfigBuilder unregistered")
 class ConfigBuilderDecorateSpec extends ConfigBuilderBaseSpec {
-    def "decorate before"() {
+    def "decorates before"() {
         when:
         builder.decorateBefore(context -> {})
         then:
         isRegistered solomonx.api.Decorator
     }
 
-    def "decorate after"() {
+    def "decorates after"() {
         when:
         builder.decorateAfter(context -> {})
         then:
         isRegistered solomonx.api.Decorator
     }
 
-    def "observe success"() {
+    def "observes success"() {
         when:
         builder.onSuccess((command, value) -> {})
         then:
         isRegistered solomonx.api.Observer
     }
 
-    def "observe failure"() {
+    def "observes failure"() {
         when:
         builder.onFailure((command, value) -> {})
         then:

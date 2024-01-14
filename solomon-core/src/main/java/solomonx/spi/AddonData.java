@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 @Data
 public class AddonData {
-    private final Class<Addon> key;
+    private final Class<? extends Addon> key;
     private final Addon instance;
     private Collection<Annotation> annotations;
     private Boolean applied;
@@ -18,7 +18,7 @@ public class AddonData {
     private Boolean disabled;
 
     public AddonData(Addon instance) {
-        this.key = Cast.unchecked(instance.getClass());
+        this.key = instance.getClass();
         this.instance = instance;
     }
 
