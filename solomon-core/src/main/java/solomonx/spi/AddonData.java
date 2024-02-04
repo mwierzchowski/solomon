@@ -1,11 +1,14 @@
 package solomonx.spi;
 
 import lombok.Data;
+import solomonx.annotation.Priority;
 import solomonx.api.Addon;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.function.Consumer;
+
+import static solomonx.annotation.Priority.REGULAR;
 
 @Data
 public class AddonData {
@@ -13,7 +16,7 @@ public class AddonData {
     private final Addon instance;
     private Collection<Annotation> annotations;
     private Boolean applied;
-    private Integer priority;
+    private Priority priority;
     private Boolean disabled;
 
     public AddonData(Addon instance) {
@@ -27,6 +30,14 @@ public class AddonData {
     }
 
     public void apply() {
-        this.setApplied(true);
+        this.applied = true;
+        this.disabled = false;
+        this.priority = REGULAR;
+    }
+
+    public void disable() {
+        this.applied = false;
+        this.disabled = true;
+        this.priority = null;
     }
 }
