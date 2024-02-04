@@ -67,19 +67,23 @@ public class ConfigBuilder {
     }
 
     public ConfigBuilder decorateBefore(Consumer<Context<Object, Object>> handler) {
-        return this.registerAndApplyAnonymous(Decorators.before(handler));
+        var addon = Decorators.before(handler);
+        return this.registerAndApplyAnonymous(addon);
     }
 
     public ConfigBuilder decorateAfter(Consumer<Context<Object, Object>> handler) {
-        return this.registerAndApplyAnonymous(Decorators.after(handler));
+        var addon = Decorators.after(handler);
+        return this.registerAndApplyAnonymous(addon);
     }
 
     public ConfigBuilder onSuccess(BiConsumer<Object, Object> handler) {
-        return this.registerAndApplyAnonymous(Observers.onSuccess(handler));
+        var addon = Observers.onSuccess(handler);
+        return this.registerAndApplyAnonymous(addon);
     }
 
     public ConfigBuilder onFailure(BiConsumer<Object, RuntimeException> handler) {
-        return this.registerAndApplyAnonymous(Observers.onFailure(handler));
+        var addon = Observers.onFailure(handler);
+        return this.registerAndApplyAnonymous(addon);
     }
 
     private ConfigBuilder registerAndApplyAnonymous(Addon addon) {
