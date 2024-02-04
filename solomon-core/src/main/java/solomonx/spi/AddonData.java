@@ -2,7 +2,6 @@ package solomonx.spi;
 
 import lombok.Data;
 import solomonx.api.Addon;
-import solomonx.util.Cast;
 
 import java.lang.annotation.Annotation;
 import java.util.Collection;
