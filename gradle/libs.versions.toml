@@ -1,5 +1,5 @@
 [versions]
-slf4j = '2.0.9'
+slf4j = '2.0.12'
 spock = '2.4-M1-groovy-4.0'
 spring-framework = '6.1.1'
 spring-boot = '3.2.0'
