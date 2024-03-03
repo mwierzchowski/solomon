@@ -24,11 +24,11 @@ public class ConfigBuilder {
     protected final Map<Class<? extends Addon>, AddonData> addonDataMap = new LinkedHashMap<>();
 
     public ConfigBuilder register(Addon addon) {
-        var data = new AddonData(addon);
-        for (var processor : this.addonProcessors) {
-            processor.process(data);
+        var addonData = new AddonData(addon);
+        for (var addonProcessor : this.addonProcessors) {
+            addonProcessor.process(addonData);
         }
-        return this.registerData(data);
+        return this.registerData(addonData);
     }
 
     public ConfigBuilder register(List<Addon> addonList) {
@@ -50,6 +50,26 @@ public class ConfigBuilder {
         return this;
     }
 
+    public ConfigBuilder applyBeforeDecorator(Consumer<Context<Object, Object>> handler) {
+        var addon = Decorators.before(handler);
+        return this.registerAndApplyAnonymous(addon);
+    }
+
+    public ConfigBuilder applyAfterDecorator(Consumer<Context<Object, Object>> handler) {
+        var addon = Decorators.after(handler);
+        return this.registerAndApplyAnonymous(addon);
+    }
+
+    public ConfigBuilder applyOnSuccessObserver(BiConsumer<Object, Object> handler) {
+        var addon = Observers.onSuccess(handler);
+        return this.registerAndApplyAnonymous(addon);
+    }
+
+    public ConfigBuilder applyOnFailureObserver(BiConsumer<Object, RuntimeException> handler) {
+        var addon = Observers.onFailure(handler);
+        return this.registerAndApplyAnonymous(addon);
+    }
+
     public ConfigBuilder customize(Class<Addon> key, Consumer<AddonData> customization) {
         Optional.ofNullable(this.addonDataMap.get(key))
                 .orElseThrow(() -> new IllegalArgumentException("Key is not registered: " + key))
@@ -66,24 +86,9 @@ public class ConfigBuilder {
         return this;
     }
 
-    public ConfigBuilder decorateBefore(Consumer<Context<Object, Object>> handler) {
-        var addon = Decorators.before(handler);
-        return this.registerAndApplyAnonymous(addon);
-    }
-
-    public ConfigBuilder decorateAfter(Consumer<Context<Object, Object>> handler) {
-        var addon = Decorators.after(handler);
-        return this.registerAndApplyAnonymous(addon);
-    }
-
-    public ConfigBuilder onSuccess(BiConsumer<Object, Object> handler) {
-        var addon = Observers.onSuccess(handler);
-        return this.registerAndApplyAnonymous(addon);
-    }
-
-    public ConfigBuilder onFailure(BiConsumer<Object, RuntimeException> handler) {
-        var addon = Observers.onFailure(handler);
-        return this.registerAndApplyAnonymous(addon);
+    public Config build() {
+        // TODO
+        return null;
     }
 
     private ConfigBuilder registerAndApplyAnonymous(Addon addon) {
